@@ -561,6 +561,7 @@ input, select, textarea {
     box-shadow: 0 10px 25px rgba(27, 37, 66, 0.12);
     z-index: 10;
     transition: var(--transition-smooth);
+    white-space: nowrap; /* Prevent word wrapping */
 }
 
 .floating-brand-badge:hover {
@@ -583,6 +584,7 @@ input, select, textarea {
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap; /* Prevent word wrapping */
 }
 
 .brand-name-badge .thai-word {
@@ -2111,6 +2113,25 @@ hr {
 
     .experience-img-container {
         height: 270px !important; /* Scale down photo container height on mobile */
+    }
+
+    .floating-brand-badge {
+        padding: 6px 14px !important;
+        bottom: 12px !important;
+        right: 12px !important;
+        gap: 6px !important;
+    }
+
+    .badge-logo-img {
+        height: 32px !important;
+    }
+
+    .brand-name-badge {
+        font-size: 0.78rem !important;
+    }
+
+    .brand-name-badge .thai-word {
+        font-size: 0.88rem !important;
     }
 
     .hero-container {
