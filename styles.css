@@ -1,0 +1,2172 @@
+/* ==========================================================================
+   True Time Thai - Luminous Design System & Stylesheet (Huisstijl Update)
+   Typography: Segoe UI
+   Colors: Slide-matched Bright White, Royal Navy Blue, Crimson Red, Teal/Cyan
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. VARIABLES & DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+    /* Fonts */
+    --font-primary: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    
+    /* Luminous Corporate Color Palette (Matched directly to your presentation slide) */
+    --bg-dark: #F8FAFC;               /* Crisp, Luminous Slate White background */
+    --bg-card: #FFFFFF;               /* Pure White Card Base */
+    --bg-card-hover: #FFFFFF;
+    
+    --thai-blue: #1B2542;            /* Deep Royal Navy (from slide 'What is TRUE TIME') */
+    --thai-red: #B93C3C;             /* Corporate Crimson Red (from slide 'THAI') */
+    --thai-red-glow: rgba(185, 60, 60, 0.15);
+    
+    --neon-cyan: #2BB3C0;            /* Tropical Teal/Cyan (from slide description text & arcs) */
+    --neon-cyan-glow: rgba(43, 179, 192, 0.25);
+    
+    --thai-gold: #D4AF37;            /* Heritage Gold accent */
+    --thai-gold-glow: rgba(212, 175, 55, 0.15);
+    
+    /* Text & Content Contrast */
+    --text-white: #1B2542;           /* High contrast Deep Navy text */
+    --text-muted: #576F84;           /* Soft Slate Blue for subtitles (matching slide text) */
+    --silver-platinum: #334155;      /* Slate Grey for body text readability */
+    
+    /* Glassmorphism & Borders */
+    --border-glass: rgba(27, 37, 66, 0.08);
+    --border-glow: rgba(43, 179, 192, 0.4);
+    
+    /* System Colors */
+    --success: #10B981;
+    --success-glow: rgba(16, 185, 129, 0.15);
+    
+    /* Layout & Shadows */
+    --container-width: 1200px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    
+    /* Premium Soft Shadows (Luxury tech-brand style) */
+    --shadow-soft: 0 10px 30px -5px rgba(27, 37, 66, 0.05), 0 4px 12px -2px rgba(27, 37, 66, 0.03);
+    --shadow-glow: 0 0 25px 0 rgba(43, 179, 192, 0.15);
+    --shadow-hover: 0 20px 40px -10px rgba(27, 37, 66, 0.12), 0 0 1px 1px rgba(43, 179, 192, 0.1);
+    
+    --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. BASE STYLES & RESET
+   -------------------------------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-dark);
+    color: var(--silver-platinum);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Base Headings & Links */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    color: var(--thai-blue);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+}
+
+a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+a:hover {
+    color: var(--thai-red);
+}
+
+input, select, textarea {
+    font-family: var(--font-primary);
+}
+
+/* Utility Containers */
+.container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.section-divider {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   3. BACKGROUND GLOWS & OVERLAYS (Soft and Subtle Pastel Glows for Light Theme)
+   -------------------------------------------------------------------------- */
+.bg-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.18;
+}
+
+.bg-glow-1 {
+    top: -5%;
+    right: -10%;
+    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+}
+
+.bg-glow-2 {
+    top: 40%;
+    left: -15%;
+    background: radial-gradient(circle, var(--thai-red) 0%, transparent 70%);
+}
+
+/* Soft Geometric Background Motif */
+.mandala-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 100% 150px, rgba(43, 179, 192, 0.04) 0%, transparent 500px),
+        radial-gradient(circle at 0% 800px, rgba(185, 60, 60, 0.03) 0%, transparent 600px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Large Subtle Background Watermark Logo */
+.bg-watermark {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 750px; /* Massive, highly prominent corporate watermark */
+    height: 750px;
+    z-index: -3; /* Placed completely in the background behind all elements */
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.035; /* Extremely elegant, soft, semi-transparent blend */
+    mix-blend-mode: multiply; /* Renders white background 100% transparent */
+}
+
+.watermark-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------
+   4. GLASSMORPHISM COMPONENT (Polished Frosted Glass for Light Theme)
+   -------------------------------------------------------------------------- */
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+}
+
+.glass:hover {
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   5. BUTTONS & CONTROLS
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    border: none;
+    outline: none;
+    text-align: center;
+}
+
+.btn-sm {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 16px 36px;
+    font-size: 1.05rem;
+}
+
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+.btn-neon {
+    background: linear-gradient(135deg, var(--neon-cyan) 0%, #1FA2B1 100%);
+    color: white;
+    box-shadow: 0 4px 15px 0 var(--neon-cyan-glow);
+}
+
+.btn-neon:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(43, 179, 192, 0.4), 0 0 10px 0 var(--neon-cyan-glow);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--thai-blue);
+    color: var(--thai-blue);
+}
+
+.btn-outline:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px 0 rgba(43, 179, 192, 0.08);
+}
+
+/* Brand Custom Vector Icon Utility */
+.icon-brand {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    display: inline-block;
+    vertical-align: middle;
+    transition: var(--transition-smooth);
+}
+
+.icon-brand-lg {
+    width: 44px;
+    height: 44px;
+}
+
+.highlight-icon .icon-brand {
+    width: 32px;
+    height: 32px;
+}
+
+.scenario-emoji .icon-brand {
+    width: 38px;
+    height: 38px;
+}
+
+.btn-number {
+    background: rgba(27, 37, 66, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--thai-blue);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.btn-number:hover {
+    background: var(--neon-cyan);
+    color: white;
+    border-color: var(--neon-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   6. HEADER & NAVIGATION (Elegant Frosted Glass Header)
+   -------------------------------------------------------------------------- */
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 110px; /* Increased from 80px to accommodate much larger logo */
+    z-index: 1000;
+    background: rgba(248, 250, 252, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-glass);
+    transition: var(--transition-smooth);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Increased gap for visual balance */
+}
+
+.logo-svg {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 6px rgba(27, 37, 66, 0.06));
+    transition: var(--transition-smooth);
+}
+
+.logo-img {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* Renders the white background 100% transparent and clean */
+    filter: drop-shadow(0 3px 6px rgba(27, 37, 66, 0.04));
+    transition: var(--transition-smooth);
+}
+
+.logo:hover .logo-svg,
+.logo:hover .logo-img {
+    transform: rotate(4deg) scale(1.04);
+    filter: drop-shadow(0 6px 16px rgba(43, 179, 192, 0.22)) drop-shadow(0 3px 8px var(--thai-red-glow));
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--thai-blue);
+    line-height: 1.1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.thai-word {
+    font-family: 'Segoe Script', 'Segoe UI', cursive, sans-serif; /* Cursive script form of Segoe UI! */
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.7rem; /* Balanced size for hand-drawn script */
+    color: var(--thai-red) !important;
+    -webkit-text-fill-color: var(--thai-red) !important;
+    display: inline-block;
+    transform: rotate(-3deg) translateY(1px); /* Slight organic handwriting tilt */
+    margin-left: 2px;
+}
+
+.brand-sub {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--neon-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   Hero Logo Showcase Styles (Large, Prominent & Transparent)
+   -------------------------------------------------------------------------- */
+.hero-logo-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 280px;
+    margin: 20px 0;
+}
+
+.hero-logo-img {
+    height: 240px; /* Highly prominent visual centerpiece */
+    width: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* 100% transparent background, showing glows underneath */
+    z-index: 2;
+    filter: drop-shadow(0 10px 25px rgba(27, 37, 66, 0.08));
+    animation: float 5s infinite ease-in-out;
+}
+
+.hero-logo-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+    filter: blur(25px);
+    opacity: 0.22;
+    z-index: 1;
+    animation: earbudPulse 5s infinite ease-in-out;
+}
+
+/* Precise positions for floating brand tags around the center logo */
+.logo-tag-1 { top: 15%; left: -20px; border-left: 2.5px solid var(--thai-gold); }
+.logo-tag-2 { bottom: 15%; left: 0px; border-bottom: 2.5px solid var(--thai-red); }
+.logo-tag-3 { top: 40%; right: -20px; border-right: 2.5px solid var(--neon-cyan); }
+
+/* Main Navigation Menu */
+.main-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 32px;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 8px 0;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--thai-blue);
+}
+
+.nav-link.active {
+    color: var(--neon-cyan);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--thai-red));
+    transition: var(--transition-smooth);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--thai-blue);
+    transition: var(--transition-smooth);
+}
+
+/* --------------------------------------------------------------------------
+   7. SECTIONS GENERAL
+   -------------------------------------------------------------------------- */
+.app-section {
+    padding: 170px 0 80px 0; /* Adjusted top padding to 170px to align perfectly with the larger header height */
+    display: none;
+    animation: sectionFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.section-active {
+    display: block;
+}
+
+.section-header {
+    margin-bottom: 50px;
+}
+
+.section-tag {
+    display: inline-block;
+    color: var(--neon-cyan);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--thai-red);
+    padding-bottom: 4px;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    color: var(--thai-blue);
+}
+
+.section-lead-sub {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   8. SECTION: HOME & HERO (Light Resort & Tech Design)
+   -------------------------------------------------------------------------- */
+.hero-container {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.badge-thai {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(43, 179, 192, 0.08);
+    border: 1px solid rgba(43, 179, 192, 0.2);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    margin-bottom: 24px;
+}
+
+.flag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--thai-red);
+    box-shadow: 0 0 6px var(--thai-red-glow);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    color: var(--thai-blue);
+}
+
+.text-gradient {
+    color: var(--neon-cyan);
+}
+
+.hero-lead {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    max-width: 600px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+}
+
+/* Quick Highlights Banner */
+.hero-highlights {
+    display: flex;
+    gap: 32px;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 24px;
+    width: 100%;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.highlight-icon {
+    font-size: 1.8rem;
+}
+
+.highlight-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.highlight-info strong {
+    font-size: 0.95rem;
+    color: var(--thai-blue);
+}
+
+.highlight-info span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Hero Interactive Earbud Showcase Visual */
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.visual-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+}
+
+.visual-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 12px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-indicator.online {
+    background-color: var(--success);
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+/* Earbud Graphic Render */
+.earbud-graphic {
+    height: 260px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.earbud-glow {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+    filter: blur(25px);
+    opacity: 0.25;
+    animation: earbudPulse 4s infinite ease-in-out;
+}
+
+.earbud-body {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #F8FAFC;
+    border: 3px solid var(--thai-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(27, 37, 66, 0.06), inset 0 0 15px rgba(43, 179, 192, 0.08);
+    z-index: 1;
+    position: relative;
+}
+
+.earbud-ring {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px dashed var(--neon-cyan);
+    animation: rotatingRing 20s infinite linear;
+}
+
+.earbud-logo {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 2px 4px rgba(27, 37, 66, 0.1));
+}
+
+/* Feature tags inside showcase */
+.feature-tag {
+    position: absolute;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--thai-blue);
+    box-shadow: 0 4px 12px rgba(27, 37, 66, 0.05);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.tag-1 { top: 15%; left: 0; border-left: 2.5px solid var(--thai-red); }
+.tag-2 { bottom: 20%; right: -10px; border-right: 2.5px solid var(--neon-cyan); }
+.tag-3 { bottom: 5%; left: 20px; border-bottom: 2.5px solid var(--thai-gold); }
+
+.visual-footer {
+    border-top: 1px solid var(--border-glass);
+    padding-top: 16px;
+}
+
+.visual-caption {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.feature-card {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.feature-icon.bg-red { background: rgba(185, 60, 60, 0.08); border: 1px solid var(--thai-red); color: var(--thai-red); }
+.feature-icon.bg-blue { background: rgba(27, 37, 66, 0.05); border: 1px solid var(--thai-blue); color: var(--thai-blue); }
+.feature-icon.bg-cyan { background: rgba(43, 179, 192, 0.08); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
+.feature-icon.bg-gold { background: rgba(212, 175, 55, 0.08); border: 1px solid var(--thai-gold); color: var(--thai-gold); }
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    color: var(--thai-blue);
+}
+
+.feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Language Showcase Module */
+.language-showcase-box {
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    margin-top: 40px;
+    background: #FFFFFF;
+}
+
+.language-showcase-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    text-align: center;
+    color: var(--thai-blue);
+}
+
+.language-showcase-box > p {
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.search-lang-wrapper {
+    max-width: 500px;
+    margin: 0 auto 32px auto;
+}
+
+.search-lang-wrapper input {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    color: var(--thai-blue);
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.search-lang-wrapper input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(43, 179, 192, 0.15);
+    background: #FFFFFF;
+}
+
+.languages-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.lang-tag {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-glass);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: default;
+    transition: var(--transition-smooth);
+}
+
+.lang-tag:hover {
+    background: rgba(43, 179, 192, 0.08);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    transform: translateY(-1px);
+}
+
+.lang-tag.highlight-th {
+    border-color: var(--thai-gold);
+    color: var(--thai-gold);
+    background: rgba(212, 175, 55, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   9. SECTION: INTERACTIVE SIMULATOR (Crisp Clean iMessage/High-End Style)
+   -------------------------------------------------------------------------- */
+.simulator-layout {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.simulator-scenarios {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.simulator-scenarios h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    color: var(--thai-blue);
+}
+
+.scenario-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-soft);
+}
+
+.scenario-emoji {
+    font-size: 2.2rem;
+    transition: var(--transition-smooth);
+}
+
+.scenario-details h4 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+    color: var(--thai-blue);
+}
+
+.scenario-details p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.scenario-card:hover {
+    transform: translateX(4px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 10px 20px rgba(27, 37, 66, 0.06);
+}
+
+.scenario-card.active {
+    border-color: var(--neon-cyan);
+    background: rgba(43, 179, 192, 0.04);
+    box-shadow: var(--shadow-glow);
+}
+
+.scenario-card.active .scenario-emoji {
+    transform: scale(1.1);
+}
+
+/* Chatbox Interface */
+.simulator-chatbox {
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+}
+
+.chatbox-header {
+    background: #FFFFFF;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.chatbox-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--thai-blue);
+}
+
+.blinking {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--thai-red);
+    box-shadow: 0 0 6px var(--thai-red-glow);
+    animation: blink 1.5s infinite ease-in-out;
+}
+
+.device-badge {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--thai-gold);
+    color: var(--thai-gold);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Messages area */
+.chatbox-messages {
+    flex-grow: 1;
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #F8FAFC;
+}
+
+.msg-bubble {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    position: relative;
+    animation: msgSlideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    box-shadow: 0 2px 6px rgba(27, 37, 66, 0.02);
+}
+
+.msg-meta {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--thai-gold);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.msg-text {
+    font-size: 0.95rem;
+    color: var(--thai-blue);
+}
+
+.msg-trans {
+    font-size: 0.8rem;
+    color: var(--neon-cyan);
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(43, 179, 192, 0.2);
+    font-style: italic;
+}
+
+/* Positioning of sender bubbles (High contrast clean look) */
+.msg-tourist {
+    align-self: flex-start;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    border-bottom-left-radius: 4px;
+}
+
+.msg-local {
+    align-self: flex-end;
+    background: rgba(43, 179, 192, 0.08);
+    border: 1px solid rgba(43, 179, 192, 0.25);
+    border-bottom-right-radius: 4px;
+    text-align: right;
+}
+
+.msg-local .msg-meta {
+    color: var(--neon-cyan);
+}
+
+.msg-local .msg-trans {
+    color: var(--thai-gold);
+    border-top-color: rgba(212, 175, 55, 0.25);
+}
+
+/* Controls */
+.chatbox-controls {
+    background: #FFFFFF;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-glass);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    background: rgba(43, 179, 192, 0.06);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(43, 179, 192, 0.2);
+    border-top: 2px solid var(--neon-cyan);
+    border-radius: 50%;
+    animation: rotate 1s infinite linear;
+}
+
+.control-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   10. SECTION: BOOKING WIZARD
+   -------------------------------------------------------------------------- */
+.booking-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.booking-form {
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+}
+
+.booking-form h3 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 12px;
+    color: var(--thai-blue);
+}
+
+/* Form layouts */
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.booking-form label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--thai-blue);
+}
+
+.booking-form input[type="text"],
+.booking-form input[type="email"],
+.booking-form input[type="date"],
+.booking-form select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    color: var(--thai-blue);
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.booking-form input:focus,
+.booking-form select:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(43, 179, 192, 0.15);
+    background: #FFFFFF;
+}
+
+/* Custom quantity button style */
+.number-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.number-input-wrapper input {
+    width: 50px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: var(--thai-blue);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* Checkbox design */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.checkbox-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    position: relative;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-glass);
+}
+
+.checkbox-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.check-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(27, 37, 66, 0.15);
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+    transition: var(--transition-smooth);
+    margin-top: 2px;
+}
+
+.checkbox-card:hover .check-custom {
+    border-color: var(--neon-cyan);
+}
+
+.checkbox-card input:checked ~ .check-custom {
+    background-color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+}
+
+.checkbox-card input:checked ~ .check-custom::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-details strong {
+    font-size: 0.9rem;
+    color: var(--thai-blue);
+}
+
+.checkbox-details span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.checkbox-card input:checked ~ .checkbox-details strong {
+    color: var(--neon-cyan);
+}
+
+/* Booking Receipt Sidebar */
+.booking-receipt-sidebar {
+    position: sticky;
+    top: 110px;
+}
+
+.receipt-card {
+    padding: 32px;
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    border-left: 4px solid var(--thai-gold);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-soft);
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.receipt-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.receipt-brand {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--thai-gold);
+}
+
+.receipt-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.receipt-row-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    color: var(--silver-platinum);
+}
+
+.font-bold {
+    font-weight: 700;
+    color: var(--thai-blue);
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: var(--border-glass);
+    margin: 8px 0;
+}
+
+.total-row {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    margin-top: 8px;
+}
+
+.eur-conversion {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.text-green { color: var(--success); }
+
+.receipt-footer {
+    border-top: 1px dashed var(--border-glass);
+    padding-top: 16px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.receipt-footer p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.hygiene-badge {
+    align-self: flex-start;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+/* Success Card */
+.success-card {
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    border-top: 4px solid var(--success);
+    text-align: center;
+    background: #FFFFFF;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-glass);
+    animation: successFade 0.5s ease forwards;
+}
+
+.success-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite alternate;
+}
+
+.success-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: var(--success);
+}
+
+.success-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   11. SECTION: HYGIENE & OPERATIONS
+   -------------------------------------------------------------------------- */
+.hygiene-timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.timeline-step {
+    padding: 32px;
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    border-top: 3px solid var(--thai-gold);
+    box-shadow: var(--shadow-soft);
+}
+
+.timeline-step:nth-child(2) {
+    border-top-color: var(--thai-red);
+}
+
+.timeline-step:nth-child(3) {
+    border-top-color: var(--neon-cyan);
+}
+
+.step-num {
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(27, 37, 66, 0.04);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    pointer-events: none;
+}
+
+.timeline-step h3 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+    color: var(--thai-blue);
+}
+
+.timeline-step p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Open Ear Banner design */
+.open-ear-banner {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 40px;
+    padding: 48px;
+    border-radius: var(--radius-lg);
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+    border-right: 4px solid var(--neon-cyan);
+}
+
+.banner-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    color: var(--neon-cyan);
+}
+
+.banner-content > p {
+    color: var(--silver-platinum);
+    margin-bottom: 24px;
+}
+
+.benefit-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.benefit-list li {
+    font-size: 0.9rem;
+    padding-left: 24px;
+    position: relative;
+    color: var(--silver-platinum);
+}
+
+.benefit-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--neon-cyan);
+    font-weight: 800;
+}
+
+.benefit-list strong {
+    color: var(--thai-blue);
+}
+
+.banner-badge {
+    background: linear-gradient(135deg, var(--thai-gold) 0%, #B8860B 100%);
+    color: white;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+    animation: float 4s infinite ease-in-out;
+}
+
+/* --------------------------------------------------------------------------
+   12. SECTION: PRICING & TESTIMONIALS
+   -------------------------------------------------------------------------- */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-bottom: 80px;
+    align-items: stretch;
+}
+
+.pricing-card {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+}
+
+.pricing-card.popular {
+    border-color: var(--thai-gold);
+    box-shadow: 0 15px 35px rgba(27, 37, 66, 0.08), 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.popular-ribbon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--thai-gold);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.plan-header {
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+}
+
+.plan-header h3 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: var(--thai-blue);
+}
+
+.plan-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+}
+
+.price-val {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--thai-blue);
+}
+
+.pricing-card.popular .price-val {
+    color: var(--neon-cyan);
+}
+
+.price-period {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-left: 8px;
+}
+
+.plan-features {
+    margin-bottom: 32px;
+}
+
+.plan-features ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.plan-features li {
+    font-size: 0.9rem;
+    color: var(--silver-platinum);
+}
+
+/* Testimonials Carousel Box */
+.testimonials-box {
+    padding: 48px;
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+    border-bottom: 4px solid var(--thai-red);
+}
+
+.testimonials-box h3 {
+    margin-bottom: 32px;
+    color: var(--thai-blue);
+}
+
+.testimonial-slider {
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-card {
+    text-align: center;
+    max-width: 700px;
+    display: none;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.testimonial-card.active {
+    display: block;
+}
+
+.quote-text {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--thai-blue);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.quote-author {
+    font-weight: 700;
+    color: var(--neon-cyan);
+    font-size: 0.95rem;
+}
+
+.quote-role {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   13. SECTION: FAQ ACCORDION
+   -------------------------------------------------------------------------- */
+.faq-container {
+    max-width: 800px;
+}
+
+.faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.faq-item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+}
+
+.faq-question {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 20px 24px;
+    border: none;
+    color: var(--thai-blue);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.faq-question::after {
+    content: '+';
+    font-size: 1.3rem;
+    color: var(--neon-cyan);
+    transition: var(--transition-smooth);
+}
+
+.faq-question:hover {
+    background: var(--bg-dark);
+}
+
+.faq-item.active .faq-question {
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.faq-item.active .faq-question::after {
+    content: '−';
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    background: #FFFFFF;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.faq-answer-inner {
+    padding: 20px 24px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.faq-answer-inner strong {
+    color: var(--thai-blue);
+}
+
+/* --------------------------------------------------------------------------
+   14. FOOTER & CONTACT
+   -------------------------------------------------------------------------- */
+.app-footer {
+    background: #1B2542; /* Corporate Deep Royal Navy as footer base */
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 80px 0 0 0;
+    margin-top: 100px;
+}
+
+.app-footer h3, 
+.app-footer p, 
+.app-footer label,
+.app-footer strong {
+    color: #FFFFFF;
+}
+
+.app-footer .text-muted,
+.app-footer p {
+    color: #94A3B8;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    margin-bottom: 60px;
+}
+
+.footer-contact h3,
+.footer-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    border-left: 3px solid var(--thai-red);
+    padding-left: 12px;
+}
+
+.footer-contact > p {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+/* Footer Contact Form */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact-form label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(43, 179, 192, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-success {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+/* Footer Info Card items */
+.footer-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.info-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.info-item p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.info-item strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.trust-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.trust-badge {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #E2E8F0;
+}
+
+/* Footer bottom */
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 24px 0;
+    background: #111827;
+}
+
+.bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #94A3B8;
+}
+
+.bottom-links {
+    display: flex;
+    gap: 24px;
+}
+
+.bottom-links a {
+    color: #94A3B8;
+}
+
+.bottom-links a:hover {
+    color: var(--neon-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   15. ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes sectionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes earbudPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.25;
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 0.4;
+    }
+}
+
+@keyframes rotatingRing {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes msgSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes successFade {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   16. MEDIA QUERIES (RESPONSIVENESS)
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-content {
+        align-items: center;
+    }
+    
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero-lead {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+    }
+    
+    .hero-highlights {
+        justify-content: center;
+    }
+    
+    .simulator-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .booking-receipt-sidebar {
+        position: static;
+        margin-top: 24px;
+    }
+    
+    .hygiene-timeline {
+        grid-template-columns: 1fr;
+    }
+    
+    .open-ear-banner {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .banner-badge {
+        margin-top: 24px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        height: 95px; /* Increased from 70px on mobile */
+    }
+    
+    .logo-text {
+        display: flex;
+    }
+    
+    .logo-img {
+        height: 65px; /* Large mobile logo size, increased from 54px */
+    }
+    
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: absolute;
+        top: 95px; /* Adjusted to sit perfectly under the larger mobile header */
+        left: 0;
+        width: 100%;
+        background: rgba(248, 250, 252, 0.98);
+        backdrop-filter: blur(16px);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid var(--border-glass);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-menu.open {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+    }
+    
+    .header-action {
+        display: none;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-highlights {
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .col-6 {
+        width: 100%;
+    }
+    
+    .booking-form {
+        padding: 24px;
+    }
+    
+    .pricing-card {
+        padding: 24px;
+    }
+    
+    .bottom-container {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
