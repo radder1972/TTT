@@ -1617,16 +1617,11 @@ hr {
 }
 
 .hygiene-polaroid {
-    position: relative !important;
-    width: 100% !important;
-    max-width: 320px !important;
-    transform: rotate(-4deg);
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
 .hygiene-polaroid:hover {
-    transform: rotate(2deg) scale(1.05) !important;
     box-shadow: 0 25px 55px rgba(0, 0, 0, 0.16), 0 10px 22px rgba(0, 0, 0, 0.07) !important;
 }
 
