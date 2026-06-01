@@ -1180,7 +1180,89 @@ document.addEventListener('DOMContentLoaded', () => {
         stack.addEventListener('click', shuffle);
     };
 
+    /* ==========================================================================
+       11. INTERACTIVE TERMS & CONDITIONS TABS
+       ========================================================================== */
+    const initTermsTabs = () => {
+        const termsNavBtns = document.querySelectorAll('.terms-nav-btn');
+        const termsContentPanel = document.getElementById('terms-content-panel');
+        if (!termsNavBtns || !termsContentPanel) return;
+
+        const termsData = {
+            pickup: {
+                title: "1. Ophalen & Inleveren van de Apparatuur",
+                content: `
+                    <p>Bij het boeken selecteert u uw gewenste ophaal- en inleverlocatie. Wij bieden momenteel drie handige opties aan in Bangkok en Pattaya:</p>
+                    <ul>
+                        <li><strong>Bangkok Suvarnabhumi Airport (BKK) Stand:</strong> Onze stand op de luchthaven is 24/7 geopend. Ideaal om direct bij aankomst uw sets in ontvangst te nemen.</li>
+                        <li><strong>Pattaya Beach Road Office:</strong> Geopend van 08:00 tot 22:00 uur. Ons kantoor ligt centraal en is eenvoudig te bereiken.</li>
+                        <li><strong>Gratis Hotelbezorging & Inlevering:</strong> Wij bezorgen de verzegelde sets gratis bij de receptie van uw hotel of resort in Pattaya (inclusief Jomtien en Naklua). U kunt de set bij vertrek simpelweg weer achterlaten bij de receptie.</li>
+                    </ul>
+                    <p><em>Let op:</em> De huurperiode gaat in op de afgesproken startdatum vanaf 08:00 uur en eindigt op de einddatum uiterlijk om 22:00 uur. Te laat inleveren zonder overleg brengt een toeslag van ฿250 per dag met zich mee.</p>
+                `
+            },
+            deposit: {
+                title: "2. Borg, Betaling & Legitimatie",
+                content: `
+                    <p>Wij houden van heldere en eenvoudige afspraken zonder onnodige rompslomp:</p>
+                    <ul>
+                        <li><strong>Geen Contante Borg:</strong> Bij verificatie van een geldige creditcard (Visa of Mastercard) bij ophalen of online boeken is <strong>geen contante borg</strong> vereist.</li>
+                        <li><strong>Alternatieve Borg:</strong> Beschikt u niet over een creditcard? Geen probleem! U kunt er ook voor kiezen om een contante borg van ฿3.000 (€80) per set te deponeren, of een kopie van uw paspoort achter te laten. Contante borg krijgt u bij inlevering direct en volledig terug.</li>
+                        <li><strong>Betalingswijzen:</strong> Wij accepteren online betalingen met Creditcard, PromptPay en contante betaling in THB of EUR bij overdracht.</li>
+                    </ul>
+                `
+            },
+            insurance: {
+                title: "3. Schade, Diefstal & Verzekering",
+                content: `
+                    <p>Tijdens het reizen kan er natuurlijk altijd iets onverwachts gebeuren. Wij bieden volledige transparantie over schade en verlies:</p>
+                    <ul>
+                        <li><strong>Optionele Schadedekking (+฿50 / €1.35 per dag):</strong> Hiermee bent u volledig (100%) gedekt tegen onopzettelijke fysieke schade, waterschade of diefstal (met politierapport). Geen eigen risico!</li>
+                        <li><strong>Zonder Verzekering:</strong> Bij verlies, diefstal of onherstelbare schade aan de oordopjes bent u aansprakelijk voor de vervangingswaarde. Deze bedraagt maximaal ฿4.500 per oordopje of laadcase.</li>
+                        <li><strong>Normale Slijtage:</strong> Kleine krasjes of normale gebruikssporen vallen uiteraard onder onze service en hier worden nooit kosten voor in rekening gebracht.</li>
+                    </ul>
+                `
+            },
+            cancellation: {
+                title: "4. Annuleren, Wijzigen & Verlengen",
+                content: `
+                    <p>Plannen veranderen, zeker tijdens een reis. Wij zijn de meest flexibele partner in Pattaya:</p>
+                    <ul>
+                        <li><strong>Gratis Annuleren:</strong> U kunt uw reservering tot 24 uur voor de startdatum volledig gratis annuleren. U ontvangt uw eventuele aanbetaling binnen 3 werkdagen terug.</li>
+                        <li><strong>Tussentijds Wijzigen:</strong> Wilt u de startdatum verschuiven of de ophaallocatie aanpassen? Laat het ons weten via WhatsApp en we passen het kosteloos voor u aan.</li>
+                        <li><strong>Verlengen:</strong> Bevalt de vertaalservice zo goed dat u de oordopjes langer wilt houden? Stuur ons simpelweg een WhatsApp-bericht. Indien de sets beschikbaar zijn, verlengen we uw contract direct tegen hetzelfde voordelige dagtarief.</li>
+                    </ul>
+                `
+            }
+        };
+
+        termsNavBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tabId = e.target.getAttribute('data-tab');
+                const data = termsData[tabId];
+                if (!data) return;
+
+                // Toggle active button class
+                termsNavBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Fade out, update content, fade in
+                termsContentPanel.style.opacity = '0';
+                setTimeout(() => {
+                    termsContentPanel.innerHTML = `
+                        <div class="terms-tab-panel active">
+                            <h3>${data.title}</h3>
+                            ${data.content}
+                        </div>
+                    `;
+                    termsContentPanel.style.opacity = '1';
+                }, 150);
+            });
+        });
+    };
+
     initHeaderScroll();
     initPolaroidStack();
     initHygienePolaroidStack();
+    initTermsTabs();
 });
