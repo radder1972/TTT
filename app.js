@@ -803,24 +803,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const card1 = document.getElementById('polaroid-card-1');
         const card2 = document.getElementById('polaroid-card-2');
-        if (!card1 || !card2) return;
+        const card3 = document.getElementById('polaroid-card-3');
+        if (!card1 || !card2 || !card3) return;
 
         let isShuffling = false;
-        let card1Top = true; // Tracks which card is currently on top
+        
+        // Order of cards from top to bottom (initially: 1, 2, 3)
+        let cards = [card1, card2, card3];
 
         // Initial positions and styles
         card1.style.transform = 'rotate(12deg)';
-        card1.style.zIndex = '2';
+        card1.style.zIndex = '3';
         card2.style.transform = 'rotate(-8deg)';
-        card2.style.zIndex = '1';
+        card2.style.zIndex = '2';
+        card3.style.transform = 'rotate(4deg)';
+        card3.style.zIndex = '1';
 
         stack.addEventListener('mouseenter', () => {
             if (isShuffling) return;
             isShuffling = true;
 
             const isMobile = window.innerWidth <= 992;
-            const topCard = card1Top ? card1 : card2;
-            const bottomCard = card1Top ? card2 : card1;
+            
+            // Top card is always cards[0]
+            const topCard = cards[0];
 
             // Slide top card out dynamically (upwards on mobile, rightwards on desktop)
             topCard.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
@@ -830,19 +836,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Swap z-index and tilt angles when card is completely clear (250ms)
             setTimeout(() => {
-                card1Top = !card1Top;
+                // Update our tracker array: shift top card to the bottom
+                cards.shift();
+                cards.push(topCard);
 
-                // Send original top card to bottom with a fresh random bottom tilt
-                topCard.style.zIndex = '1';
-                const randomTiltBottom = Math.floor(Math.random() * 8) - 10; // -10deg to -2deg
+                // Set new z-indexes:
+                cards[0].style.zIndex = '3';
+                cards[1].style.zIndex = '2';
+                cards[2].style.zIndex = '1';
+
+                // Recalculate natural, randomized angles for a physical feel
+                const topTilt = Math.floor(Math.random() * 8) + 6; // 6deg to 14deg
+                const middleTilt = Math.floor(Math.random() * 8) - 8; // -8deg to 0deg
+                const bottomTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+
+                // Apply angles
+                cards[0].style.transform = `rotate(${topTilt}deg)`;
+                cards[1].style.transform = `rotate(${middleTilt}deg)`;
+                
+                // Return original top card (now bottom card at cards[2]) to stack
                 topCard.style.transform = isMobile 
-                    ? `translateY(0) rotate(${randomTiltBottom}deg)` 
-                    : `translateX(0) rotate(${randomTiltBottom}deg)`;
-
-                // Bring original bottom card to top with a fresh random top tilt
-                bottomCard.style.zIndex = '2';
-                const randomTiltTop = Math.floor(Math.random() * 8) + 6; // 6deg to 14deg
-                bottomCard.style.transform = `rotate(${randomTiltTop}deg)`;
+                    ? `translateY(0) rotate(${bottomTilt}deg)` 
+                    : `translateX(0) rotate(${bottomTilt}deg)`;
 
                 // Shuffling completes after the card returns and settles
                 setTimeout(() => {

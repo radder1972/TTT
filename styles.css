@@ -65,11 +65,12 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    background-color: var(--bg-dark); /* Base solid white background */
 }
 
 body {
     font-family: var(--font-primary);
-    background-color: var(--bg-dark);
+    background-color: transparent; /* Transparent body allows negative z-index background watermarks to render perfectly! */
     color: var(--silver-platinum);
     line-height: 1.6;
     overflow-x: hidden;
@@ -184,7 +185,7 @@ input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.32; /* Increased opacity from 0.18 for better visibility as requested! */
+    opacity: 0.38; /* Highly visible page watermark as requested! */
     mix-blend-mode: multiply; /* Renders white background 100% transparent */
 }
 
@@ -381,14 +382,14 @@ input, select, textarea {
 /* Massive Centered Watermark Logo behind the header brand letters (Scrolling naturally) */
 .hero-watermark {
     position: absolute;
-    top: -140px !important; /* Perfectly aligned to sit behind the centered header letters when at the top! */
+    top: -240px !important; /* Adjusted top coordinate to perfectly center the enlarged logo behind the letters at top scroll! */
     left: 50%;
     transform: translateX(-50%);
-    width: 380px; /* Exact same massive size as original match */
-    height: 380px;
-    z-index: -2; /* Placed deep in the background behind all elements */
+    width: 580px !important; /* Massive brand watermark logo, enormously enlarged (from 380px) for high prominence! */
+    height: 580px !important;
+    z-index: -2; /* Placed deep in the background behind all text elements to act as a true background logo */
     pointer-events: none; /* Entirely click-through */
-    opacity: 0.35; /* High visibility as matches the screenshot */
+    opacity: 0.45; /* High visibility & prominent opacity as requested! */
     mix-blend-mode: multiply;
 }
 
