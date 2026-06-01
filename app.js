@@ -867,5 +867,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    /* ==========================================================================
+       9. FIXED HEADER SCROLL TRANSITION (DYNAMIC COLLAPSE)
+       ========================================================================== */
+    const initHeaderScroll = () => {
+        const header = document.querySelector('.app-header');
+        if (!header) return;
+        
+        const handleScroll = () => {
+            if (window.scrollY > 40) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        // Run immediately to capture initial page scroll state
+        handleScroll();
+    };
+
+    initHeaderScroll();
     initPolaroidStack();
 });

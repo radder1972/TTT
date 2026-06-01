@@ -356,40 +356,75 @@ input, select, textarea {
     top: 50%;
     transform: translate(-50%, -50%); /* Perfectly centered horizontally and vertically in the header */
     display: flex;
-    flex-direction: row !important; /* Premium horizontal layout */
+    flex-direction: column !important; /* Center column at top scroll */
     align-items: center;
     z-index: 1002;
-    gap: 12px !important;
+    gap: 0px !important;
+    transition: var(--transition-smooth);
 }
 
 .logo-svg, .logo-img {
-    height: 48px !important; /* Compact, highly polished header logo size */
+    height: 380px !important; /* Enormously large logo! */
     width: auto !important;
     object-fit: contain;
     mix-blend-mode: multiply; /* 100% transparent white background removal */
     transition: var(--transition-smooth);
-    position: static !important; /* Stand in static row flow */
+    position: absolute !important;
+    top: -80px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    opacity: 0.38 !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+}
+
+.logo:hover .logo-img {
+    transform: translateX(-50%) scale(1.04) rotate(1deg) !important; /* Elegant subtle scale and pop */
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: var(--transition-smooth);
+}
+
+/* Scrolled state transitions for header logo */
+.app-header.scrolled {
+    height: 80px; /* Compress header height on scroll */
+}
+
+.app-header.scrolled .logo {
+    flex-direction: row !important;
+    gap: 12px !important;
+}
+
+.app-header.scrolled .logo-img {
+    height: 48px !important;
+    position: static !important;
     transform: none !important;
     opacity: 1 !important;
     z-index: 2 !important;
     pointer-events: auto !important;
 }
 
-.logo:hover .logo-img {
-    transform: scale(1.06) rotate(3deg) !important; /* Elegant subtle rotation and pop */
+.app-header.scrolled .logo-text {
+    text-align: left;
+    align-items: flex-start;
 }
 
-/* Massive Centered Watermark Logo behind the header brand letters (Scrolling naturally) */
+/* Massive Centered Watermark Logo in the middle of the Hero section */
 .hero-watermark {
     position: absolute;
-    top: -240px !important; /* Adjusted top coordinate to perfectly center the enlarged logo behind the letters at top scroll! */
+    top: 50% !important; /* Center vertically inside the Hero section */
     left: 50%;
-    transform: translateX(-50%);
-    width: 580px !important; /* Massive brand watermark logo, enormously enlarged (from 380px) for high prominence! */
-    height: 580px !important;
-    z-index: -2; /* Placed deep in the background behind all text elements to act as a true background logo */
+    transform: translate(-50%, -50%) !important; /* Center perfectly horizontally and vertically */
+    width: 680px !important; /* Enormously enlarged and highly prominent background logo! */
+    height: 680px !important;
+    z-index: -2; /* Placed deep in the background behind all elements (text & polaroids) */
     pointer-events: none; /* Entirely click-through */
-    opacity: 0.45; /* High visibility & prominent opacity as requested! */
+    opacity: 0.45; /* High visibility & prominent opacity */
     mix-blend-mode: multiply;
 }
 
@@ -626,6 +661,7 @@ input, select, textarea {
    7. SECTIONS GENERAL
    -------------------------------------------------------------------------- */
 .app-section {
+    position: relative; /* Anchor for absolute background watermarks */
     padding: 160px 0 80px 0; /* Aligned perfectly with the 100px Apple White header height */
     display: none;
     animation: sectionFadeIn 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
@@ -2146,6 +2182,11 @@ hr {
 @media (min-width: 993px) and (max-width: 1350px) {
     .app-header {
         height: 100px;
+        transition: var(--transition-smooth);
+    }
+    
+    .app-header.scrolled {
+        height: 80px;
     }
     
     .logo {
@@ -2154,14 +2195,47 @@ hr {
         top: 50%;
         transform: translate(-50%, -50%);
         display: flex;
-        flex-direction: row !important; /* Premium horizontal layout */
+        flex-direction: column !important; /* Center column at top scroll for laptop */
         align-items: center;
         z-index: 1002;
-        gap: 12px !important;
+        gap: 0px !important;
+        transition: var(--transition-smooth);
     }
     
     .logo-img, .logo-svg {
-        height: 40px !important; /* Slightly smaller compact logo for laptops */
+        height: 300px !important; /* Slightly smaller massive logo for laptops */
+        position: absolute !important;
+        top: -60px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        opacity: 0.38 !important;
+        z-index: -1 !important;
+        pointer-events: none !important;
+        transition: var(--transition-smooth);
+    }
+    
+    .logo:hover .logo-img {
+        transform: translateX(-50%) scale(1.04) rotate(1deg) !important;
+    }
+    
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: var(--transition-smooth);
+        margin-left: 0;
+    }
+    
+    /* Scrolled laptop state transitions */
+    .app-header.scrolled .logo {
+        flex-direction: row !important;
+        gap: 12px !important;
+    }
+    
+    .app-header.scrolled .logo-img,
+    .app-header.scrolled .logo-svg {
+        height: 40px !important; /* Slightly smaller compact logo for laptops on scroll */
         position: static !important;
         transform: none !important;
         opacity: 1 !important;
@@ -2169,12 +2243,9 @@ hr {
         pointer-events: auto !important;
     }
     
-    .logo:hover .logo-img {
-        transform: scale(1.06) rotate(3deg) !important;
-    }
-    
-    .logo-text {
-        margin-left: 0;
+    .app-header.scrolled .logo-text {
+        text-align: left;
+        align-items: flex-start;
     }
     
     .brand-name {
