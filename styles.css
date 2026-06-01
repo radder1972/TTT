@@ -426,18 +426,54 @@ input, select, textarea {
    Premium Real-World Experience Showcase Styles (Pattaya Photo visual)
    -------------------------------------------------------------------------- */
 .experience-visual-card {
-    padding: 16px !important; /* Tighter padding for a gorgeous photo focus */
+    padding: 16px 16px 40px 16px !important; /* Polaroid-style deep bottom margin */
     overflow: hidden;
-    background: #FFFFFF;
+    background: #FFFFFF !important;
+    border-radius: 4px !important; /* Sharp photo frame edges */
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.06) !important;
+    transform: rotate(18deg) !important; /* Playful 18-degree Polaroid tilt */
+    transform-origin: center center;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease !important;
+}
+
+.experience-visual-card:hover {
+    transform: rotate(6deg) scale(1.03) !important; /* Smoothly straightens and lifts up on hover */
+    box-shadow: 0 35px 65px rgba(0, 0, 0, 0.18), 0 14px 32px rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Hide header on the Polaroid card for absolute physical realism */
+.experience-visual-card .visual-header {
+    display: none !important;
+}
+
+/* Remove card division borders and align caption */
+.experience-visual-card .visual-footer {
+    border-top: none !important;
+    padding-top: 18px !important;
+}
+
+/* Custom premium handwriting typography for the Polaroid caption */
+.experience-visual-card .visual-caption {
+    font-family: 'Segoe Print', 'Segoe Script', 'Segoe UI', cursive, sans-serif !important;
+    font-size: 0.95rem !important;
+    color: #333333 !important;
+    text-align: center;
+    font-style: normal !important;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 0 4px;
 }
 
 .experience-img-container {
     position: relative;
     width: 100%;
     height: 320px; /* Perfect height for the card display */
-    border-radius: var(--radius-md);
+    border-radius: 2px !important; /* Crisp photo corner styling */
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(27, 37, 66, 0.08);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.12) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .experience-img {
@@ -2006,6 +2042,17 @@ hr {
    16. MEDIA QUERIES (RESPONSIVENESS)
    -------------------------------------------------------------------------- */
 @media (max-width: 992px) {
+    /* Polaroid Responsive Handling to prevent edge clipping on smaller viewports */
+    .experience-visual-card {
+        transform: rotate(6deg) !important; /* Reduced rotation for mobile safety */
+        max-width: 340px !important;
+        margin: 30px auto 0 auto !important; /* Centered nicely */
+    }
+    
+    .experience-visual-card:hover {
+        transform: rotate(2deg) scale(1.02) !important;
+    }
+
     .hero-container {
         grid-template-columns: 1fr;
         gap: 40px;
