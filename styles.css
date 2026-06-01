@@ -1,5 +1,5 @@
 /* ==========================================================================
-   True Time Thai - Luminous Design System & Stylesheet (Huisstijl Update)
+   True Time Thai - Luminous Design System & Stylesheet (Experience Update)
    Typography: Segoe UI
    Colors: Slide-matched Bright White, Royal Navy Blue, Crimson Red, Teal/Cyan
    ========================================================================== */
@@ -9,48 +9,48 @@
    -------------------------------------------------------------------------- */
 :root {
     /* Fonts */
-    --font-primary: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     
-    /* Luminous Corporate Color Palette (Matched directly to your presentation slide) */
-    --bg-dark: #F8FAFC;               /* Crisp, Luminous Slate White background */
-    --bg-card: #FFFFFF;               /* Pure White Card Base */
-    --bg-card-hover: #FFFFFF;
+    /* Apple White Premium Minimalist Color Palette */
+    --bg-dark: #FFFFFF;               /* Clean Apple Pure White background */
+    --bg-card: #F5F5F7;               /* Apple Signature smooth off-white/light grey card background */
+    --bg-card-hover: #E8E8ED;         /* Slightly deeper grey for subtle card hover state */
     
-    --thai-blue: #1B2542;            /* Deep Royal Navy (from slide 'What is TRUE TIME') */
-    --thai-red: #B93C3C;             /* Corporate Crimson Red (from slide 'THAI') */
-    --thai-red-glow: rgba(185, 60, 60, 0.15);
+    --thai-blue: #1D1D1F;            /* Apple deep slate black text & primary accents */
+    --thai-red: #D02A2A;             /* Refined, high-end crimson red brand accent */
+    --thai-red-glow: rgba(208, 42, 42, 0.06);
     
-    --neon-cyan: #2BB3C0;            /* Tropical Teal/Cyan (from slide description text & arcs) */
-    --neon-cyan-glow: rgba(43, 179, 192, 0.25);
+    --neon-cyan: #0066CC;            /* Apple brand blue for high-contrast hyperlinks & primary buttons */
+    --neon-cyan-glow: rgba(0, 102, 204, 0.12);
     
-    --thai-gold: #D4AF37;            /* Heritage Gold accent */
-    --thai-gold-glow: rgba(212, 175, 55, 0.15);
+    --thai-gold: #BF9F3F;            /* Muted heritage gold accent */
+    --thai-gold-glow: rgba(191, 159, 63, 0.06);
     
     /* Text & Content Contrast */
-    --text-white: #1B2542;           /* High contrast Deep Navy text */
-    --text-muted: #576F84;           /* Soft Slate Blue for subtitles (matching slide text) */
-    --silver-platinum: #334155;      /* Slate Grey for body text readability */
+    --text-white: #1D1D1F;           /* High contrast slate black text */
+    --text-muted: #86868B;           /* Apple secondary muted grey for sub-labels and info */
+    --silver-platinum: #424245;      /* Apple elegant body text color for high readability */
     
-    /* Glassmorphism & Borders */
-    --border-glass: rgba(27, 37, 66, 0.08);
-    --border-glow: rgba(43, 179, 192, 0.4);
+    /* Glassmorphism & Thin Apple Borders */
+    --border-glass: rgba(0, 0, 0, 0.08); /* Extremely thin and crisp border */
+    --border-glow: rgba(0, 102, 204, 0.35);
     
     /* System Colors */
     --success: #10B981;
-    --success-glow: rgba(16, 185, 129, 0.15);
+    --success-glow: rgba(16, 185, 129, 0.12);
     
-    /* Layout & Shadows */
+    /* Layout & Rounded Corners (Apple Style) */
     --container-width: 1200px;
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
     
-    /* Premium Soft Shadows (Luxury tech-brand style) */
-    --shadow-soft: 0 10px 30px -5px rgba(27, 37, 66, 0.05), 0 4px 12px -2px rgba(27, 37, 66, 0.03);
-    --shadow-glow: 0 0 25px 0 rgba(43, 179, 192, 0.15);
-    --shadow-hover: 0 20px 40px -10px rgba(27, 37, 66, 0.12), 0 0 1px 1px rgba(43, 179, 192, 0.1);
+    /* Ultra-soft premium flat shadows */
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+    --shadow-glow: 0 0 20px rgba(0, 102, 204, 0.06);
+    --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.08), 0 2px 10px rgba(0, 0, 0, 0.02);
     
-    --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* --------------------------------------------------------------------------
@@ -174,11 +174,11 @@ input, select, textarea {
 /* Large Subtle Background Watermark Logo */
 .bg-watermark {
     position: fixed;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 750px; /* Massive, highly prominent corporate watermark */
-    height: 750px;
+    top: 50%;
+    left: 33.33%; /* Positioned exactly at 1/3 of the page width! */
+    transform: translate(-50%, -50%) rotate(-12deg); /* Dramatically tilted/rotated for that asymmetric artistic feel */
+    width: 1250px; /* Grand visual watermark overhaul, scaled up from 1000px */
+    height: 1250px;
     z-index: -3; /* Placed completely in the background behind all elements */
     pointer-events: none;
     display: flex;
@@ -247,28 +247,31 @@ input, select, textarea {
 }
 
 .btn-neon {
-    background: linear-gradient(135deg, var(--neon-cyan) 0%, #1FA2B1 100%);
+    background: var(--neon-cyan);
     color: white;
-    box-shadow: 0 4px 15px 0 var(--neon-cyan-glow);
+    border-radius: 980px; /* Signature Apple pill button style */
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
 }
 
 .btn-neon:hover {
+    background: #0052A3; /* Slightly darker Apple Blue on hover */
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px 0 rgba(43, 179, 192, 0.4), 0 0 10px 0 var(--neon-cyan-glow);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 102, 204, 0.25);
 }
 
 .btn-outline {
     background: transparent;
-    border: 2px solid var(--thai-blue);
+    border: 1px solid var(--thai-blue); /* Thinner, ultra-crisp border */
     color: var(--thai-blue);
+    border-radius: 980px; /* Pill shaped button */
 }
 
 .btn-outline:hover {
     border-color: var(--neon-cyan);
     color: var(--neon-cyan);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px 0 rgba(43, 179, 192, 0.08);
+    transform: translateY(-1px);
+    background: rgba(0, 102, 204, 0.03); /* Subtle blue tint on hover */
 }
 
 /* Brand Custom Vector Icon Utility */
@@ -330,7 +333,7 @@ input, select, textarea {
     top: 0;
     left: 0;
     width: 100%;
-    height: 110px; /* Increased from 80px to accommodate much larger logo */
+    height: 150px; /* Grand luxury header to accommodate an impressively large logo */
     z-index: 1000;
     background: rgba(248, 250, 252, 0.85);
     backdrop-filter: blur(16px);
@@ -349,30 +352,30 @@ input, select, textarea {
 .logo {
     display: flex;
     align-items: center;
-    gap: 16px; /* Increased gap for visual balance */
+    gap: 20px; /* Increased gap for perfect visual balance with the larger logo */
 }
 
 .logo-svg {
-    height: 80px;
+    height: 120px; /* Scaled up from 90px to make the logo outstandingly prominent and premium */
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 3px 6px rgba(27, 37, 66, 0.06));
+    filter: drop-shadow(0 4px 8px rgba(27, 37, 66, 0.08));
     transition: var(--transition-smooth);
 }
 
 .logo-img {
-    height: 80px;
+    height: 120px; /* Scaled up from 90px to make the logo outstandingly prominent and premium */
     width: auto;
     object-fit: contain;
     mix-blend-mode: multiply; /* Renders the white background 100% transparent and clean */
-    filter: drop-shadow(0 3px 6px rgba(27, 37, 66, 0.04));
+    filter: drop-shadow(0 4px 8px rgba(27, 37, 66, 0.06));
     transition: var(--transition-smooth);
 }
 
 .logo:hover .logo-svg,
 .logo:hover .logo-img {
-    transform: rotate(4deg) scale(1.04);
-    filter: drop-shadow(0 6px 16px rgba(43, 179, 192, 0.22)) drop-shadow(0 3px 8px var(--thai-red-glow));
+    transform: rotate(4deg) scale(1.05);
+    filter: drop-shadow(0 8px 20px rgba(43, 179, 192, 0.25)) drop-shadow(0 4px 10px var(--thai-red-glow));
 }
 
 .logo-text {
@@ -381,21 +384,21 @@ input, select, textarea {
 }
 
 .brand-name {
-    font-size: 1.55rem;
+    font-size: 1.95rem; /* Scaled up typography to keep perfect proportions with the larger logo */
     font-weight: 800;
     letter-spacing: 0.02em;
     color: var(--thai-blue);
     line-height: 1.1;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .thai-word {
     font-family: 'Segoe Script', 'Segoe UI', cursive, sans-serif; /* Cursive script form of Segoe UI! */
     font-style: italic;
     font-weight: 700;
-    font-size: 1.7rem; /* Balanced size for hand-drawn script */
+    font-size: 2.1rem; /* Balanced size for hand-drawn script */
     color: var(--thai-red) !important;
     -webkit-text-fill-color: var(--thai-red) !important;
     display: inline-block;
@@ -404,51 +407,86 @@ input, select, textarea {
 }
 
 .brand-sub {
-    font-size: 0.72rem;
+    font-size: 0.88rem; /* Scaled up sub-brand text for excellent readability */
     font-weight: 700;
     letter-spacing: 0.15em;
     color: var(--neon-cyan);
 }
 
 /* --------------------------------------------------------------------------
-   Hero Logo Showcase Styles (Large, Prominent & Transparent)
+   Premium Real-World Experience Showcase Styles (Pattaya Photo visual)
    -------------------------------------------------------------------------- */
-.hero-logo-container {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 280px;
-    margin: 20px 0;
+.experience-visual-card {
+    padding: 16px !important; /* Tighter padding for a gorgeous photo focus */
+    overflow: hidden;
+    background: #FFFFFF;
 }
 
-.hero-logo-img {
-    height: 240px; /* Highly prominent visual centerpiece */
+.experience-img-container {
+    position: relative;
+    width: 100%;
+    height: 320px; /* Perfect height for the card display */
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(27, 37, 66, 0.08);
+}
+
+.experience-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Beautiful cropped scale */
+    transition: var(--transition-smooth);
+}
+
+.experience-visual-card:hover .experience-img {
+    transform: scale(1.03); /* Subtle zoom interaction on hover! */
+}
+
+/* Premium Floating Brand Badge Overlay */
+.floating-brand-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    padding: 10px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 25px rgba(27, 37, 66, 0.12);
+    z-index: 10;
+    transition: var(--transition-smooth);
+}
+
+.floating-brand-badge:hover {
+    transform: translateY(-2px);
+    background: #FFFFFF;
+    box-shadow: 0 14px 30px rgba(27, 37, 66, 0.18);
+}
+
+.badge-logo-img {
+    height: 54px; /* Highly visible badge logo (enlarged from 36px) */
     width: auto;
     object-fit: contain;
-    mix-blend-mode: multiply; /* 100% transparent background, showing glows underneath */
-    z-index: 2;
-    filter: drop-shadow(0 10px 25px rgba(27, 37, 66, 0.08));
-    animation: float 5s infinite ease-in-out;
+    mix-blend-mode: multiply; /* 100% transparent background overlay */
 }
 
-.hero-logo-glow {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
-    filter: blur(25px);
-    opacity: 0.22;
-    z-index: 1;
-    animation: earbudPulse 5s infinite ease-in-out;
+.brand-name-badge {
+    font-size: 1.05rem; /* Enlarged from 0.85rem for greater prominence */
+    font-weight: 800;
+    color: var(--thai-blue);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-/* Precise positions for floating brand tags around the center logo */
-.logo-tag-1 { top: 15%; left: -20px; border-left: 2.5px solid var(--thai-gold); }
-.logo-tag-2 { bottom: 15%; left: 0px; border-bottom: 2.5px solid var(--thai-red); }
-.logo-tag-3 { top: 40%; right: -20px; border-right: 2.5px solid var(--neon-cyan); }
+.brand-name-badge .thai-word {
+    font-size: 1.2rem; /* Cursive script resized inside badge */
+}
 
 /* Main Navigation Menu */
 .main-nav {
@@ -516,7 +554,7 @@ input, select, textarea {
    7. SECTIONS GENERAL
    -------------------------------------------------------------------------- */
 .app-section {
-    padding: 170px 0 80px 0; /* Adjusted top padding to 170px to align perfectly with the larger header height */
+    padding: 215px 0 80px 0; /* Adjusted top padding to 215px to align perfectly with the larger header height (150px) */
     display: none;
     animation: sectionFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
@@ -655,7 +693,7 @@ input, select, textarea {
     color: var(--text-muted);
 }
 
-/* Hero Interactive Earbud Showcase Visual */
+/* Hero Interactive Showcase Visual */
 .hero-visual {
     display: flex;
     justify-content: center;
@@ -694,76 +732,6 @@ input, select, textarea {
     background-color: var(--success);
     box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
 }
-
-/* Earbud Graphic Render */
-.earbud-graphic {
-    height: 260px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-}
-
-.earbud-glow {
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
-    filter: blur(25px);
-    opacity: 0.25;
-    animation: earbudPulse 4s infinite ease-in-out;
-}
-
-.earbud-body {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #F8FAFC;
-    border: 3px solid var(--thai-gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 25px rgba(27, 37, 66, 0.06), inset 0 0 15px rgba(43, 179, 192, 0.08);
-    z-index: 1;
-    position: relative;
-}
-
-.earbud-ring {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: 50%;
-    border: 2px dashed var(--neon-cyan);
-    animation: rotatingRing 20s infinite linear;
-}
-
-.earbud-logo {
-    font-size: 2.5rem;
-    filter: drop-shadow(0 2px 4px rgba(27, 37, 66, 0.1));
-}
-
-/* Feature tags inside showcase */
-.feature-tag {
-    position: absolute;
-    background: #FFFFFF;
-    border: 1px solid var(--border-glass);
-    padding: 6px 12px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--thai-blue);
-    box-shadow: 0 4px 12px rgba(27, 37, 66, 0.05);
-    z-index: 2;
-    pointer-events: none;
-}
-
-.tag-1 { top: 15%; left: 0; border-left: 2.5px solid var(--thai-red); }
-.tag-2 { bottom: 20%; right: -10px; border-right: 2.5px solid var(--neon-cyan); }
-.tag-3 { bottom: 5%; left: 20px; border-bottom: 2.5px solid var(--thai-gold); }
 
 .visual-footer {
     border-top: 1px solid var(--border-glass);
@@ -2084,42 +2052,105 @@ hr {
     }
 }
 
-@media (max-width: 768px) {
+/* Intermediate Scaling for Laptop Screens (Prevents wrapping of large logo and long nav menu) */
+@media (min-width: 1151px) and (max-width: 1350px) {
     .app-header {
-        height: 95px; /* Increased from 70px on mobile */
+        height: 130px;
+    }
+    
+    .logo-img, .logo-svg {
+        height: 100px;
+    }
+    
+    .brand-name {
+        font-size: 1.65rem;
+        gap: 6px;
+    }
+    
+    .thai-word {
+        font-size: 1.8rem;
+    }
+    
+    .brand-sub {
+        font-size: 0.76rem;
+    }
+    
+    .nav-menu {
+        gap: 20px;
+    }
+    
+    .nav-link {
+        font-size: 0.88rem;
+    }
+    
+    .app-section {
+        padding: 195px 0 80px 0;
+    }
+}
+
+/* Tablet & Mobile Layout Breakpoint */
+@media (max-width: 1150px) {
+    .app-header {
+        height: 110px; /* Highly elegant and clean mobile header height */
     }
     
     .logo-text {
         display: flex;
     }
     
-    .logo-img {
-        height: 65px; /* Large mobile logo size, increased from 54px */
+    .logo-img, .logo-svg {
+        height: 80px; /* Proportional mobile logo height */
+    }
+    
+    .brand-name {
+        font-size: 1.4rem;
+        gap: 4px;
+    }
+    
+    .thai-word {
+        font-size: 1.5rem;
+    }
+    
+    .brand-sub {
+        font-size: 0.65rem;
     }
     
     .nav-toggle {
         display: flex;
     }
     
+    .nav-toggle.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: scale(0);
+    }
+    
+    .nav-toggle.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+    
     .nav-menu {
         position: absolute;
-        top: 95px; /* Adjusted to sit perfectly under the larger mobile header */
+        top: 110px; /* Sits perfectly under the 110px mobile header */
         left: 0;
         width: 100%;
-        background: rgba(248, 250, 252, 0.98);
+        background: rgba(255, 255, 255, 0.98); /* Apple pure white background */
         backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         flex-direction: column;
         gap: 0;
         border-bottom: 1px solid var(--border-glass);
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.4s ease-out;
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+        transition: max-height 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.03);
     }
     
     .nav-menu.open {
-        max-height: 400px;
-        overflow-y: auto;
+        max-height: 450px; /* Large enough to fit all links */
     }
     
     .nav-menu li {
