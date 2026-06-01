@@ -2508,3 +2508,260 @@ hr {
         text-align: center;
     }
 }
+
+/* --------------------------------------------------------------------------
+   14. HEADER SPLIT LAYOUT & RED LINKS STYLE
+   -------------------------------------------------------------------------- */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-menu-right {
+    display: flex;
+    list-style: none;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+.nav-link-red {
+    color: var(--thai-red) !important;
+}
+
+.nav-link-red:hover {
+    color: #A01B1B !important;
+}
+
+.nav-link-red.active {
+    color: var(--thai-red) !important;
+    font-weight: 700;
+}
+
+.nav-link-red::after {
+    background: linear-gradient(90deg, var(--thai-red), var(--thai-blue)) !important;
+}
+
+/* Responsive utilities */
+.mobile-only {
+    display: none !important;
+}
+
+.desktop-only {
+    display: flex !important;
+}
+
+@media (max-width: 992px) {
+    .mobile-only {
+        display: block !important;
+    }
+    .desktop-only {
+        display: none !important;
+    }
+    .header-right {
+        display: none !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   15. SECTION: GEBRUIKERSERVARINGEN (REVIEWS)
+   -------------------------------------------------------------------------- */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.review-card {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition-smooth);
+}
+
+.review-rating {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+}
+
+.review-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--silver-platinum);
+    font-style: italic;
+    margin-bottom: 24px;
+    flex-grow: 1;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 16px;
+}
+
+.author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(43, 179, 192, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    border: 1px solid rgba(43, 179, 192, 0.15);
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-details strong {
+    font-size: 0.9rem;
+    color: var(--thai-blue);
+}
+
+.author-details span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.reviews-cta {
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+    margin-top: 50px;
+    box-shadow: var(--shadow-soft);
+}
+
+.reviews-cta h3 {
+    font-size: 1.5rem;
+    color: var(--thai-blue);
+    margin-bottom: 12px;
+}
+
+.reviews-cta p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 600px;
+    margin: 0 auto 24px auto;
+}
+
+/* --------------------------------------------------------------------------
+   16. SECTION: VOORWAARDEN (TERMS)
+   -------------------------------------------------------------------------- */
+.terms-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.terms-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-soft);
+}
+
+.terms-nav-btn {
+    text-align: left;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-smooth);
+    border-left: 3px solid transparent;
+}
+
+.terms-nav-btn:hover {
+    color: var(--thai-blue);
+    background: rgba(0, 102, 204, 0.02);
+}
+
+.terms-nav-btn.active {
+    color: var(--thai-red);
+    background: rgba(208, 42, 42, 0.03);
+    border-left-color: var(--thai-red);
+}
+
+.terms-content {
+    padding: 40px;
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    min-height: 380px;
+    box-shadow: var(--shadow-soft);
+}
+
+.terms-tab-panel {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.terms-tab-panel.active {
+    display: block;
+}
+
+.terms-content h3 {
+    font-size: 1.6rem;
+    color: var(--thai-blue);
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(43, 179, 192, 0.15);
+    padding-bottom: 12px;
+}
+
+.terms-content p {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--silver-platinum);
+    margin-bottom: 20px;
+}
+
+.terms-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 24px;
+}
+
+.terms-content li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--silver-platinum);
+}
+
+.terms-content li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--thai-red);
+    font-weight: 800;
+}
+
+.terms-content strong {
+    color: var(--thai-blue);
+}
+
+@media (max-width: 768px) {
+    .terms-layout {
+        grid-template-columns: 1fr;
+    }
+}
