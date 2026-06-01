@@ -793,4 +793,64 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    /* ==========================================================================
+       8. POLAROID STACK SHUFFLE EFFECT
+       ========================================================================== */
+    const initPolaroidStack = () => {
+        const stack = document.getElementById('polaroid-deck');
+        if (!stack) return;
+
+        const card1 = document.getElementById('polaroid-card-1');
+        const card2 = document.getElementById('polaroid-card-2');
+        if (!card1 || !card2) return;
+
+        let isShuffling = false;
+        let card1Top = true; // Tracks which card is currently on top
+
+        // Initial positions and styles
+        card1.style.transform = 'rotate(12deg)';
+        card1.style.zIndex = '2';
+        card2.style.transform = 'rotate(-8deg)';
+        card2.style.zIndex = '1';
+
+        stack.addEventListener('mouseenter', () => {
+            if (isShuffling) return;
+            isShuffling = true;
+
+            const isMobile = window.innerWidth <= 992;
+            const topCard = card1Top ? card1 : card2;
+            const bottomCard = card1Top ? card2 : card1;
+
+            // Slide top card out dynamically (upwards on mobile, rightwards on desktop)
+            topCard.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            topCard.style.transform = isMobile 
+                ? 'translateY(-105%) rotate(15deg)' 
+                : 'translateX(115%) rotate(25deg)';
+
+            // Swap z-index and tilt angles when card is completely clear (250ms)
+            setTimeout(() => {
+                card1Top = !card1Top;
+
+                // Send original top card to bottom with a fresh random bottom tilt
+                topCard.style.zIndex = '1';
+                const randomTiltBottom = Math.floor(Math.random() * 8) - 10; // -10deg to -2deg
+                topCard.style.transform = isMobile 
+                    ? `translateY(0) rotate(${randomTiltBottom}deg)` 
+                    : `translateX(0) rotate(${randomTiltBottom}deg)`;
+
+                // Bring original bottom card to top with a fresh random top tilt
+                bottomCard.style.zIndex = '2';
+                const randomTiltTop = Math.floor(Math.random() * 8) + 6; // 6deg to 14deg
+                bottomCard.style.transform = `rotate(${randomTiltTop}deg)`;
+
+                // Shuffling completes after the card returns and settles
+                setTimeout(() => {
+                    isShuffling = false;
+                }, 400);
+            }, 250);
+        });
+    };
+
+    initPolaroidStack();
 });

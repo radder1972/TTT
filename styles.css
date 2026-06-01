@@ -184,7 +184,7 @@ input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.18; /* Significantly more prominent, visible background logo */
+    opacity: 0.32; /* Increased opacity from 0.18 for better visibility as requested! */
     mix-blend-mode: multiply; /* Renders white background 100% transparent */
 }
 
@@ -355,34 +355,47 @@ input, select, textarea {
     top: 50%;
     transform: translate(-50%, -50%); /* Perfectly centered horizontally and vertically in the header */
     display: flex;
-    flex-direction: column;
+    flex-direction: row !important; /* Premium horizontal layout */
     align-items: center;
-    text-align: center;
     z-index: 1002;
-    gap: 0;
+    gap: 12px !important;
 }
 
 .logo-svg, .logo-img {
-    height: 380px; /* Massive brand watermark logo (10x standard logo height!) */
-    width: auto;
+    height: 48px !important; /* Compact, highly polished header logo size */
+    width: auto !important;
     object-fit: contain;
     mix-blend-mode: multiply; /* 100% transparent white background removal */
-    filter: drop-shadow(0 8px 24px rgba(0, 102, 204, 0.04));
     transition: var(--transition-smooth);
-    position: absolute;
-    top: -80px; /* Positioned exactly at top: -80px, bleeding chichly off the top of screen */
-    left: 50%;
-    transform: translateX(-50%); /* Center horizontally behind the brand text */
-    opacity: 0.35; /* Prominent opacity matching your screenshot perfectly! */
-    z-index: -1; /* Placed behind the brand text */
-    pointer-events: none; /* Let clicks pass through */
+    position: static !important; /* Stand in static row flow */
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: 2 !important;
+    pointer-events: auto !important;
 }
 
-.logo:hover .logo-svg,
 .logo:hover .logo-img {
-    transform: translateX(-50%) rotate(3deg) scale(1.02);
-    filter: drop-shadow(0 12px 28px rgba(0, 102, 204, 0.08));
-    opacity: 0.38;
+    transform: scale(1.06) rotate(3deg) !important; /* Elegant subtle rotation and pop */
+}
+
+/* Massive Centered Watermark Logo behind the header brand letters (Scrolling naturally) */
+.hero-watermark {
+    position: absolute;
+    top: -140px !important; /* Perfectly aligned to sit behind the centered header letters when at the top! */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px; /* Exact same massive size as original match */
+    height: 380px;
+    z-index: -2; /* Placed deep in the background behind all elements */
+    pointer-events: none; /* Entirely click-through */
+    opacity: 0.35; /* High visibility as matches the screenshot */
+    mix-blend-mode: multiply;
+}
+
+.hero-watermark-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -423,27 +436,38 @@ input, select, textarea {
 }
 
 /* --------------------------------------------------------------------------
-   Premium Real-World Experience Showcase Styles (Pattaya Photo visual)
+   Premium Real-World Experience Showcase Styles (Stacked Polaroid Deck)
    -------------------------------------------------------------------------- */
+.polaroid-stack {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 480px; /* Leave enough room for the rotated/stacked cards */
+    margin: 0 auto;
+    perspective: 1000px; /* Add 3D depth for the shuffle effect */
+}
+
 .experience-visual-card {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
     padding: 16px 16px 40px 16px !important; /* Polaroid-style deep bottom margin */
     overflow: hidden;
     background: #FFFFFF !important;
     border-radius: 4px !important; /* Sharp photo frame edges */
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.06) !important;
-    transform: rotate(18deg) !important; /* Playful 18-degree Polaroid tilt */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05) !important;
     transform-origin: center center;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease !important;
 }
 
 .experience-visual-card:hover {
-    transform: rotate(6deg) scale(1.03) !important; /* Smoothly straightens and lifts up on hover */
-    box-shadow: 0 35px 65px rgba(0, 0, 0, 0.18), 0 14px 32px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.16), 0 10px 22px rgba(0, 0, 0, 0.07) !important;
     border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Hide header on the Polaroid card for absolute physical realism */
+/* Hide header on the Polaroid cards for absolute physical realism */
 .experience-visual-card .visual-header {
     display: none !important;
 }
@@ -454,10 +478,10 @@ input, select, textarea {
     padding-top: 18px !important;
 }
 
-/* Custom premium handwriting typography for the Polaroid caption */
+/* Custom premium handwriting typography for the Polaroid captions */
 .experience-visual-card .visual-caption {
     font-family: 'Segoe Print', 'Segoe Script', 'Segoe UI', cursive, sans-serif !important;
-    font-size: 0.95rem !important;
+    font-size: 0.90rem !important; /* Slightly smaller to fit text beautifully */
     color: #333333 !important;
     text-align: center;
     font-style: normal !important;
@@ -484,7 +508,7 @@ input, select, textarea {
 }
 
 .experience-visual-card:hover .experience-img {
-    transform: scale(1.03); /* Subtle zoom interaction on hover! */
+    transform: scale(1.02); /* Subtle zoom interaction on hover */
 }
 
 /* Premium Floating Brand Badge Overlay */
@@ -2042,15 +2066,20 @@ hr {
    16. MEDIA QUERIES (RESPONSIVENESS)
    -------------------------------------------------------------------------- */
 @media (max-width: 992px) {
-    /* Polaroid Responsive Handling to prevent edge clipping on smaller viewports */
-    .experience-visual-card {
-        transform: rotate(6deg) !important; /* Reduced rotation for mobile safety */
+    /* Polaroid Stack Responsive Handling to prevent edge clipping on smaller viewports */
+    .polaroid-stack {
         max-width: 340px !important;
-        margin: 30px auto 0 auto !important; /* Centered nicely */
+        height: 430px !important; /* Slightly shorter on mobile */
+        margin: 30px auto 0 auto !important;
     }
-    
-    .experience-visual-card:hover {
-        transform: rotate(2deg) scale(1.02) !important;
+
+    .experience-visual-card {
+        max-width: 340px !important;
+        padding-bottom: 30px !important; /* Slightly tighter bottom padding on mobile */
+    }
+
+    .experience-img-container {
+        height: 270px !important; /* Scale down photo container height on mobile */
     }
 
     .hero-container {
@@ -2124,25 +2153,23 @@ hr {
         top: 50%;
         transform: translate(-50%, -50%);
         display: flex;
-        flex-direction: column;
+        flex-direction: row !important; /* Premium horizontal layout */
         align-items: center;
-        text-align: center;
         z-index: 1002;
-        gap: 0;
+        gap: 12px !important;
     }
     
     .logo-img, .logo-svg {
-        height: 300px; /* Grand floating laptop watermark logo */
-        position: absolute;
-        top: -60px;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 0.35;
+        height: 40px !important; /* Slightly smaller compact logo for laptops */
+        position: static !important;
+        transform: none !important;
+        opacity: 1 !important;
+        z-index: 2 !important;
+        pointer-events: auto !important;
     }
     
-    .logo:hover .logo-svg,
     .logo:hover .logo-img {
-        transform: translateX(-50%) rotate(3deg) scale(1.02);
+        transform: scale(1.06) rotate(3deg) !important;
     }
     
     .logo-text {

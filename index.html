@@ -64,6 +64,11 @@
         
         <!-- SECTION: HOME & HERO -->
         <section id="home" class="app-section section-active">
+            <!-- Massive Centered Watermark Logo behind the header brand letters -->
+            <div class="hero-watermark" aria-hidden="true">
+                <img src="assets/logo.png" alt="" class="hero-watermark-img">
+            </div>
+            
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="badge-thai">
@@ -122,25 +127,42 @@
                     </div>
                 </div>
 
-                <!-- Premium Real-World Experience Visual Showcase -->
+                <!-- Premium Real-World Experience Visual Showcase - Stacked Polaroid Deck -->
                 <div class="hero-visual">
-                    <div class="visual-card glass experience-visual-card">
-                        <div class="visual-header">
-                            <span class="status-indicator online"></span>
-                            <span>Live Vertaalervaring in Pattaya</span>
-                        </div>
-                        <div class="experience-img-container">
-                            <img src="assets/hero-experience.jpg" alt="True Time Thai Experience in Pattaya" class="experience-img">
-                            
-                            <!-- Floating Brand Badge overlay in the corner of the photo -->
-                            <div class="floating-brand-badge">
-                                <img src="assets/logo.png" alt="True Time Thai Logo" class="badge-logo-img">
-                                <span class="brand-name-badge">TRUE TIME <span class="thai-word">THAI</span></span>
+                    <div class="polaroid-stack" id="polaroid-deck">
+                        
+                        <!-- CARD 1: Beach Couple (Top Card initially) -->
+                        <div class="visual-card glass experience-visual-card card-top" id="polaroid-card-1">
+                            <div class="experience-img-container">
+                                <img src="assets/hero-experience.jpg" alt="True Time Thai Beach Experience" class="experience-img">
+                                
+                                <!-- Floating Brand Badge overlay in the corner of the photo -->
+                                <div class="floating-brand-badge">
+                                    <img src="assets/logo.png" alt="True Time Thai Logo" class="badge-logo-img">
+                                    <span class="brand-name-badge">TRUE TIME <span class="thai-word">THAI</span></span>
+                                </div>
+                            </div>
+                            <div class="visual-footer">
+                                <p class="visual-caption">Een open oor design om rustig te genieten</p>
                             </div>
                         </div>
-                        <div class="visual-footer">
-                            <p class="visual-caption">Timekettle open oor design om samen rustiger te kunnen genieten van het eten.</p>
+
+                        <!-- CARD 2: Restaurant Couple (Bottom Card initially) -->
+                        <div class="visual-card glass experience-visual-card card-bottom" id="polaroid-card-2">
+                            <div class="experience-img-container">
+                                <img src="assets/hero-restaurant.jpg" alt="True Time Thai Restaurant Experience" class="experience-img">
+                                
+                                <!-- Floating Brand Badge overlay in the corner of the photo -->
+                                <div class="floating-brand-badge">
+                                    <img src="assets/logo.png" alt="True Time Thai Logo" class="badge-logo-img">
+                                    <span class="brand-name-badge">TRUE TIME <span class="thai-word">THAI</span></span>
+                                </div>
+                            </div>
+                            <div class="visual-footer">
+                                <p class="visual-caption">Who helps you to get true?</p>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
