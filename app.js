@@ -1015,18 +1015,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const card1 = document.getElementById('hygiene-polaroid-1');
         const card2 = document.getElementById('hygiene-polaroid-2');
         const card3 = document.getElementById('hygiene-polaroid-3');
-        if (!card1 || !card2 || !card3) return;
+        const card4 = document.getElementById('hygiene-polaroid-4');
+        if (!card1 || !card2 || !card3 || !card4) return;
 
         let isShuffling = false;
-        let cards = [card1, card2, card3];
+        let cards = [card1, card2, card3, card4];
 
-        // Initial positions and styles for the hygiene deck
+        // Initial positions and styles for the hygiene deck (4 cards)
         card1.style.transform = 'rotate(-4deg)';
-        card1.style.zIndex = '3';
+        card1.style.zIndex = '4';
         card2.style.transform = 'rotate(6deg)';
-        card2.style.zIndex = '2';
+        card2.style.zIndex = '3';
         card3.style.transform = 'rotate(-10deg)';
-        card3.style.zIndex = '1';
+        card3.style.zIndex = '2';
+        card4.style.transform = 'rotate(3deg)';
+        card4.style.zIndex = '1';
 
         const shuffle = () => {
             if (isShuffling) return;
@@ -1044,16 +1047,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 cards.shift();
                 cards.push(topCard);
 
-                cards[0].style.zIndex = '3';
-                cards[1].style.zIndex = '2';
-                cards[2].style.zIndex = '1';
+                cards[0].style.zIndex = '4';
+                cards[1].style.zIndex = '3';
+                cards[2].style.zIndex = '2';
+                cards[3].style.zIndex = '1';
 
                 const topTilt = Math.floor(Math.random() * 8) - 6; // -6deg to 2deg
-                const middleTilt = Math.floor(Math.random() * 8) + 2; // 2deg to 10deg
-                const bottomTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+                const secondTilt = Math.floor(Math.random() * 8) + 2; // 2deg to 10deg
+                const thirdTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+                const bottomTilt = Math.floor(Math.random() * 8) - 2; // -2deg to 6deg
 
                 cards[0].style.transform = `rotate(${topTilt}deg)`;
-                cards[1].style.transform = `rotate(${middleTilt}deg)`;
+                cards[1].style.transform = `rotate(${secondTilt}deg)`;
+                cards[2].style.transform = `rotate(${thirdTilt}deg)`;
                 
                 topCard.style.transform = isMobile 
                     ? `translateY(0) rotate(${bottomTilt}deg)` 
