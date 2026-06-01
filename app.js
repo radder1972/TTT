@@ -1011,6 +1011,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let isShuffling = false;
 
+        // Highly persuasive & promotional text content for each category
+        const hygieneContent = {
+            "1": {
+                title: "100% Vrijheid & Natuurlijk Geluid",
+                text: "Ervaar de ultieme revolutie in audiogemak onder de Thaise zon. Omdat onze oordopjes <em>boven</em> uw gehoorkanaal zweven in plaats van erin, geniet u van uw favoriete muziek of real-time vertalingen zonder zweetophoping of druk. Ideaal voor actieve stranddagen in Jomtien en wandelingen door Pattaya!"
+            },
+            "2": {
+                title: "Handmatige Precisie-reiniging",
+                text: "Naast onze machinale sterilisatie ondergaan alle W4 Pro's een uitgebreide handmatige reinigingsbeurt. Onze getrainde specialisten desinfecteren elk hoekje, gleufje en contactpunt met biologisch afbreekbare, alcoholvrije medische doekjes die speciaal zijn gecertificeerd voor audio-apparatuur. Gegarandeerd pluis- en bacterievrij!"
+            },
+            "3": {
+                title: "Medische UV-C Lichtdesinfectie",
+                text: "Veiligheid is onze absolute prioriteit bij True Time Thai. Elk oordopjesset en oplaadcase ondergaat een intensieve sterilisatiecyclus in onze industriële UV-C lichtkamers. Binnen enkele minuten wordt 99.9% van alle bacteriën, virussen en micro-organismen volledig geëlimineerd. Zo bent u verzekerd van een klinisch schone start!"
+            },
+            "4": {
+                title: "Ergonomie Die Aanvoelt Als Lucht",
+                text: "Dankzij de flexibele, vederlichte oorhaakvorm passen de W4 Pro oordopjes zich onmiddellijk en natuurlijk aan de anatomie van uw oor aan. U vergeet al snel dat u ze draagt! Bovendien hoort u door het open-oor design nog steeds de geluiden om u heen, wat zorgt voor maximale veiligheid in het drukke Pattayaanse verkeer."
+            },
+            "5": {
+                title: "Hermetisch Verzegeld Voor U",
+                text: "Nadat de oordopjes onze strenge 5-punts kwaliteitscontrole hebben doorlopen, worden ze direct vacuüm verzegeld in een biologisch afbreekbare hygiëneverpakking. U bent de allereerste die de zegel verbreekt bij ontvangst in uw resort. 100% gegarandeerd stofvrij, bacterievrij en verser dan vers!"
+            }
+        };
+
         // Apply organic initial layout
         const applyInitialLayout = () => {
             const angles = [-4, 6, -10, 3, -7];
@@ -1022,6 +1046,80 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         applyInitialLayout();
+
+        // Update the tab and left text area based on card target
+        const updateContentAndTabs = (targetNum) => {
+            const tabs = stack.parentElement.parentElement.querySelectorAll('.hygiene-tab');
+            const contentArea = document.getElementById('hygiene-content-area');
+            
+            // Set active class
+            tabs.forEach(t => {
+                if (t.getAttribute('data-target') === targetNum.toString()) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+
+            // Animate content change
+            if (contentArea) {
+                contentArea.style.opacity = '0';
+                contentArea.style.transition = 'opacity 0.25s ease';
+                
+                setTimeout(() => {
+                    const data = hygieneContent[targetNum];
+                    if (data) {
+                        contentArea.querySelector('.dynamic-title').innerHTML = data.title;
+                        contentArea.querySelector('.dynamic-text').innerHTML = `<p>${data.text}</p>`;
+                    }
+                    contentArea.style.opacity = '1';
+                }, 200);
+            }
+        };
+
+        // Bring a specific card dynamically to the top of the stack
+        const bringToTop = (targetId) => {
+            if (isShuffling) return;
+
+            const targetIndex = cards.findIndex(card => card.id === targetId);
+            if (targetIndex === -1 || targetIndex === 0) return; // Not found or already on top
+
+            isShuffling = true;
+
+            const isMobile = window.innerWidth <= 992;
+            const targetCard = cards[targetIndex];
+
+            // Slide out card smoothly
+            targetCard.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            targetCard.style.transform = isMobile 
+                ? 'translateY(-105%) rotate(15deg)' 
+                : 'translateX(115%) rotate(25deg)';
+
+            setTimeout(() => {
+                // Remove from current index and insert at front
+                cards.splice(targetIndex, 1);
+                cards.unshift(targetCard);
+
+                // Reset z-indexes
+                cards.forEach((card, index) => {
+                    card.style.zIndex = (cards.length - index).toString();
+                });
+
+                // Apply new organic angles (make top card straight and focused)
+                cards.forEach((card, index) => {
+                    if (index === 0) {
+                        card.style.transform = 'rotate(0deg) scale(1.03)';
+                    } else {
+                        const tilt = Math.floor(Math.random() * 12) - 6; // -6deg to 6deg
+                        card.style.transform = `rotate(${tilt}deg)`;
+                    }
+                });
+
+                setTimeout(() => {
+                    isShuffling = false;
+                }, 400);
+            }, 250);
+        };
 
         const shuffle = () => {
             if (isShuffling || cards.length < 2) return;
@@ -1057,11 +1155,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                // Sync text and active tab with new top card
+                const newTopNum = cards[0].id.replace('hygiene-polaroid-', '');
+                updateContentAndTabs(newTopNum);
+
                 setTimeout(() => {
                     isShuffling = false;
                 }, 400);
             }, 250);
         };
+
+        // Attach event listeners to tabs
+        const tabs = stack.parentElement.parentElement.querySelectorAll('.hygiene-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const targetNum = e.target.getAttribute('data-target');
+                updateContentAndTabs(targetNum);
+                bringToTop(`hygiene-polaroid-${targetNum}`);
+            });
+        });
 
         stack.addEventListener('mouseenter', shuffle);
         stack.addEventListener('click', shuffle);
