@@ -553,11 +553,11 @@ input, select, textarea {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.7);
-    padding: 10px 24px;
+    padding: 12px 30px; /* Increased from 10px 24px */
     border-radius: 50px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px; /* Increased from 12px */
     box-shadow: 0 10px 25px rgba(27, 37, 66, 0.12);
     z-index: 10;
     transition: var(--transition-smooth);
@@ -571,24 +571,24 @@ input, select, textarea {
 }
 
 .badge-logo-img {
-    height: 54px; /* Highly visible badge logo (enlarged from 36px) */
+    height: 72px; /* Increased logo height from 54px to 72px! */
     width: auto;
     object-fit: contain;
 }
 
 .brand-name-badge {
-    font-size: 1.05rem; /* Enlarged from 0.85rem for greater prominence */
+    font-size: 1.25rem; /* Increased text size from 1.05rem to 1.25rem! */
     font-weight: 800;
     color: var(--thai-blue);
     letter-spacing: 0.02em;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px; /* Increased from 6px */
     white-space: nowrap; /* Prevent word wrapping */
 }
 
 .brand-name-badge .thai-word {
-    font-size: 1.2rem; /* Cursive script resized inside badge */
+    font-size: 1.45rem; /* Increased cursive script size from 1.2rem to 1.45rem! */
 }
 
 /* Main Navigation Menu */
@@ -2168,22 +2168,22 @@ hr {
     }
 
     .floating-brand-badge {
-        padding: 6px 14px !important;
+        padding: 8px 18px !important;
         bottom: 12px !important;
         right: 12px !important;
-        gap: 6px !important;
+        gap: 8px !important;
     }
 
     .badge-logo-img {
-        height: 32px !important;
+        height: 48px !important; /* Increased from 32px to 48px! */
     }
 
     .brand-name-badge {
-        font-size: 0.78rem !important;
+        font-size: 0.92rem !important; /* Increased from 0.78rem to 0.92rem! */
     }
 
     .brand-name-badge .thai-word {
-        font-size: 0.88rem !important;
+        font-size: 1.05rem !important; /* Increased from 0.88rem to 1.05rem! */
     }
 
     .hero-container {
