@@ -910,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       8. POLAROID STACK SHUFFLE EFFECT
+       8. POLAROID STACK SHUFFLE EFFECT (HERO DECK)
        ========================================================================== */
     const initPolaroidStack = () => {
         const stack = document.getElementById('polaroid-deck');
@@ -934,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card3.style.transform = 'rotate(4deg)';
         card3.style.zIndex = '1';
 
-        stack.addEventListener('mouseenter', () => {
+        const shuffle = () => {
             if (isShuffling) return;
             isShuffling = true;
 
@@ -979,7 +979,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     isShuffling = false;
                 }, 400);
             }, 250);
-        });
+        };
+
+        stack.addEventListener('mouseenter', shuffle);
+        stack.addEventListener('click', shuffle);
     };
 
     /* ==========================================================================
@@ -1003,26 +1006,70 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /* ==========================================================================
-       9. HYGIENE POLAROID CLICK STRAIGHTENING
+       10. HYGIENE POLAROID STACK SHUFFLE EFFECT (CAROUSEL)
        ========================================================================== */
-    const initHygienePolaroid = () => {
-        const hygienePolaroid = document.getElementById('hygiene-polaroid-card');
-        if (!hygienePolaroid) return;
-        
-        let isStraight = false;
-        hygienePolaroid.addEventListener('click', () => {
-            isStraight = !isStraight;
-            if (isStraight) {
-                hygienePolaroid.style.transform = 'rotate(0deg) scale(1.08)';
-                hygienePolaroid.style.zIndex = '10';
-            } else {
-                hygienePolaroid.style.transform = '';
-                hygienePolaroid.style.zIndex = '';
-            }
-        });
+    const initHygienePolaroidStack = () => {
+        const stack = document.getElementById('hygiene-polaroid-deck');
+        if (!stack) return;
+
+        const card1 = document.getElementById('hygiene-polaroid-1');
+        const card2 = document.getElementById('hygiene-polaroid-2');
+        const card3 = document.getElementById('hygiene-polaroid-3');
+        if (!card1 || !card2 || !card3) return;
+
+        let isShuffling = false;
+        let cards = [card1, card2, card3];
+
+        // Initial positions and styles for the hygiene deck
+        card1.style.transform = 'rotate(-4deg)';
+        card1.style.zIndex = '3';
+        card2.style.transform = 'rotate(6deg)';
+        card2.style.zIndex = '2';
+        card3.style.transform = 'rotate(-10deg)';
+        card3.style.zIndex = '1';
+
+        const shuffle = () => {
+            if (isShuffling) return;
+            isShuffling = true;
+
+            const isMobile = window.innerWidth <= 992;
+            const topCard = cards[0];
+
+            topCard.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            topCard.style.transform = isMobile 
+                ? 'translateY(-105%) rotate(-15deg)' 
+                : 'translateX(115%) rotate(15deg)';
+
+            setTimeout(() => {
+                cards.shift();
+                cards.push(topCard);
+
+                cards[0].style.zIndex = '3';
+                cards[1].style.zIndex = '2';
+                cards[2].style.zIndex = '1';
+
+                const topTilt = Math.floor(Math.random() * 8) - 6; // -6deg to 2deg
+                const middleTilt = Math.floor(Math.random() * 8) + 2; // 2deg to 10deg
+                const bottomTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+
+                cards[0].style.transform = `rotate(${topTilt}deg)`;
+                cards[1].style.transform = `rotate(${middleTilt}deg)`;
+                
+                topCard.style.transform = isMobile 
+                    ? `translateY(0) rotate(${bottomTilt}deg)` 
+                    : `translateX(0) rotate(${bottomTilt}deg)`;
+
+                setTimeout(() => {
+                    isShuffling = false;
+                }, 400);
+            }, 250);
+        };
+
+        stack.addEventListener('mouseenter', shuffle);
+        stack.addEventListener('click', shuffle);
     };
 
     initHeaderScroll();
     initPolaroidStack();
-    initHygienePolaroid();
+    initHygienePolaroidStack();
 });
