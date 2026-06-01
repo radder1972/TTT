@@ -594,20 +594,87 @@ document.addEventListener('DOMContentLoaded', () => {
         rentalForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            const name = document.getElementById('cust-name') ? document.getElementById('cust-name').value : '';
             const email = document.getElementById('cust-email') ? document.getElementById('cust-email').value : '';
+            const startDate = document.getElementById('start-date') ? document.getElementById('start-date').value : '';
+            const endDate = document.getElementById('end-date') ? document.getElementById('end-date').value : '';
+            const earbudCount = document.getElementById('earbud-count') ? document.getElementById('earbud-count').value : '1';
             
-            // Perform Visual Switch to success layout
-            if (rentalForm) rentalForm.style.display = 'none';
-            if (receiptBox) receiptBox.style.display = 'none';
+            const pickupLocSelect = document.getElementById('pickup-loc');
+            const pickupLoc = pickupLocSelect ? pickupLocSelect.options[pickupLocSelect.selectedIndex].text : '';
             
-            if (successCard) successCard.style.display = 'block';
-            if (successEmailSpan) successEmailSpan.textContent = email;
+            const hasSim = document.getElementById('extra-sim') ? document.getElementById('extra-sim').checked : false;
+            const hasPowerbank = document.getElementById('extra-powerbank') ? document.getElementById('extra-powerbank').checked : false;
             
-            // Scroll to the wizard section top
-            const bookingSection = document.getElementById('booking');
-            if (bookingSection) {
-                bookingSection.scrollIntoView({ behavior: 'smooth' });
+            // Read calculated totals from receipt DOM elements
+            const durationText = document.getElementById('rec-duration') ? document.getElementById('rec-duration').textContent : '';
+            const totalThb = document.getElementById('rec-total-thb') ? document.getElementById('rec-total-thb').textContent : '';
+            const totalEur = document.getElementById('rec-total-eur') ? document.getElementById('rec-total-eur').textContent : '';
+            
+            const submitBtn = document.getElementById('btn-submit-booking');
+            const originalBtnText = submitBtn ? submitBtn.textContent : 'Bevestig Huuraanvraag';
+            
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Verzenden... een moment a.u.b.";
+                submitBtn.style.opacity = '0.7';
             }
+            
+            const formData = {
+                _subject: `🎉 Nieuwe Boekingsaanvraag van ${name} - True Time Thai`,
+                _replyto: email,
+                Naam: name,
+                E_mailadres: email,
+                Startdatum: startDate,
+                Einddatum: endDate,
+                Aantal_Sets_W4_Pro: earbudCount,
+                Ophaal_en_Inleverlocatie: pickupLoc,
+                Inclusief_5G_SIM_Kaart: hasSim ? "Ja (+ ฿350 per stuk)" : "Nee",
+                Inclusief_Powerbank: hasPowerbank ? "Ja (+ ฿175 per stuk)" : "Nee",
+                Huurperiode: durationText,
+                Totaal_Bedrag_THB: totalThb,
+                Totaal_Bedrag_EUR: totalEur
+            };
+            
+            fetch("https://formsubmit.co/ajax/matthias.radder@gmail.com", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Netwerkfout bij verzenden van formulier");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Perform Visual Switch to success layout
+                if (rentalForm) rentalForm.style.display = 'none';
+                if (receiptBox) receiptBox.style.display = 'none';
+                
+                if (successCard) successCard.style.display = 'block';
+                if (successEmailSpan) successEmailSpan.textContent = email;
+                
+                // Scroll to the wizard section top
+                const bookingSection = document.getElementById('booking');
+                if (bookingSection) {
+                    bookingSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            })
+            .catch(error => {
+                console.error("Verzendfout:", error);
+                alert("Er is helaas iets misgegaan bij het verzenden van uw reservering. Controleer uw internetverbinding of neem contact met ons op via WhatsApp!");
+            })
+            .finally(() => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.style.opacity = '1';
+                }
+            });
         });
     }
 
@@ -782,15 +849,63 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (contactSuccessMsg) {
-                contactSuccessMsg.style.display = 'block';
-                contactForm.reset();
-                
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    contactSuccessMsg.style.display = 'none';
-                }, 5000);
+            
+            const name = document.getElementById('contact-name') ? document.getElementById('contact-name').value : '';
+            const email = document.getElementById('contact-email') ? document.getElementById('contact-email').value : '';
+            const msg = document.getElementById('contact-msg') ? document.getElementById('contact-msg').value : '';
+            
+            const submitBtn = document.getElementById('btn-submit-contact');
+            const originalBtnText = submitBtn ? submitBtn.textContent : 'Verstuur Bericht';
+            
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Verzenden...";
+                submitBtn.style.opacity = '0.7';
             }
+            
+            const formData = {
+                _subject: `✉️ Nieuw Contactbericht van ${name} - True Time Thai`,
+                _replyto: email,
+                Naam: name,
+                E_mailadres: email,
+                Bericht: msg
+            };
+            
+            fetch("https://formsubmit.co/ajax/matthias.radder@gmail.com", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Netwerkfout bij verzenden van contactbericht");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (contactSuccessMsg) {
+                    contactSuccessMsg.style.display = 'block';
+                    contactForm.reset();
+                    
+                    setTimeout(() => {
+                        contactSuccessMsg.style.display = 'none';
+                    }, 8000);
+                }
+            })
+            .catch(error => {
+                console.error("Contact verzendfout:", error);
+                alert("Er is helaas iets misgegaan bij het verzenden van uw bericht. Controleer uw internetverbinding of probeer het later opnieuw.");
+            })
+            .finally(() => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.style.opacity = '1';
+                }
+            });
         });
     }
 
