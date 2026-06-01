@@ -19,6 +19,8 @@
     --thai-blue: #122C54;            /* Premium Royal Dark Blue for headings and primary accents */
     --thai-red: #D02A2A;             /* Refined, high-end crimson red brand accent */
     --thai-red-glow: rgba(208, 42, 42, 0.06);
+    --thai-turquoise: #2BB3C0;       /* Luminous resort light turquoise */
+    --thai-turquoise-glow: rgba(43, 179, 192, 0.08);
     
     --neon-cyan: #0066CC;            /* Apple brand blue for high-contrast hyperlinks & primary buttons */
     --neon-cyan-glow: rgba(0, 102, 204, 0.12);
@@ -546,51 +548,64 @@ input, select, textarea {
     transform: scale(1.02); /* Subtle zoom interaction on hover */
 }
 
-/* Premium Floating Brand Badge Overlay */
 .floating-brand-badge {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    padding: 12px 30px; /* Increased from 10px 24px */
-    border-radius: 50px;
+    bottom: 16px; /* Positioned beautifully in the bottom-left corner */
+    left: 16px;
+    right: auto; /* Clear right alignment */
+    background: transparent !important; /* Completely transparent background */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
     display: flex;
+    flex-direction: row; /* Horizontal row layout as requested! */
     align-items: center;
-    gap: 16px; /* Increased from 12px */
-    box-shadow: 0 10px 25px rgba(27, 37, 66, 0.12);
+    justify-content: flex-start;
+    gap: 12px; /* Gap between logo and text */
+    box-shadow: none !important; /* No container shadow */
     z-index: 10;
     transition: var(--transition-smooth);
-    white-space: nowrap; /* Prevent word wrapping */
+    width: auto; /* Auto width for clean wrapping */
+    max-width: 90%;
+    text-align: left;
+    pointer-events: none; /* Click-through so users can still click the cards underneath */
 }
 
 .floating-brand-badge:hover {
-    transform: translateY(-2px);
-    background: #FFFFFF;
-    box-shadow: 0 14px 30px rgba(27, 37, 66, 0.18);
+    transform: translateY(-2px) scale(1.02);
 }
 
 .badge-logo-img {
-    height: 72px; /* Increased logo height from 54px to 72px! */
-    width: auto;
+    height: 100px; /* Highly prominent and perfectly sized logo for the bottom-left corner */
+    width: 100px;
     object-fit: contain;
+    transition: var(--transition-smooth);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22)); /* Gorgeous dropshadow on the transparent logo */
+}
+
+.floating-brand-badge:hover .badge-logo-img {
+    transform: scale(1.05); /* Dynamic micro-interaction for logo */
 }
 
 .brand-name-badge {
-    font-size: 1.25rem; /* Increased text size from 1.05rem to 1.25rem! */
+    font-size: 1.15rem; /* Highly visible text overlay */
     font-weight: 800;
     color: var(--thai-blue);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     display: flex;
-    align-items: center;
-    gap: 8px; /* Increased from 6px */
-    white-space: nowrap; /* Prevent word wrapping */
+    flex-direction: column; /* Stack TRUE TIME and THAI vertically */
+    align-items: flex-start; /* Left-aligned typography */
+    gap: 2px;
+    line-height: 1.1;
+    text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6); /* White glow shadow around text for extreme legibility over photos */
 }
 
 .brand-name-badge .thai-word {
-    font-size: 1.45rem; /* Increased cursive script size from 1.2rem to 1.45rem! */
+    font-size: 1.35rem;
+    margin: 0;
+    text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
 /* Main Navigation Menu */
@@ -882,10 +897,11 @@ input, select, textarea {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
 }
 
-.feature-icon.bg-red { background: rgba(185, 60, 60, 0.08); border: 1px solid var(--thai-red); color: var(--thai-red); }
+.feature-icon.bg-red { background: rgba(208, 42, 42, 0.08); border: 1px solid var(--thai-red); color: var(--thai-red); }
 .feature-icon.bg-blue { background: rgba(27, 37, 66, 0.05); border: 1px solid var(--thai-blue); color: var(--thai-blue); }
 .feature-icon.bg-cyan { background: rgba(43, 179, 192, 0.08); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
 .feature-icon.bg-gold { background: rgba(212, 175, 55, 0.08); border: 1px solid var(--thai-gold); color: var(--thai-gold); }
+.feature-icon.bg-turquoise { background: var(--thai-turquoise-glow); border: 1px solid var(--thai-turquoise); color: var(--thai-turquoise); }
 
 .feature-card h3 {
     font-size: 1.25rem;
@@ -2170,22 +2186,37 @@ hr {
     }
 
     .floating-brand-badge {
-        padding: 8px 18px !important;
+        padding: 0 !important;
         bottom: 12px !important;
-        right: 12px !important;
+        left: 12px !important;
+        right: auto !important;
         gap: 8px !important;
+        border-radius: 0 !important;
+        width: auto !important;
+        max-width: 90% !important;
+        flex-direction: row !important; /* Horizontal layout on mobile too */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
     .badge-logo-img {
-        height: 48px !important; /* Increased from 32px to 48px! */
+        height: 64px !important; /* Elegant 64px watermark logo on mobile */
+        width: 64px !important;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22)) !important;
     }
 
     .brand-name-badge {
-        font-size: 0.92rem !important; /* Increased from 0.78rem to 0.92rem! */
+        font-size: 0.82rem !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.95) !important;
     }
 
     .brand-name-badge .thai-word {
-        font-size: 1.05rem !important; /* Increased from 0.88rem to 1.05rem! */
+        font-size: 0.92rem !important;
+        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.95) !important;
     }
 
     .hero-container {

@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "English (American)", category: "14 Engelse Accenten", flag: "🇺🇸" },
         { name: "English (Australian)", category: "14 Engelse Accenten", flag: "🇦🇺" },
         { name: "English (Indian)", category: "14 Engelse Accenten", flag: "🇮🇳" },
+        { name: "Thai English (Tinglish)", category: "14 Engelse Accenten", flag: "🇹🇭" },
         { name: "Thai (ไทย)", category: "Thais - Doeltaal", flag: "🇹🇭" },
         { name: "Deutsch (German)", category: "West-Germaans", flag: "🇩🇪" },
         { name: "Français (French)", category: "Romaans", flag: "🇫🇷" },
@@ -784,8 +785,8 @@ document.addEventListener('DOMContentLoaded', () => {
             a: "Absoluut! Hygiëne is onze hoogste prioriteit. Onze True Time Thai W4 Pro oordopjes hebben een modern <strong>open-oor ontwerp</strong> dat op de oorschelp rust en het gehoorkanaal niet binnendringt. Na elk gebruik ondergaan de oordopjes een intensieve reinigingscyclus: reiniging met alcoholvrije medische desinfectiedoekjes, <strong>sterilisatie in UV-C kamers</strong>, batterijcontrole en luchtdichte verzegeling. U verbreekt zelf de hygiëneverzegeling."
         },
         {
-            q: "Welke talen worden ondersteund door de True Time Thai W4 Pro?",
-            a: "De oordopjes ondersteunen real-time, bidirectionele AI-vertaling in <strong>102 talen en 14 verschillende Engelse accenten</strong> (inclusief Brits, Amerikaans, Australisch, Indiaas, etc.). Hierdoor kunt u spreken in uw eigen taal (zoals Nederlands, Duits of Engels) en hoort uw Thaise gesprekspartner direct Thais, en omgekeerd!"
+            q: "Welke talen worden ondersteund door de True Time Thai W4 Pro / Wifi Pro?",
+            a: "De oordopjes ondersteunen real-time, bidirectionele AI-vertaling in <strong>102 talen en 14 verschillende Engelse accenten</strong> (inclusief Brits, Amerikaans, Australisch, Indiaas en tevens Thai English / Tinglish). Hierdoor kunt u spreken in uw eigen taal (zoals Nederlands, Duits of Engels) en hoort uw Thaise gesprekspartner direct Thais, en omgekeerd!"
         },
         {
             q: "Heb ik internet nodig voor de vertalingen in Pattaya?",
