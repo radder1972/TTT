@@ -910,71 +910,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       8. POLAROID STACK SHUFFLE EFFECT (HERO DECK)
+       8. POLAROID STACK SHUFFLE EFFECT (HERO DECK) - DYNAMIC & ROBUST
        ========================================================================== */
     const initPolaroidStack = () => {
         const stack = document.getElementById('polaroid-deck');
         if (!stack) return;
 
-        const card1 = document.getElementById('polaroid-card-1');
-        const card2 = document.getElementById('polaroid-card-2');
-        const card3 = document.getElementById('polaroid-card-3');
-        if (!card1 || !card2 || !card3) return;
+        // Dynamically fetch all cards inside the deck
+        let cards = Array.from(stack.querySelectorAll('.experience-visual-card'));
+        if (cards.length === 0) return;
 
         let isShuffling = false;
-        
-        // Order of cards from top to bottom (initially: 1, 2, 3)
-        let cards = [card1, card2, card3];
 
-        // Initial positions and styles
-        card1.style.transform = 'rotate(12deg)';
-        card1.style.zIndex = '3';
-        card2.style.transform = 'rotate(-8deg)';
-        card2.style.zIndex = '2';
-        card3.style.transform = 'rotate(4deg)';
-        card3.style.zIndex = '1';
+        // Apply initial layout organically
+        const applyInitialLayout = () => {
+            const angles = [12, -8, 4, -6, 9];
+            cards.forEach((card, index) => {
+                const angle = angles[index % angles.length];
+                card.style.transform = `rotate(${angle}deg)`;
+                card.style.zIndex = (cards.length - index).toString();
+            });
+        };
+
+        applyInitialLayout();
 
         const shuffle = () => {
-            if (isShuffling) return;
+            if (isShuffling || cards.length < 2) return;
             isShuffling = true;
 
             const isMobile = window.innerWidth <= 992;
-            
-            // Top card is always cards[0]
             const topCard = cards[0];
 
-            // Slide top card out dynamically (upwards on mobile, rightwards on desktop)
             topCard.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
             topCard.style.transform = isMobile 
                 ? 'translateY(-105%) rotate(15deg)' 
                 : 'translateX(115%) rotate(25deg)';
 
-            // Swap z-index and tilt angles when card is completely clear (250ms)
             setTimeout(() => {
-                // Update our tracker array: shift top card to the bottom
                 cards.shift();
                 cards.push(topCard);
 
-                // Set new z-indexes:
-                cards[0].style.zIndex = '3';
-                cards[1].style.zIndex = '2';
-                cards[2].style.zIndex = '1';
+                // Reset z-indexes dynamically
+                cards.forEach((card, index) => {
+                    card.style.zIndex = (cards.length - index).toString();
+                });
 
-                // Recalculate natural, randomized angles for a physical feel
-                const topTilt = Math.floor(Math.random() * 8) + 6; // 6deg to 14deg
-                const middleTilt = Math.floor(Math.random() * 8) - 8; // -8deg to 0deg
-                const bottomTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+                // Set new dynamic angles
+                cards.forEach((card, index) => {
+                    if (index === cards.length - 1) {
+                        const bottomTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
+                        topCard.style.transform = isMobile 
+                            ? `translateY(0) rotate(${bottomTilt}deg)` 
+                            : `translateX(0) rotate(${bottomTilt}deg)`;
+                    } else {
+                        const tilt = Math.floor(Math.random() * 8) - 4; // -4deg to 4deg
+                        card.style.transform = `rotate(${tilt}deg)`;
+                    }
+                });
 
-                // Apply angles
-                cards[0].style.transform = `rotate(${topTilt}deg)`;
-                cards[1].style.transform = `rotate(${middleTilt}deg)`;
-                
-                // Return original top card (now bottom card at cards[2]) to stack
-                topCard.style.transform = isMobile 
-                    ? `translateY(0) rotate(${bottomTilt}deg)` 
-                    : `translateX(0) rotate(${bottomTilt}deg)`;
-
-                // Shuffling completes after the card returns and settles
                 setTimeout(() => {
                     isShuffling = false;
                 }, 400);
@@ -1006,36 +999,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /* ==========================================================================
-       10. HYGIENE POLAROID STACK SHUFFLE EFFECT (CAROUSEL)
+       10. HYGIENE POLAROID STACK SHUFFLE EFFECT (CAROUSEL) - DYNAMIC & ROBUST
        ========================================================================== */
     const initHygienePolaroidStack = () => {
         const stack = document.getElementById('hygiene-polaroid-deck');
         if (!stack) return;
 
-        const card1 = document.getElementById('hygiene-polaroid-1');
-        const card2 = document.getElementById('hygiene-polaroid-2');
-        const card3 = document.getElementById('hygiene-polaroid-3');
-        const card4 = document.getElementById('hygiene-polaroid-4');
-        const card5 = document.getElementById('hygiene-polaroid-5');
-        if (!card1 || !card2 || !card3 || !card4 || !card5) return;
+        // Dynamically query all cards under the hygiene deck
+        let cards = Array.from(stack.querySelectorAll('.hygiene-polaroid'));
+        if (cards.length === 0) return;
 
         let isShuffling = false;
-        let cards = [card1, card2, card3, card4, card5];
 
-        // Initial positions and styles for the hygiene deck (5 cards)
-        card1.style.transform = 'rotate(-4deg)';
-        card1.style.zIndex = '5';
-        card2.style.transform = 'rotate(6deg)';
-        card2.style.zIndex = '4';
-        card3.style.transform = 'rotate(-10deg)';
-        card3.style.zIndex = '3';
-        card4.style.transform = 'rotate(3deg)';
-        card4.style.zIndex = '2';
-        card5.style.transform = 'rotate(-7deg)';
-        card5.style.zIndex = '1';
+        // Apply organic initial layout
+        const applyInitialLayout = () => {
+            const angles = [-4, 6, -10, 3, -7];
+            cards.forEach((card, index) => {
+                const angle = angles[index % angles.length];
+                card.style.transform = `rotate(${angle}deg)`;
+                card.style.zIndex = (cards.length - index).toString();
+            });
+        };
+
+        applyInitialLayout();
 
         const shuffle = () => {
-            if (isShuffling) return;
+            if (isShuffling || cards.length < 2) return;
             isShuffling = true;
 
             const isMobile = window.innerWidth <= 992;
@@ -1050,26 +1039,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 cards.shift();
                 cards.push(topCard);
 
-                cards[0].style.zIndex = '5';
-                cards[1].style.zIndex = '4';
-                cards[2].style.zIndex = '3';
-                cards[3].style.zIndex = '2';
-                cards[4].style.zIndex = '1';
+                // Reset z-indexes dynamically
+                cards.forEach((card, index) => {
+                    card.style.zIndex = (cards.length - index).toString();
+                });
 
-                const topTilt = Math.floor(Math.random() * 8) - 6; // -6deg to 2deg
-                const secondTilt = Math.floor(Math.random() * 8) + 2; // 2deg to 10deg
-                const thirdTilt = Math.floor(Math.random() * 8) - 12; // -12deg to -4deg
-                const fourthTilt = Math.floor(Math.random() * 8) - 2; // -2deg to 6deg
-                const bottomTilt = Math.floor(Math.random() * 8) - 9; // -9deg to -1deg
-
-                cards[0].style.transform = `rotate(${topTilt}deg)`;
-                cards[1].style.transform = `rotate(${secondTilt}deg)`;
-                cards[2].style.transform = `rotate(${thirdTilt}deg)`;
-                cards[3].style.transform = `rotate(${fourthTilt}deg)`;
-                
-                topCard.style.transform = isMobile 
-                    ? `translateY(0) rotate(${bottomTilt}deg)` 
-                    : `translateX(0) rotate(${bottomTilt}deg)`;
+                // Set new dynamic angles
+                cards.forEach((card, index) => {
+                    if (index === cards.length - 1) {
+                        const bottomTilt = Math.floor(Math.random() * 8) - 10; // -10deg to -2deg
+                        topCard.style.transform = isMobile 
+                            ? `translateY(0) rotate(${bottomTilt}deg)` 
+                            : `translateX(0) rotate(${bottomTilt}deg)`;
+                    } else {
+                        const tilt = Math.floor(Math.random() * 12) - 6; // -6deg to 6deg
+                        card.style.transform = `rotate(${tilt}deg)`;
+                    }
+                });
 
                 setTimeout(() => {
                     isShuffling = false;
