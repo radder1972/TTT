@@ -1002,6 +1002,27 @@ document.addEventListener('DOMContentLoaded', () => {
         handleScroll();
     };
 
+    /* ==========================================================================
+       9. HYGIENE POLAROID CLICK STRAIGHTENING
+       ========================================================================== */
+    const initHygienePolaroid = () => {
+        const hygienePolaroid = document.getElementById('hygiene-polaroid-card');
+        if (!hygienePolaroid) return;
+        
+        let isStraight = false;
+        hygienePolaroid.addEventListener('click', () => {
+            isStraight = !isStraight;
+            if (isStraight) {
+                hygienePolaroid.style.transform = 'rotate(0deg) scale(1.08)';
+                hygienePolaroid.style.zIndex = '10';
+            } else {
+                hygienePolaroid.style.transform = '';
+                hygienePolaroid.style.zIndex = '';
+            }
+        });
+    };
+
     initHeaderScroll();
     initPolaroidStack();
+    initHygienePolaroid();
 });
