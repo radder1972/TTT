@@ -186,7 +186,6 @@ input, select, textarea {
     align-items: center;
     justify-content: center;
     opacity: 0.38; /* Highly visible page watermark as requested! */
-    mix-blend-mode: multiply; /* Renders white background 100% transparent */
 }
 
 .watermark-img {
@@ -367,7 +366,6 @@ input, select, textarea {
     height: 380px !important; /* Enormously large logo! */
     width: auto !important;
     object-fit: contain;
-    mix-blend-mode: multiply; /* 100% transparent white background removal */
     transition: var(--transition-smooth);
     position: absolute !important;
     top: -80px !important;
@@ -425,7 +423,6 @@ input, select, textarea {
     z-index: -2; /* Placed deep in the background behind all elements (text & polaroids) */
     pointer-events: none; /* Entirely click-through */
     opacity: 0.45; /* High visibility & prominent opacity */
-    mix-blend-mode: multiply;
 }
 
 .hero-watermark-img {
@@ -576,7 +573,6 @@ input, select, textarea {
     height: 54px; /* Highly visible badge logo (enlarged from 36px) */
     width: auto;
     object-fit: contain;
-    mix-blend-mode: multiply; /* 100% transparent background overlay */
 }
 
 .brand-name-badge {
