@@ -350,46 +350,46 @@ input, select, textarea {
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.logo-svg {
-    height: 350px; /* 10 times standard logo height, positioned beautifully */
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(27, 37, 66, 0.08));
-    transition: var(--transition-smooth);
     position: absolute;
-    top: 5px;
-    left: 24px;
-    z-index: 1001;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Perfectly centered horizontally and vertically in the header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 1002;
+    gap: 0;
 }
 
-.logo-img {
-    height: 350px; /* 10 times standard logo height, positioned beautifully */
+.logo-svg, .logo-img {
+    height: 380px; /* Massive brand watermark logo (10x standard logo height!) */
     width: auto;
     object-fit: contain;
     mix-blend-mode: multiply; /* 100% transparent white background removal */
-    filter: drop-shadow(0 8px 16px rgba(27, 37, 66, 0.06));
+    filter: drop-shadow(0 8px 24px rgba(0, 102, 204, 0.04));
     transition: var(--transition-smooth);
     position: absolute;
-    top: 5px;
-    left: 24px;
-    z-index: 1001;
+    top: -80px; /* Positioned exactly at top: -80px, bleeding chichly off the top of screen */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally behind the brand text */
+    opacity: 0.35; /* Prominent opacity matching your screenshot perfectly! */
+    z-index: -1; /* Placed behind the brand text */
+    pointer-events: none; /* Let clicks pass through */
 }
 
 .logo:hover .logo-svg,
 .logo:hover .logo-img {
-    transform: rotate(4deg) scale(1.03);
-    filter: drop-shadow(0 12px 24px rgba(0, 102, 204, 0.18));
+    transform: translateX(-50%) rotate(3deg) scale(1.02);
+    filter: drop-shadow(0 12px 28px rgba(0, 102, 204, 0.08));
+    opacity: 0.38;
 }
 
 .logo-text {
     display: flex;
     flex-direction: column;
-    margin-left: 360px; /* Shift text to the right of the massive 350px logo */
+    align-items: center;
+    text-align: center;
 }
 
 .brand-name {
@@ -606,6 +606,8 @@ input, select, textarea {
 .text-center {
     text-align: center;
 }
+
+
 
 /* --------------------------------------------------------------------------
    8. SECTION: HOME & HERO (Light Resort & Tech Design)
@@ -2069,15 +2071,35 @@ hr {
         height: 100px;
     }
     
-    .logo-img, .logo-svg {
-        height: 220px; /* Grander floating logo on laptops */
+    .logo {
         position: absolute;
-        top: 5px;
-        left: 20px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        z-index: 1002;
+        gap: 0;
+    }
+    
+    .logo-img, .logo-svg {
+        height: 300px; /* Grand floating laptop watermark logo */
+        position: absolute;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.35;
+    }
+    
+    .logo:hover .logo-svg,
+    .logo:hover .logo-img {
+        transform: translateX(-50%) rotate(3deg) scale(1.02);
     }
     
     .logo-text {
-        margin-left: 230px; /* Shift text to the right of the laptop floating logo */
+        margin-left: 0;
     }
     
     .brand-name {
@@ -2118,15 +2140,27 @@ hr {
     }
     
     .logo-img, .logo-svg {
-        height: 80px; /* Clean proportional mobile logo */
-        position: static; /* Standard static placement in the header row on mobile */
+        height: 50px; /* Clean, compact mobile logo */
+        position: static;
         top: auto;
         left: auto;
-        filter: drop-shadow(0 3px 6px rgba(27, 37, 66, 0.04));
+        transform: none;
+        opacity: 1;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.03));
     }
     
     .logo {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        align-items: center;
         gap: 12px;
+        z-index: auto;
+    }
+    
+    .logo-text {
+        align-items: flex-start;
+        text-align: left;
     }
     
     .brand-name {
