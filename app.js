@@ -781,10 +781,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             q: "Zijn de gehuurde oordopjes wel echt hygiënisch en schoon?",
-            a: "Absoluut! Hygiëne is onze hoogste prioriteit. Onze Timekettle W4 Pro oordopjes hebben een modern <strong>open-oor ontwerp</strong> dat op de oorschelp rust en het gehoorkanaal niet binnendringt. Na elk gebruik ondergaan de oordopjes een intensieve reinigingscyclus: reiniging met alcoholvrije medische desinfectiedoekjes, <strong>sterilisatie in UV-C kamers</strong>, batterijcontrole en luchtdichte verzegeling. U verbreekt zelf de hygiëneverzegeling."
+            a: "Absoluut! Hygiëne is onze hoogste prioriteit. Onze True Time Thai W4 Pro oordopjes hebben een modern <strong>open-oor ontwerp</strong> dat op de oorschelp rust en het gehoorkanaal niet binnendringt. Na elk gebruik ondergaan de oordopjes een intensieve reinigingscyclus: reiniging met alcoholvrije medische desinfectiedoekjes, <strong>sterilisatie in UV-C kamers</strong>, batterijcontrole en luchtdichte verzegeling. U verbreekt zelf de hygiëneverzegeling."
         },
         {
-            q: "Welke talen worden ondersteund door de Timekettle W4 Pro?",
+            q: "Welke talen worden ondersteund door de True Time Thai W4 Pro?",
             a: "De oordopjes ondersteunen real-time, bidirectionele AI-vertaling in <strong>102 talen en 14 verschillende Engelse accenten</strong> (inclusief Brits, Amerikaans, Australisch, Indiaas, etc.). Hierdoor kunt u spreken in uw eigen taal (zoals Nederlands, Duits of Engels) en hoort uw Thaise gesprekspartner direct Thais, en omgekeerd!"
         },
         {
