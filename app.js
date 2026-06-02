@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    True Time Thai - Web Application Logic (app.js)
    Features: SPA Router, Simulator, Booking Engine, Testimonials, FAQ Accordion
    ========================================================================== */
@@ -724,6 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const successCard = document.getElementById('booking-success-card');
     const successEmailSpan = document.getElementById('success-email');
     const btnNewBooking = document.getElementById('btn-new-booking');
+    let activeBookingData = null;
 
     // Basic Pricing Config (THB)
     const DAILY_RATE = 250;
@@ -902,6 +903,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Submit handler
+    // Submit handler - Navigates to payment wizard
     if (rentalForm) {
         rentalForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -923,18 +925,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalThb = document.getElementById('rec-total-thb') ? document.getElementById('rec-total-thb').textContent : '';
             const totalEur = document.getElementById('rec-total-eur') ? document.getElementById('rec-total-eur').textContent : '';
             
-            const submitBtn = document.getElementById('btn-submit-booking');
-            const originalBtnText = submitBtn ? submitBtn.textContent : 'Bevestig Huuraanvraag';
-            
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = "Verzenden... een moment a.u.b.";
-                submitBtn.style.opacity = '0.7';
-            }
-            
-            const formData = {
-                _subject: `🎉 Nieuwe Boekingsaanvraag van ${name} - True Time Thai`,
-                _replyto: email,
+            // Store active data for payment steps
+            activeBookingData = {
                 Naam: name,
                 E_mailadres: email,
                 Startdatum: startDate,
@@ -947,49 +939,342 @@ document.addEventListener('DOMContentLoaded', () => {
                 Totaal_Bedrag_THB: totalThb,
                 Totaal_Bedrag_EUR: totalEur
             };
+
+            // Switch to payment step wizard
+            if (rentalForm) rentalForm.style.display = 'none';
             
-            fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
-                method: "POST",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Netwerkfout bij verzenden van formulier");
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Perform Visual Switch to success layout
-                if (rentalForm) rentalForm.style.display = 'none';
-                if (receiptBox) receiptBox.style.display = 'none';
-                
-                if (successCard) successCard.style.display = 'block';
-                if (successEmailSpan) successEmailSpan.textContent = email;
-                
-                // Scroll to the wizard section top
-                const bookingSection = document.getElementById('booking');
-                if (bookingSection) {
-                    bookingSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            })
-            .catch(error => {
-                console.error("Verzendfout:", error);
-                alert("Er is helaas iets misgegaan bij het verzenden van uw reservering. Controleer uw internetverbinding of neem contact met ons op via WhatsApp!");
-            })
-            .finally(() => {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = originalBtnText;
-                    submitBtn.style.opacity = '1';
-                }
-            });
+            const paymentStep = document.getElementById('payment-step');
+            if (paymentStep) {
+                paymentStep.style.display = 'block';
+                // Copy total THB digits to payment panels
+                const thbValueOnly = totalThb.replace(/[^0-9]/g, '');
+                document.querySelectorAll('.pay-amount-placeholder').forEach(el => el.textContent = thbValueOnly);
+            }
+            
+            // Scroll to the booking wizard top
+            const bookingSection = document.getElementById('booking');
+            if (bookingSection) {
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Default payment tab is Credit Card
+            selectPaymentTab('card');
         });
     }
 
+    // Submit final paid booking to FormSubmit.co
+    function submitBooking(paymentMethod, txnId, bookingData) {
+        const payCardBtn = document.getElementById('btn-pay-card');
+        const cancelBtn = document.getElementById('btn-cancel-payment');
+        
+        let originalPayCardText = "";
+        if (payCardBtn) {
+            originalPayCardText = payCardBtn.textContent;
+            payCardBtn.disabled = true;
+            payCardBtn.textContent = "Verwerken...";
+        }
+        if (cancelBtn) cancelBtn.disabled = true;
+
+        const finalFormData = {
+            ...bookingData,
+            _subject: `🎉 Betaalde Boeking van ${bookingData.Naam} (${paymentMethod})`,
+            _replyto: bookingData.E_mailadres,
+            Betalingsstatus: `BETAALD via ${paymentMethod}`,
+            Transactie_ID: txnId,
+            Betalingskenmerk: `True Time Thai Pattaya - ${txnId}`
+        };
+
+        fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
+            method: "POST",
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(finalFormData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Netwerkfout bij verzenden van betalingsbevestiging");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Visual success transition
+            const paymentStep = document.getElementById('payment-step');
+            const rentalForm = document.getElementById('rental-form');
+            const successCard = document.getElementById('booking-success-card');
+            const successEmailSpan = document.getElementById('success-email');
+            const successTxnSpan = document.getElementById('success-transaction-id');
+            const receiptPaidStamp = document.getElementById('receipt-paid-stamp');
+
+            if (paymentStep) paymentStep.style.display = 'none';
+            if (rentalForm) rentalForm.style.display = 'none';
+            
+            if (successCard) successCard.style.display = 'block';
+            if (successEmailSpan) successEmailSpan.textContent = bookingData.E_mailadres;
+            if (successTxnSpan) successTxnSpan.textContent = txnId;
+
+            // Stamp Receipt
+            if (receiptPaidStamp) receiptPaidStamp.classList.add('visible');
+
+            // Scroll to wizard section
+            const bookingSection = document.getElementById('booking');
+            if (bookingSection) {
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        })
+        .catch(error => {
+            console.error("Verzendfout betaling:", error);
+            alert("Er is helaas een fout opgetreden bij het registreren van uw betaling. Neem direct contact op via WhatsApp met transactie-ID: " + txnId);
+        })
+        .finally(() => {
+            if (payCardBtn) {
+                payCardBtn.disabled = false;
+                payCardBtn.textContent = originalPayCardText;
+            }
+            if (cancelBtn) cancelBtn.disabled = false;
+            stopPromptPaySimulation();
+        });
+    }
+
+    // Payment Tab Selector Logic
+    function selectPaymentTab(tabName) {
+        const tabCard = document.getElementById('tab-card');
+        const tabPromptPay = document.getElementById('tab-promptpay');
+        const panelCard = document.getElementById('card-payment-panel');
+        const panelPromptPay = document.getElementById('promptpay-payment-panel');
+
+        if (tabName === 'card') {
+            if (tabCard) tabCard.classList.add('active');
+            if (tabPromptPay) tabPromptPay.classList.remove('active');
+            if (panelCard) panelCard.style.display = 'block';
+            if (panelPromptPay) panelPromptPay.style.display = 'none';
+            stopPromptPaySimulation();
+        } else if (tabName === 'promptpay') {
+            if (tabCard) tabCard.classList.remove('active');
+            if (tabPromptPay) tabPromptPay.classList.add('active');
+            if (panelCard) panelCard.style.display = 'none';
+            if (panelPromptPay) panelPromptPay.style.display = 'block';
+            if (activeBookingData) {
+                startPromptPaySimulation(activeBookingData);
+            }
+        }
+    }
+
+    // PromptPay Simulation Logic
+    let promptPayTimerInterval = null;
+    let promptPaySimTimeout1 = null;
+    let promptPaySimTimeout2 = null;
+
+    // Set up payment events
+    const tabCard = document.getElementById('tab-card');
+    const tabPromptPay = document.getElementById('tab-promptpay');
+    if (tabCard) {
+        tabCard.addEventListener('click', () => selectPaymentTab('card'));
+    }
+    if (tabPromptPay) {
+        tabPromptPay.addEventListener('click', () => selectPaymentTab('promptpay'));
+    }
+
+    // Card Input formatters & dynamic face updating
+    const cardNumInput = document.getElementById('card-number');
+    const cardHolderInput = document.getElementById('card-holder');
+    const cardExpiryInput = document.getElementById('card-expiry');
+    const cardCvvInput = document.getElementById('card-cvv');
+
+    const cardInner = document.getElementById('card-inner');
+    const cardNumberDisplay = document.getElementById('card-number-display');
+    const cardHolderDisplay = document.getElementById('card-holder-display');
+    const cardExpiryDisplay = document.getElementById('card-expiry-display');
+    const cardCvvDisplay = document.getElementById('card-cvv-display');
+    const cardBrandLogo = document.getElementById('card-brand-logo');
+
+    if (cardNumInput) {
+        cardNumInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length > 16) val = val.substring(0, 16);
+            let formatted = '';
+            for (let i = 0; i < val.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += val[i];
+            }
+            e.target.value = formatted;
+            if (cardNumberDisplay) cardNumberDisplay.textContent = formatted || '•••• •••• •••• ••••';
+            
+            if (cardBrandLogo) {
+                if (val.startsWith('4')) {
+                    cardBrandLogo.textContent = 'VISA';
+                } else if (val.startsWith('5')) {
+                    cardBrandLogo.textContent = 'Mastercard';
+                } else {
+                    cardBrandLogo.textContent = 'CARD';
+                }
+            }
+        });
+    }
+
+    if (cardHolderInput) {
+        cardHolderInput.addEventListener('input', (e) => {
+            let val = e.target.value;
+            if (cardHolderDisplay) {
+                cardHolderDisplay.textContent = val.toUpperCase() || 'NAAM KAARTHOUDER';
+            }
+        });
+    }
+
+    if (cardExpiryInput) {
+        cardExpiryInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length > 4) val = val.substring(0, 4);
+            let formatted = val;
+            if (val.length > 2) {
+                formatted = val.substring(0, 2) + '/' + val.substring(2);
+            }
+            e.target.value = formatted;
+            if (cardExpiryDisplay) {
+                cardExpiryDisplay.textContent = formatted || 'MM/JJ';
+            }
+        });
+    }
+
+    if (cardCvvInput) {
+        cardCvvInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length > 3) val = val.substring(0, 3);
+            e.target.value = val;
+            if (cardCvvDisplay) {
+                cardCvvDisplay.textContent = val || '•••';
+            }
+        });
+
+        cardCvvInput.addEventListener('focus', () => {
+            if (cardInner) cardInner.classList.add('flipped');
+        });
+
+        cardCvvInput.addEventListener('blur', () => {
+            if (cardInner) cardInner.classList.remove('flipped');
+        });
+    }
+
+    // Submit via credit card
+    const payCardBtn = document.getElementById('btn-pay-card');
+    if (payCardBtn) {
+        payCardBtn.addEventListener('click', () => {
+            const cardNumber = cardNumInput ? cardNumInput.value.replace(/\D/g, '') : '';
+            const cardHolder = cardHolderInput ? cardHolderInput.value.trim() : '';
+            const cardExpiry = cardExpiryInput ? cardExpiryInput.value.trim() : '';
+            const cardCvv = cardCvvInput ? cardCvvInput.value.trim() : '';
+
+            if (cardNumber.length < 15) {
+                alert("Voer een geldig creditcardnummer in.");
+                return;
+            }
+            if (cardHolder.length === 0) {
+                alert("Voer de naam van de kaarthouder in.");
+                return;
+            }
+            if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                alert("Voer een geldige vervaldatum in (MM/JJ).");
+                return;
+            }
+            if (cardCvv.length < 3) {
+                alert("Voer een geldige CVV code in.");
+                return;
+            }
+
+            // Simulate card validation
+            const originalText = payCardBtn.textContent;
+            payCardBtn.disabled = true;
+            payCardBtn.textContent = "Kaart verifiëren...";
+            
+            setTimeout(() => {
+                const mockTxnId = 'TXN_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                submitBooking('Creditcard (Simulated)', mockTxnId, activeBookingData);
+            }, 1800);
+        });
+    }
+
+    // Cancel payment action
+    const btnCancelPayment = document.getElementById('btn-cancel-payment');
+    if (btnCancelPayment) {
+        btnCancelPayment.addEventListener('click', () => {
+            stopPromptPaySimulation();
+            const paymentStep = document.getElementById('payment-step');
+            if (paymentStep) paymentStep.style.display = 'none';
+            if (rentalForm) rentalForm.style.display = 'block';
+            
+            const bookingSection = document.getElementById('booking');
+            if (bookingSection) {
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+    function startPromptPaySimulation(bookingData) {
+        stopPromptPaySimulation();
+
+        const timerDisplay = document.getElementById('pp-timer');
+        const statusOverlay = document.getElementById('qr-status-overlay');
+        const statusText = document.getElementById('qr-status-text');
+        const statusMsg = document.getElementById('pp-status-msg');
+
+        if (statusOverlay) statusOverlay.style.display = 'none';
+        if (statusMsg) {
+            statusMsg.innerHTML = '<span class="pp-pulse"></span> Wachten op scan door uw bankieren-app...';
+        }
+
+        let timeLeft = 5 * 60;
+        if (timerDisplay) {
+            timerDisplay.textContent = '05:00';
+        }
+
+        promptPayTimerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(promptPayTimerInterval);
+                if (timerDisplay) timerDisplay.textContent = '00:00';
+                alert('De betalingstijd is verstreken. Genereer een nieuwe QR-code.');
+                return;
+            }
+            const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const secs = (timeLeft % 60).toString().padStart(2, '0');
+            if (timerDisplay) {
+                timerDisplay.textContent = `${mins}:${secs}`;
+            }
+        }, 1000);
+
+        // Simulation Timeline:
+        // After 1.5s, simulate scan detected
+        promptPaySimTimeout1 = setTimeout(() => {
+            if (statusOverlay) {
+                statusOverlay.style.display = 'flex';
+            }
+            if (statusText) {
+                statusText.textContent = "Betaling ontvangen! Verifiëren...";
+            }
+            if (statusMsg) {
+                statusMsg.textContent = "Betaling ontvangen. Transactie wordt verwerkt...";
+            }
+
+            // After 3.0s total, verify success & submit
+            promptPaySimTimeout2 = setTimeout(() => {
+                if (statusText) {
+                    statusText.textContent = "Verificatie succesvol! Boeking verwerken...";
+                }
+                const mockTxnId = 'TXN_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                submitBooking('PromptPay (Simulated)', mockTxnId, bookingData);
+            }, 1500);
+
+        }, 1500);
+    }
+
+    function stopPromptPaySimulation() {
+        if (promptPayTimerInterval) clearInterval(promptPayTimerInterval);
+        if (promptPaySimTimeout1) clearTimeout(promptPaySimTimeout1);
+        if (promptPaySimTimeout2) clearTimeout(promptPaySimTimeout2);
+    }
+
+    // New Booking action
     if (btnNewBooking) {
         btnNewBooking.addEventListener('click', () => {
             // Reset wizard
@@ -1000,6 +1285,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (receiptBox) receiptBox.style.display = 'block';
             
+            // Reset payment step states
+            const paymentStep = document.getElementById('payment-step');
+            if (paymentStep) paymentStep.style.display = 'none';
+            
+            const receiptPaidStamp = document.getElementById('receipt-paid-stamp');
+            if (receiptPaidStamp) receiptPaidStamp.classList.remove('visible');
+            
+            stopPromptPaySimulation();
+            activeBookingData = null;
+            
+            // Clear payment inputs
+            if (cardNumInput) cardNumInput.value = '';
+            if (cardHolderInput) cardHolderInput.value = '';
+            if (cardExpiryInput) cardExpiryInput.value = '';
+            if (cardCvvInput) cardCvvInput.value = '';
+            
+            if (cardNumberDisplay) cardNumberDisplay.textContent = '•••• •••• •••• ••••';
+            if (cardHolderDisplay) cardHolderDisplay.textContent = 'NAAM KAARTHOUDER';
+            if (cardExpiryDisplay) cardExpiryDisplay.textContent = 'MM/JJ';
+            if (cardCvvDisplay) cardCvvDisplay.textContent = '•••';
+            if (cardBrandLogo) cardBrandLogo.textContent = 'VISA';
+
             // Recalculate
             if (startDateInput) startDateInput.value = formattedToday;
             if (endDateInput) endDateInput.value = formattedTomorrow;
