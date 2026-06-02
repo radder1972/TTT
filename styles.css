@@ -2376,6 +2376,10 @@ hr {
 
 /* Tablet & Mobile Layout Breakpoint (Hamburger menu activates below 992px) */
 @media (max-width: 992px) {
+    .header-container {
+        flex-direction: row-reverse;
+    }
+    
     .app-header {
         height: 90px; /* Sleek mobile header height */
     }
