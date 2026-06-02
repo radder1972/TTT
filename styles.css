@@ -2056,6 +2056,52 @@ hr {
     color: #E2E8F0;
 }
 
+/* Polaroid Card in Contact Section */
+.polaroid-card {
+    background: #FFFFFF !important;
+    border-radius: 4px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+    padding: 14px 14px 28px 14px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    margin: 24px auto 24px auto;
+    transform: rotate(2deg); /* Artistieke lichte kanteling */
+    transition: var(--transition-smooth);
+}
+
+.polaroid-card:hover {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+.polaroid-card .polaroid-img-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.polaroid-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.polaroid-card .polaroid-caption {
+    font-family: 'Architects Daughter', 'Segoe Print', 'Segoe Script', 'Brush Script MT', cursive, sans-serif !important;
+    font-size: 0.95rem !important;
+    color: #333333 !important;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 !important;
+}
+
 /* Footer bottom */
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
