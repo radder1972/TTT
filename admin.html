@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>True Time Thai | Beheer Dashboard</title>
+    <!-- Google Fonts: Architects Daughter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=2.1">
+    
+    <!-- Favicon / Meta -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+</head>
+<body class="admin-body">
+    <!-- Decorative Background Elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+    <div class="mandala-overlay" aria-hidden="true"></div>
+    
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="True Time Thai Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">TRUE TIME <span class="thai-word">THAI</span></span>
+                    <span class="brand-sub">BEHEER PORTAAL</span>
+                </div>
+            </a>
+            
+            <div class="header-right" id="header-logout-wrapper" style="display: none;">
+                <button type="button" class="btn btn-sm btn-outline" id="btn-logout">Uitloggen</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main container admin-main-container">
+        
+        <!-- SECTION 1: LOGIN (Shown by default) -->
+        <section id="admin-login-section" class="admin-section">
+            <div class="admin-login-card glass">
+                <div class="login-header">
+                    <div class="lock-icon">🔒</div>
+                    <h2>Beveiligde Toegang</h2>
+                    <p>Log in met uw admin-account om reserveringen en voorraad in Pattaya te beheren.</p>
+                </div>
+                
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="login-email">E-mailadres</label>
+                        <input type="email" id="login-email" required placeholder="admin@truetimethai.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Wachtwoord</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-login">Inloggen</button>
+                </form>
+                
+                <div class="login-footer-text">
+                    <p>Wachtwoord vergeten of hulp nodig? Neem contact op met support.</p>
+                    <p class="demo-credentials-info">Demo credentials: <strong>admin@truetimethai.com</strong> / <strong>pattaya2026</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: DASHBOARD (Initially Hidden) -->
+        <section id="admin-dashboard-section" class="admin-section" style="display: none;">
+            
+            <!-- Welcome Header -->
+            <div class="dashboard-welcome">
+                <h2>Welkom terug, <span class="text-gradient">Manager</span></h2>
+                <p>Hier is het actuele overzicht van uw AI-oordopjes verhuur in Pattaya.</p>
+            </div>
+
+            <!-- Stats Widgets Row -->
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon text-blue">🎧</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Actieve Verhuur</span>
+                        <strong class="stat-val" id="stat-active-rentals">0</strong>
+                        <span class="stat-sub">oordopjes nu in gebruik</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon text-red">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Pickups Vandaag</span>
+                        <strong class="stat-val" id="stat-today-pickups">0</strong>
+                        <span class="stat-sub">sets moeten worden opgehaald</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon text-green">฿</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Totale Omzet</span>
+                        <strong class="stat-val" id="stat-total-revenue">฿0</strong>
+                        <span class="stat-sub">van alle betaalde boekingen</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon text-gold">🧼</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Beschikbaar Nu</span>
+                        <strong class="stat-val" id="stat-available-now">0 / 0</strong>
+                        <span class="stat-sub">sets direct leverbaar in Pattaya</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Area (List & Sidebar Controls) -->
+            <div class="dashboard-layout">
+                
+                <!-- Left Column: Bookings list -->
+                <div class="dashboard-content-card glass">
+                    <div class="card-header-actions">
+                        <h3>Boekingen & Reserveringen</h3>
+                        
+                        <!-- Search & Status filter tabs -->
+                        <div class="search-filter-row">
+                            <input type="text" id="booking-search" placeholder="Zoek op naam of email...">
+                            <select id="booking-status-filter">
+                                <option value="ALL">Alle Statussen</option>
+                                <option value="CONFIRMED">Gereserveerd / Betaald</option>
+                                <option value="PICKED_UP">Opgehaald / Actief</option>
+                                <option value="RETURNED">Ingeleverd / Compleet</option>
+                                <option value="CANCELLED">Geannuleerd</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Bookings Table container -->
+                    <div class="table-scroll-wrapper">
+                        <table class="admin-table" id="bookings-table">
+                            <thead>
+                                <tr>
+                                    <th>Klant</th>
+                                    <th>Periode</th>
+                                    <th>Sets</th>
+                                    <th>Bedrag</th>
+                                    <th>Locatie</th>
+                                    <th>Betaling</th>
+                                    <th>Status</th>
+                                    <th>Actie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-table-body">
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">Boekingen worden geladen...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings & Operational actions -->
+                <div class="dashboard-sidebar">
+                    
+                    <!-- Inventory Management Card -->
+                    <div class="sidebar-card glass">
+                        <h4>Voorraadinstellingen</h4>
+                        <p class="text-muted">Pas het totaal aantal beschikbare W4 Pro sets in Pattaya aan.</p>
+                        
+                        <div class="form-group" style="margin-top: 16px;">
+                            <label for="input-total-stock">Totale Voorraad Sets</label>
+                            <input type="number" id="input-total-stock" min="1" max="200" value="30">
+                        </div>
+                        
+                        <button type="button" class="btn btn-sm btn-neon btn-block" id="btn-save-stock">Voorraad Opslaan</button>
+                    </div>
+
+                    <!-- Live SQL Database Settings / Info -->
+                    <div class="sidebar-card glass">
+                        <h4>Systeem Status</h4>
+                        <div class="status-indicator-box">
+                            <div class="db-status-badge" id="db-connection-status">
+                                <span class="pulse-dot green" id="db-status-dot"></span>
+                                <span id="db-status-text">Simulatiemodus (Local)</span>
+                            </div>
+                        </div>
+                        <p class="text-muted small" style="margin-top: 12px;">
+                            <strong>Supabase Project URL:</strong><br>
+                            <span class="code-url-text" id="lbl-supabase-url">https://uuciegboqicihcanjqbh.supabase.co</span>
+                        </p>
+                        <p class="text-muted small">
+                            Gebruikt opgeslagen browserdata totdat de Anon Key is geconfigureerd.
+                        </p>
+                    </div>
+
+                    <!-- Database SQL Creation script helper -->
+                    <div class="sidebar-card glass">
+                        <h4>SQL Database Inrichting</h4>
+                        <p class="text-muted small">Indien u verbinding maakt met uw live Supabase-database, voer dan dit script uit in uw Supabase SQL Editor om de tabellen correct te genereren.</p>
+                        <textarea class="sql-code-box" readonly onclick="this.select()">-- Kopieer en plak in Supabase SQL Editor:
+CREATE TABLE IF NOT EXISTS bookings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  customer_name TEXT NOT NULL,
+  customer_email TEXT NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  earbud_count INT NOT NULL DEFAULT 1,
+  pickup_location TEXT NOT NULL,
+  extra_sim BOOLEAN NOT NULL DEFAULT false,
+  extra_powerbank BOOLEAN NOT NULL DEFAULT false,
+  total_price_thb INT NOT NULL,
+  payment_method TEXT NOT NULL,
+  payment_status TEXT NOT NULL DEFAULT 'PAID',
+  transaction_id TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'CONFIRMED' -- CONFIRMED, PICKED_UP, RETURNED, CANCELLED
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
+
+INSERT INTO settings (key, value) VALUES ('total_stock', '30')
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
+-- Activeer publieke toegang
+ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read" ON bookings FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON bookings FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow admin all" ON bookings FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow public read settings" ON settings FOR SELECT USING (true);
+CREATE POLICY "Allow admin all settings" ON settings FOR ALL TO authenticated USING (true);
+</textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="container text-center">
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard.</p>
+        </div>
+    </footer>
+
+    <!-- Supabase Client Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Admin Dashboard Logic JS -->
+    <script src="admin.js"></script>
+</body>
+</html>
