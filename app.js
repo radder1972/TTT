@@ -1320,6 +1320,17 @@ document.addEventListener('DOMContentLoaded', () => {
             resetAutoPlay();
         });
 
+        // Click on the Polaroid card itself to go to the next slide
+        slides.forEach(slide => {
+            const card = slide.querySelector('.polaroid-card');
+            if (card) {
+                card.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoPlay();
+                });
+            }
+        });
+
         dots.forEach(dot => {
             dot.addEventListener('click', (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'), 10);
@@ -1329,6 +1340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const startAutoPlay = () => {
+            stopAutoPlay(); // Clean up existing timer first to avoid overlapping intervals
             autoPlayTimer = setInterval(nextSlide, 5000);
         };
 
