@@ -3843,3 +3843,27 @@ hr {
         width: 100%;
     }
 }
+
+/* Subtle Admin Link under Booking Section */
+.booking-admin-shortcut {
+    text-align: center;
+    margin-top: 32px;
+    opacity: 0.25;
+    transition: opacity 0.3s ease;
+}
+
+.booking-admin-shortcut:hover {
+    opacity: 0.7;
+}
+
+.subtle-admin-link {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.subtle-admin-link:hover {
+    color: var(--neon-cyan);
+}
