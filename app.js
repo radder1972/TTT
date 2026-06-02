@@ -4,6 +4,238 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ==========================================================================
+    // Supabase Connection & Configuration
+    // ==========================================================================
+    const SUPABASE_URL = "https://uuciegboqicihcanjqbh.supabase.co";
+    const SUPABASE_ANON_KEY = ""; // <-- PLAK HIER UW SUPABASE ANON KEY OM LIVE TE GAAN
+
+    let supabaseClient = null;
+    let isSimulated = true;
+
+    function initDatabase() {
+        if (typeof supabase !== 'undefined' && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY.trim() !== "") {
+            try {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSimulated = false;
+                console.log("Supabase live client initialized successfully in app.js.");
+            } catch (error) {
+                console.error("Fout bij initialiseren live Supabase client, fallback naar simulatie:", error);
+                isSimulated = true;
+            }
+        } else {
+            isSimulated = true;
+            console.log("Supabase Anon Key is leeg in app.js. Systeem draait in Simulatiemodus.");
+        }
+    }
+    initDatabase();
+
+    // Database helper functions
+    async function fetchTotalStock() {
+        if (isSimulated) {
+            return parseInt(localStorage.getItem('ttt_total_stock') || '30');
+        } else {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'total_stock')
+                    .single();
+                if (data && data.value) {
+                    return parseInt(data.value);
+                }
+            } catch (e) {
+                console.error("Error fetching total stock from Supabase:", e);
+            }
+            return 30; // default fallback
+        }
+    }
+
+    async function fetchOverlappingBookings() {
+        if (isSimulated) {
+            const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
+            return JSON.parse(bookingsStr);
+        } else {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .select('*')
+                    .not('status', 'in', '("CANCELLED","RETURNED")');
+                if (error) {
+                    console.error("Error fetching active bookings:", error);
+                    return [];
+                }
+                return data || [];
+            } catch (e) {
+                console.error("Error fetching bookings from Supabase:", e);
+                return [];
+            }
+        }
+    }
+
+    function formatDateString(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`; // DD-MM-YYYY
+            }
+            return dateStr;
+        } catch (e) {
+            return dateStr;
+        }
+    }
+
+    async function saveBookingToDatabase(paymentMethod, txnId, bookingData) {
+        const earbudCount = parseInt(bookingData.Aantal_Sets_W4_Pro);
+        const totalThb = parseInt(bookingData.Totaal_Bedrag_THB.replace(/[^0-9]/g, ''));
+        
+        const extraSim = bookingData.Inclusief_5G_SIM_Kaart === "Ja (+ ฿350 per stuk)" || bookingData.Inclusief_5G_SIM_Kaart === true;
+        const extraPowerbank = bookingData.Inclusief_Powerbank === "Ja (+ ฿175 per stuk)" || bookingData.Inclusief_Powerbank === true;
+
+        const record = {
+            customer_name: bookingData.Naam,
+            customer_email: bookingData.E_mailadres,
+            start_date: bookingData.Startdatum,
+            end_date: bookingData.Einddatum,
+            earbud_count: earbudCount,
+            pickup_location: bookingData.Ophaal_en_Inleverlocatie,
+            extra_sim: extraSim,
+            extra_powerbank: extraPowerbank,
+            total_price_thb: totalThb,
+            payment_method: paymentMethod,
+            payment_status: "BETAALD",
+            transaction_id: txnId,
+            status: "CONFIRMED"
+        };
+
+        if (isSimulated) {
+            const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
+            const bookings = JSON.parse(bookingsStr);
+            record.id = 'b_' + Math.random().toString(36).substr(2, 9);
+            record.created_at = new Date().toISOString();
+            bookings.push(record);
+            localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
+            console.log("Booking saved to localStorage simulation:", record);
+            return record.id;
+        } else {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .insert([record])
+                    .select();
+                
+                if (error) {
+                    throw error;
+                }
+                console.log("Booking saved to Supabase live:", data);
+                return data && data[0] ? data[0].id : txnId;
+            } catch (error) {
+                console.error("Fout bij opslaan in Supabase database:", error);
+                throw error;
+            }
+        }
+    }
+
+    async function checkAvailability() {
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        const earbudCountInput = document.getElementById('earbud-count');
+        
+        const startDate = startDateInput ? startDateInput.value : '';
+        const endDate = endDateInput ? endDateInput.value : '';
+        const quantity = parseInt(earbudCountInput ? earbudCountInput.value : 1);
+        const availDot = document.getElementById('availability-dot');
+        const availText = document.getElementById('availability-text');
+        const submitBtn = document.getElementById('btn-submit-booking');
+
+        if (!startDate || !endDate || isNaN(quantity)) {
+            if (availText) availText.textContent = "Voer datums in om de voorraad te controleren...";
+            if (availDot) {
+                availDot.className = "availability-dot";
+                availDot.style.backgroundColor = "#ccc";
+            }
+            if (submitBtn) submitBtn.disabled = false;
+            return;
+        }
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        if (isNaN(start.getTime()) || isNaN(end.getTime()) || start >= end) {
+            if (availText) availText.textContent = "Voer een geldige huurperiode in...";
+            if (availDot) {
+                availDot.className = "availability-dot";
+                availDot.style.backgroundColor = "#ccc";
+            }
+            if (submitBtn) submitBtn.disabled = true;
+            return;
+        }
+
+        if (availText) availText.textContent = "Beschikbaarheid controleren...";
+        if (availDot) {
+            availDot.className = "availability-dot";
+            availDot.style.backgroundColor = "#ffc107";
+        }
+
+        try {
+            const totalStock = await fetchTotalStock();
+            const bookings = await fetchOverlappingBookings();
+
+            let maxOccupied = 0;
+            let curr = new Date(start);
+            while (curr < end) {
+                const currStr = curr.toISOString().split('T')[0];
+                let occupiedOnDay = 0;
+                bookings.forEach(b => {
+                    if (['PENDING', 'CONFIRMED', 'PICKED_UP'].includes(b.status)) {
+                        if (b.start_date <= currStr && b.end_date > currStr) {
+                            occupiedOnDay += parseInt(b.earbud_count || 1);
+                        }
+                    }
+                });
+
+                if (occupiedOnDay > maxOccupied) {
+                    maxOccupied = occupiedOnDay;
+                }
+                curr.setDate(curr.getDate() + 1);
+            }
+
+            const available = totalStock - maxOccupied;
+            if (available >= quantity) {
+                if (availDot) {
+                    availDot.className = "availability-dot bg-green";
+                    availDot.style.backgroundColor = "";
+                }
+                if (availText) {
+                    availText.textContent = `✓ ${available} sets beschikbaar in deze periode.`;
+                }
+                if (submitBtn) submitBtn.disabled = false;
+            } else {
+                if (availDot) {
+                    availDot.className = "availability-dot bg-red";
+                    availDot.style.backgroundColor = "";
+                }
+                if (availText) {
+                    if (available <= 0) {
+                        availText.textContent = `✗ Uitverkocht! Geen sets beschikbaar van ${formatDateString(startDate)} t/m ${formatDateString(endDate)}.`;
+                    } else {
+                        availText.textContent = `✗ Onvoldoende voorraad! Nog slechts ${available} set(s) beschikbaar.`;
+                    }
+                }
+                if (submitBtn) submitBtn.disabled = true;
+            }
+        } catch (error) {
+            console.error("Fout bij controleren beschikbaarheid:", error);
+            if (availDot) {
+                availDot.className = "availability-dot bg-green";
+            }
+            if (availText) {
+                availText.textContent = "✓ Beschikbaarheid gecontroleerd (Simulatie)";
+            }
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    }
     
     /* ==========================================================================
        1. CLIENT-SIDE ROUTER (SPA NAV)
@@ -871,6 +1103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (recTotalThb) recTotalThb.textContent = `฿${totalThb}`;
         if (recTotalEur) recTotalEur.textContent = `€${totalEur.toFixed(2)}`;
+
+        // Check availability in the background
+        checkAvailability();
     }
 
     // Event listeners for fields
@@ -962,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Submit final paid booking to FormSubmit.co
+    // Submit final paid booking to database and FormSubmit.co
     function submitBooking(paymentMethod, txnId, bookingData) {
         const payCardBtn = document.getElementById('btn-pay-card');
         const cancelBtn = document.getElementById('btn-cancel-payment');
@@ -975,66 +1210,71 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (cancelBtn) cancelBtn.disabled = true;
 
-        const finalFormData = {
-            ...bookingData,
-            _subject: `🎉 Betaalde Boeking van ${bookingData.Naam} (${paymentMethod})`,
-            _replyto: bookingData.E_mailadres,
-            Betalingsstatus: `BETAALD via ${paymentMethod}`,
-            Transactie_ID: txnId,
-            Betalingskenmerk: `True Time Thai Pattaya - ${txnId}`
-        };
+        // Save to database first
+        saveBookingToDatabase(paymentMethod, txnId, bookingData)
+            .then(dbId => {
+                const finalFormData = {
+                    ...bookingData,
+                    _subject: `🎉 Betaalde Boeking van ${bookingData.Naam} (${paymentMethod})`,
+                    _replyto: bookingData.E_mailadres,
+                    Betalingsstatus: `BETAALD via ${paymentMethod}`,
+                    Transactie_ID: txnId,
+                    Betalingskenmerk: `True Time Thai Pattaya - ${txnId}`,
+                    Database_ID: dbId
+                };
 
-        fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
-            method: "POST",
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(finalFormData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Netwerkfout bij verzenden van betalingsbevestiging");
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Visual success transition
-            const paymentStep = document.getElementById('payment-step');
-            const rentalForm = document.getElementById('rental-form');
-            const successCard = document.getElementById('booking-success-card');
-            const successEmailSpan = document.getElementById('success-email');
-            const successTxnSpan = document.getElementById('success-transaction-id');
-            const receiptPaidStamp = document.getElementById('receipt-paid-stamp');
+                return fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(finalFormData)
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Netwerkfout bij verzenden van betalingsbevestiging");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Visual success transition
+                const paymentStep = document.getElementById('payment-step');
+                const rentalForm = document.getElementById('rental-form');
+                const successCard = document.getElementById('booking-success-card');
+                const successEmailSpan = document.getElementById('success-email');
+                const successTxnSpan = document.getElementById('success-transaction-id');
+                const receiptPaidStamp = document.getElementById('receipt-paid-stamp');
 
-            if (paymentStep) paymentStep.style.display = 'none';
-            if (rentalForm) rentalForm.style.display = 'none';
-            
-            if (successCard) successCard.style.display = 'block';
-            if (successEmailSpan) successEmailSpan.textContent = bookingData.E_mailadres;
-            if (successTxnSpan) successTxnSpan.textContent = txnId;
+                if (paymentStep) paymentStep.style.display = 'none';
+                if (rentalForm) rentalForm.style.display = 'none';
+                
+                if (successCard) successCard.style.display = 'block';
+                if (successEmailSpan) successEmailSpan.textContent = bookingData.E_mailadres;
+                if (successTxnSpan) successTxnSpan.textContent = txnId;
 
-            // Stamp Receipt
-            if (receiptPaidStamp) receiptPaidStamp.classList.add('visible');
+                // Stamp Receipt
+                if (receiptPaidStamp) receiptPaidStamp.classList.add('visible');
 
-            // Scroll to wizard section
-            const bookingSection = document.getElementById('booking');
-            if (bookingSection) {
-                bookingSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        })
-        .catch(error => {
-            console.error("Verzendfout betaling:", error);
-            alert("Er is helaas een fout opgetreden bij het registreren van uw betaling. Neem direct contact op via WhatsApp met transactie-ID: " + txnId);
-        })
-        .finally(() => {
-            if (payCardBtn) {
-                payCardBtn.disabled = false;
-                payCardBtn.textContent = originalPayCardText;
-            }
-            if (cancelBtn) cancelBtn.disabled = false;
-            stopPromptPaySimulation();
-        });
+                // Scroll to wizard section
+                const bookingSection = document.getElementById('booking');
+                if (bookingSection) {
+                    bookingSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            })
+            .catch(error => {
+                console.error("Fout bij afhandelen boeking:", error);
+                alert("Er is helaas een fout opgetreden bij het registreren van uw betaling. Neem direct contact op via WhatsApp met transactie-ID: " + txnId);
+            })
+            .finally(() => {
+                if (payCardBtn) {
+                    payCardBtn.disabled = false;
+                    payCardBtn.textContent = originalPayCardText;
+                }
+                if (cancelBtn) cancelBtn.disabled = false;
+                stopPromptPaySimulation();
+            });
     }
 
     // Payment Tab Selector Logic
