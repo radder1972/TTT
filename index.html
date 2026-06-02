@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
@@ -440,8 +440,140 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-submit-booking">Bevestig Huuraanvraag</button>
+                        <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-submit-booking">Doorgaan naar Betaling</button>
                     </form>
+
+                    <!-- Payment Container [NEW] -->
+                    <div class="booking-form glass" id="payment-step" style="display: none;">
+                        <h3>Veilig Afrekenen</h3>
+                        
+                        <!-- Payment Method Selector Tabs -->
+                        <div class="payment-tabs">
+                            <button type="button" class="payment-tab active" id="tab-card">
+                                <span class="tab-icon">💳</span> Creditcard
+                            </button>
+                            <button type="button" class="payment-tab" id="tab-promptpay">
+                                <span class="tab-icon">📱</span> PromptPay QR
+                            </button>
+                        </div>
+                        
+                        <!-- Card Payment Panel -->
+                        <div id="card-payment-panel" class="payment-panel">
+                            <!-- 3D Card Graphic -->
+                            <div class="card-container">
+                                <div class="card-inner" id="card-inner">
+                                    <!-- Card Front -->
+                                    <div class="card-face card-front">
+                                        <div class="card-row card-header-row">
+                                            <div class="card-chip"></div>
+                                            <div class="card-logo" id="card-brand-logo">VISA</div>
+                                        </div>
+                                        <div class="card-row card-number-display" id="card-number-display">•••• •••• •••• ••••</div>
+                                        <div class="card-row card-meta-row">
+                                            <div class="card-meta-col">
+                                                <div class="card-label">Kaarthouder</div>
+                                                <div class="card-value" id="card-holder-display">NAAM KAARTHOUDER</div>
+                                            </div>
+                                            <div class="card-meta-col">
+                                                <div class="card-label">Vervalt</div>
+                                                <div class="card-value" id="card-expiry-display">MM/JJ</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Card Back -->
+                                    <div class="card-face card-back">
+                                        <div class="card-magnetic-strip"></div>
+                                        <div class="card-signature-bar">
+                                            <div class="card-label cvv-label">CVV</div>
+                                            <div class="card-cvv-display" id="card-cvv-display">•••</div>
+                                        </div>
+                                        <div class="card-back-text">Secure Simulated Transaction</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Form Inputs -->
+                            <div class="form-group">
+                                <label for="card-number">Kaartnummer</label>
+                                <input type="text" id="card-number" class="payment-input" placeholder="4111 2222 3333 4444" autocomplete="cc-number">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-holder">Naam Kaarthouder</label>
+                                <input type="text" id="card-holder" class="payment-input" placeholder="Jan de Vries" autocomplete="cc-name">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="card-expiry">Vervaldatum</label>
+                                    <input type="text" id="card-expiry" class="payment-input" placeholder="MM/JJ" autocomplete="cc-exp">
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="card-cvv">CVV Code</label>
+                                    <input type="text" id="card-cvv" class="payment-input" placeholder="123" autocomplete="cc-csc">
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-lg btn-neon btn-block" id="btn-pay-card">Betaal ฿<span class="pay-amount-placeholder">0</span> Nu Veilig</button>
+                        </div>
+                        
+                        <!-- PromptPay Payment Panel -->
+                        <div id="promptpay-payment-panel" class="payment-panel" style="display: none;">
+                            <div class="promptpay-header">
+                                <div class="promptpay-logo-wrapper">
+                                    <span class="promptpay-logo-text">Prompt Pay</span>
+                                </div>
+                                <div class="promptpay-title">Simulated Instant Transfer</div>
+                            </div>
+                            
+                            <div class="promptpay-qr-box">
+                                <div class="qr-container">
+                                    <div class="qr-code-placeholder" id="promptpay-qr-code">
+                                        <svg viewBox="0 0 100 100" width="160" height="160">
+                                            <rect x="5" y="5" width="25" height="25" fill="#122C54" />
+                                            <rect x="9" y="9" width="17" height="17" fill="#FFF" />
+                                            <rect x="13" y="13" width="9" height="9" fill="#122C54" />
+                                            <rect x="70" y="5" width="25" height="25" fill="#122C54" />
+                                            <rect x="74" y="9" width="17" height="17" fill="#FFF" />
+                                            <rect x="78" y="13" width="9" height="9" fill="#122C54" />
+                                            <rect x="5" y="70" width="25" height="25" fill="#122C54" />
+                                            <rect x="9" y="74" width="17" height="17" fill="#FFF" />
+                                            <rect x="13" y="78" width="9" height="9" fill="#122C54" />
+                                            <path d="M 35 5 h 10 v 5 h -10 Z M 50 5 h 5 v 10 h -5 Z M 60 5 h 5 v 5 h -5 Z M 35 15 h 5 v 15 h -5 Z M 45 15 h 15 v 5 h -15 Z M 65 15 h 5 v 5 h -5 Z M 35 35 h 10 v 5 h -10 Z M 50 35 h 5 v 5 h -5 Z M 60 35 h 10 v 5 h -10 Z M 5 35 h 5 v 10 h -5 Z M 15 35 h 10 v 5 h -10 Z M 30 35 h 5 v 5 h -5 Z M 5 50 h 15 v 5 h -15 Z M 25 50 h 5 v 10 h -5 Z M 35 50 h 10 v 5 h -10 Z M 50 50 h 15 v 5 h -15 Z M 70 50 h 5 v 10 h -5 Z M 80 50 h 15 v 5 h -15 Z M 5 60 h 5 v 5 h -5 Z M 15 60 h 5 v 10 h -5 Z M 35 60 h 10 v 5 h -10 Z M 50 60 h 5 v 5 h -5 Z M 60 60 h 5 v 15 h -5 Z M 75 60 h 10 v 5 h -10 Z M 90 60 h 5 v 5 h -5 Z M 35 70 h 5 v 10 h -5 Z M 45 70 h 15 v 5 h -15 Z M 70 70 h 15 v 5 h -15 Z M 90 70 h 5 v 10 h -5 Z M 35 85 h 10 v 5 h -10 Z M 50 85 h 5 v 10 h -5 Z M 60 85 h 15 v 5 h -15 Z M 80 85 h 15 v 5 h -15 Z M 10 90 h 5 v 5 h -5 Z M 20 90 h 10 v 5 h -10 Z" fill="#122C54"/>
+                                        </svg>
+                                    </div>
+                                    <div class="qr-status-overlay" id="qr-status-overlay" style="display: none;">
+                                        <div class="qr-spinner"></div>
+                                        <span id="qr-status-text">Betaling verifiëren...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="promptpay-info">
+                                <div class="promptpay-amount">Bedrag: <strong class="text-blue">฿<span class="pay-amount-placeholder">0</span></strong></div>
+                                <div class="promptpay-timer">Code verloopt over: <span id="pp-timer">05:00</span></div>
+                            </div>
+                            
+                            <div class="promptpay-status-message" id="pp-status-msg">
+                                <span class="pp-pulse"></span> Wachten op scan door uw bankieren-app...
+                            </div>
+                        </div>
+                        
+                        <div class="payment-actions">
+                            <button type="button" class="btn btn-outline btn-block" id="btn-cancel-payment">Terug naar Gegevens</button>
+                        </div>
+                    </div>
+
+                    <!-- Success popup [NEW] -->
+                    <div class="success-card glass" id="booking-success-card" style="display: none;">
+                        <div class="success-icon">🎉</div>
+                        <h3>Betaling Ontvangen & Boeking Bevestigd!</h3>
+                        <p>Bedankt voor uw boeking bij True Time Thai. Wij hebben een bevestigingsmail met uw betaalbewijs gestuurd naar <strong id="success-email"></strong>.</p>
+                        <p>Uw transactie-ID is: <strong id="success-transaction-id" style="color: var(--neon-cyan);"></strong>.</p>
+                        <p>Uw digitale ophaalbewijs en verdere instructies voor de gekozen locatie volgen spoedig.</p>
+                        <button class="btn btn-neon btn-sm" id="btn-new-booking">Nieuwe Boeking</button>
+                    </div>
 
                     <!-- Receipt Preview / Calculation Sidebar -->
                     <div class="booking-receipt-sidebar">
@@ -481,15 +613,8 @@
                                 <p>✓ Gratis annuleren tot 24 uur voor aanvang</p>
                                 <div class="hygiene-badge">🧼 UV-C Gedesinfecteerd</div>
                             </div>
-                        </div>
-
-                        <!-- Success popup inside sidebar after submit -->
-                        <div class="success-card glass" id="booking-success-card" style="display: none;">
-                            <div class="success-icon">🎉</div>
-                            <h3>Reservering Aangevraagd!</h3>
-                            <p>Bedankt voor uw boeking bij True Time Thai. Wij hebben een bevestigingsmail gestuurd naar <strong id="success-email"></strong>.</p>
-                            <p>Uw digitale ophaalbewijs en verdere instructies voor de gekozen locatie volgen spoedig.</p>
-                            <button class="btn btn-neon btn-sm" id="btn-new-booking">Nieuwe Boeking</button>
+                            <!-- Paid Stamp Overlay [NEW] -->
+                            <div class="paid-stamp" id="receipt-paid-stamp">BETAALD / PAID</div>
                         </div>
                     </div>
                 </div>
