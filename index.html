@@ -47,14 +47,21 @@
                     <span></span>
                 </button>
                 <ul class="nav-menu" id="nav-menu">
-                    <li><a href="#home" class="nav-link active" id="nav-home">Home</a></li>
-                    <li><a href="#pricing" class="nav-link" id="nav-pricing">Tarieven</a></li>
-                    <li><a href="#booking" class="nav-link" id="nav-booking">Boeken</a></li>
-                    <li><a href="#hygiene" class="nav-link" id="nav-hygiene">Hygiëne & Info</a></li>
-                    <li><a href="#simulator" class="nav-link" id="nav-simulator">AI Simulator</a></li>
-                    <li><a href="#contact" class="nav-link" id="nav-contact">Contact</a></li>
-                    <li class="mobile-only"><a href="#reviews" class="nav-link nav-link-red" id="nav-reviews-mobile">Gebruikerservaringen</a></li>
-                    <li class="mobile-only"><a href="#terms" class="nav-link nav-link-red" id="nav-terms-mobile">Voorwaarden</a></li>
+                    <li><a href="#home" class="nav-link active" id="nav-home" data-i18n="nav_home">Home</a></li>
+                    <li><a href="#pricing" class="nav-link" id="nav-pricing" data-i18n="nav_pricing">Tarieven</a></li>
+                    <li><a href="#booking" class="nav-link" id="nav-booking" data-i18n="nav_booking">Boeken</a></li>
+                    <li><a href="#hygiene" class="nav-link" id="nav-hygiene" data-i18n="nav_hygiene">Hygiëne & Info</a></li>
+                    <li><a href="#simulator" class="nav-link" id="nav-simulator" data-i18n="nav_simulator">AI Simulator</a></li>
+                    <li><a href="#contact" class="nav-link" id="nav-contact" data-i18n="nav_contact">Contact</a></li>
+                    <li class="mobile-only"><a href="#reviews" class="nav-link nav-link-red" id="nav-reviews-mobile" data-i18n="nav_reviews">Gebruikerservaringen</a></li>
+                    <li class="mobile-only"><a href="#terms" class="nav-link nav-link-red" id="nav-terms-mobile" data-i18n="nav_terms">Voorwaarden</a></li>
+                    <li class="mobile-only mobile-lang-item">
+                        <div class="lang-switcher mobile-switcher">
+                            <button class="lang-btn active" data-lang="nl" title="Nederlands">NL</button>
+                            <button class="lang-btn" data-lang="en" title="English">EN</button>
+                            <button class="lang-btn" data-lang="th" title="ไทย">TH</button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
             
@@ -62,13 +69,19 @@
             <div class="header-right desktop-only">
                 <nav class="right-nav">
                     <ul class="nav-menu-right">
-                        <li><a href="#reviews" class="nav-link nav-link-red" id="nav-reviews">Gebruikerservaringen</a></li>
-                        <li><a href="#terms" class="nav-link nav-link-red" id="nav-terms">Voorwaarden</a></li>
+                        <li><a href="#reviews" class="nav-link nav-link-red" id="nav-reviews" data-i18n="nav_reviews">Gebruikerservaringen</a></li>
+                        <li><a href="#terms" class="nav-link nav-link-red" id="nav-terms" data-i18n="nav_terms">Voorwaarden</a></li>
                     </ul>
                 </nav>
                 
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="nl" title="Nederlands">NL</button>
+                    <button class="lang-btn" data-lang="en" title="English">EN</button>
+                    <button class="lang-btn" data-lang="th" title="ไทย">TH</button>
+                </div>
+
                 <div class="header-action">
-                    <a href="#booking" class="btn btn-sm btn-neon" id="quick-book-btn">Nu Huren</a>
+                    <a href="#booking" class="btn btn-sm btn-neon" id="quick-book-btn" data-i18n="quick_book">Nu Huren</a>
                 </div>
             </div>
         </div>
@@ -81,19 +94,19 @@
         <section id="home" class="app-section section-active">
             <div class="container hero-container">
                 <div class="hero-content">
-                    <div class="badge-thai">
+                    <div class="badge-thai" data-i18n="hero_badge">
                         <span class="flag-dot"></span> Pattaya's Eerste Premium Vertaalservice
                     </div>
-                    <h1 class="hero-title">
+                    <h1 class="hero-title" data-i18n="hero_title">
                         Breek de taalbarrière.<br>
                         <span class="text-gradient">Ervaar Thailand in Real-Time.</span>
                     </h1>
-                    <p class="hero-lead">
+                    <p class="hero-lead" data-i18n="hero_lead">
                         Huur de **True Time Thai W4 Pro** AI-vertaaloordopjes in Pattaya. Communiceer moeiteloos en natuurlijk met gidsen, lokale ondernemers en bewoners. Zonder onhandig staren naar een telefoonscherm.
                     </p>
                     <div class="hero-actions">
-                        <a href="#booking" class="btn btn-lg btn-neon" id="hero-cta-primary">Reserveer W4 Pro</a>
-                        <a href="#simulator" class="btn btn-lg btn-outline" id="hero-cta-secondary">Probeer de AI Simulator</a>
+                        <a href="#booking" class="btn btn-lg btn-neon" id="hero-cta-primary" data-i18n="hero_cta_primary">Reserveer W4 Pro</a>
+                        <a href="#simulator" class="btn btn-lg btn-outline" id="hero-cta-secondary" data-i18n="hero_cta_secondary">Probeer de AI Simulator</a>
                     </div>
                     
                     <!-- Highlights Banner -->
@@ -106,8 +119,8 @@
                                 </svg>
                             </span>
                             <div class="highlight-info">
-                                <strong>102 Talen</strong>
-                                <span>+14 Engelse accenten</span>
+                                <strong data-i18n="hl_1_title">102 Talen</strong>
+                                <span data-i18n="hl_1_desc">+14 Engelse accenten</span>
                             </div>
                         </div>
                         <div class="highlight-item">
@@ -119,8 +132,8 @@
                                 </svg>
                             </span>
                             <div class="highlight-info">
-                                <strong>Open-Oor Comfort</strong>
-                                <span>100% hygiënisch & veilig</span>
+                                <strong data-i18n="hl_2_title">Open-Oor Comfort</strong>
+                                <span data-i18n="hl_2_desc">100% hygiënisch & veilig</span>
                             </div>
                         </div>
                         <div class="highlight-item">
@@ -130,8 +143,8 @@
                                 </svg>
                             </span>
                             <div class="highlight-info">
-                                <strong>Real-Time Vertaling</strong>
-                                <span>Met geavanceerde AI</span>
+                                <strong data-i18n="hl_3_title">Real-Time Vertaling</strong>
+                                <span data-i18n="hl_3_desc">Met geavanceerde AI</span>
                             </div>
                         </div>
                     </div>
@@ -153,7 +166,7 @@
                                 </div>
                             </div>
                             <div class="visual-footer">
-                                <p class="visual-caption">Een open oor design om rustig te genieten</p>
+                                <p class="visual-caption" data-i18n="hero_caption_1">Een open oor design om rustig te genieten</p>
                             </div>
                         </div>
 
@@ -169,7 +182,7 @@
                                 </div>
                             </div>
                             <div class="visual-footer">
-                                <p class="visual-caption">Who helps you to get true?</p>
+                                <p class="visual-caption" data-i18n="hero_caption_2">Who helps you to get true?</p>
                             </div>
                         </div>
 
@@ -185,7 +198,7 @@
                                 </div>
                             </div>
                             <div class="visual-footer">
-                                <p class="visual-caption">Samen praten is samen genieten</p>
+                                <p class="visual-caption" data-i18n="hero_caption_3">Samen praten is samen genieten</p>
                             </div>
                         </div>
 
@@ -196,9 +209,9 @@
             <!-- PRODUCT HIGHLIGHTS SECTION -->
             <div class="container section-divider">
                 <div class="section-header text-center">
-                    <span class="section-tag">De Technologie</span>
-                    <h2>Waarom de True Time Thai W4 Pro?</h2>
-                    <p class="section-lead-sub">Ontwikkeld om natuurlijke, soepele communicatie mogelijk te maken in uitdagende omgevingen.</p>
+                    <span class="section-tag" data-i18n="tech_tag">De Technologie</span>
+                    <h2 data-i18n="tech_title">Waarom de True Time Thai W4 Pro?</h2>
+                    <p class="section-lead-sub" data-i18n="tech_lead">Ontwikkeld om natuurlijke, soepele communicatie mogelijk te maken in uitdagende omgevingen.</p>
                 </div>
 
                 <div class="features-grid">
@@ -209,8 +222,8 @@
                                 <circle cx="12" cy="11" r="3" stroke="var(--thai-turquoise)" stroke-width="1.5" fill="none"/>
                             </svg>
                         </div>
-                        <h3>Open-Oor Hygiëne</h3>
-                        <p>Geen in-ear contact. Het ergonomische open-oor ontwerp rust comfortabel over uw oorschelp. Dit maakt het uiterst hygiënisch, veilig en ideaal voor verhuur.</p>
+                        <h3 data-i18n="feat_1_title">Open-Oor Hygiëne</h3>
+                        <p data-i18n="feat_1_desc">Geen in-ear contact. Het ergonomische open-oor ontwerp rust comfortabel over uw oorschelp. Dit maakt het uiterst hygiënisch, veilig en ideaal voor verhuur.</p>
                     </div>
                     <div class="feature-card glass">
                         <div class="feature-icon bg-red">
@@ -219,8 +232,8 @@
                                 <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="var(--thai-red)" stroke-width="2" fill="none"/>
                             </svg>
                         </div>
-                        <h3>102 Talen & Accentondersteuning</h3>
-                        <p>Spreek in uw eigen taal (bijv. Nederlands of Engels) en hoor direct Thais terug. De AI herkent 14 Engelse accenten (inclusief Thai English) en de True Time Thai W4 Pro past zich hier perfect op aan.</p>
+                        <h3 data-i18n="feat_2_title">102 Talen & Accentondersteuning</h3>
+                        <p data-i18n="feat_2_desc">Spreek in uw eigen taal (bijv. Nederlands of Engels) en hoor direct Thais terug. De AI herkent 14 Engelse accenten (inclusief Thai English) en de True Time Thai W4 Pro past zich hier perfect op aan.</p>
                     </div>
                     <div class="feature-card glass">
                         <div class="feature-icon bg-turquoise">
@@ -229,8 +242,8 @@
                                 <path d="M3 3l18 18" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
                             </svg>
                         </div>
-                        <h3>Pattaya Wind & Noise Reduction</h3>
-                        <p>Of u nu op een drukke avondmarkt staat of in een open Songthaew (baht-bus) zit, de dual-mic ruisonderdrukking zorgt voor kristalheldere vertalingen.</p>
+                        <h3 data-i18n="feat_3_title">Pattaya Wind & Noise Reduction</h3>
+                        <p data-i18n="feat_3_desc">Of u nu op een drukke avondmarkt staat of in een open Songthaew (baht-bus) zit, de dual-mic ruisonderdrukking zorgt voor kristalheldere vertalingen.</p>
                     </div>
                     <div class="feature-card glass">
                         <div class="feature-icon bg-red">
@@ -240,17 +253,17 @@
                                 <path d="M10 7l-2 4h4l-2 4" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                             </svg>
                         </div>
-                        <h3>12 Uur Actieve Accu</h3>
-                        <p>Verken Pattaya de hele dag zonder stress. De oordopjes gaan tot 12 uur mee op een enkele lading en worden geleverd met een luxe laadcase.</p>
+                        <h3 data-i18n="feat_4_title">12 Uur Actieve Accu</h3>
+                        <p data-i18n="feat_4_desc">Verken Pattaya de hele dag zonder stress. De oordopjes gaan tot 12 uur mee op een enkele lading en worden geleverd met een luxe laadcase.</p>
                     </div>
                 </div>
 
                 <!-- Language Selector / Interactive visual -->
                 <div class="language-showcase-box glass">
-                    <h3>Ondersteunde Talen & Accenten</h3>
-                    <p>Zoek uw taal en ontdek hoe soepel de W4 Pro vertaalt naar het Thais.</p>
+                    <h3 data-i18n="lang_box_title">Ondersteunde Talen & Accenten</h3>
+                    <p data-i18n="lang_box_desc">Zoek uw taal en ontdek hoe soepel de W4 Pro vertaalt naar het Thais.</p>
                     <div class="search-lang-wrapper">
-                        <input type="text" id="lang-search" placeholder="Zoek op taal (bijv. Nederlands, Duits, Thai...)" aria-label="Zoek taal">
+                        <input type="text" id="lang-search" placeholder="Zoek op taal (bijv. Nederlands, Duits, Thai...)" aria-label="Zoek taal" data-i18n-placeholder="lang_box_search">
                     </div>
                     <div class="languages-flex" id="languages-list">
                         <!-- Populated by JavaScript -->
@@ -263,15 +276,15 @@
         <section id="simulator" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Ervaar Het Zelf</span>
-                    <h2>AI Vertaal Simulator</h2>
-                    <p class="section-lead-sub">Test hoe de True Time Thai W4 Pro in real-time gesprekken vertaalt in Pattaya. Kies een scenario en start de ervaring.</p>
+                    <span class="section-tag" data-i18n="sim_tag">Ervaar Het Zelf</span>
+                    <h2 data-i18n="sim_title">AI Vertaal Simulator</h2>
+                    <p class="section-lead-sub" data-i18n="sim_lead">Test hoe de True Time Thai W4 Pro in real-time gesprekken vertaalt in Pattaya. Kies een scenario en start de ervaring.</p>
                 </div>
 
                 <div class="simulator-layout" id="simulator-layout-container">
                     <!-- Scenario Chooser -->
                     <div class="simulator-scenarios">
-                        <h3>Kies een Scenario</h3>
+                        <h3 data-i18n="sim_scenarios_title">Kies een Scenario</h3>
                         <div class="scenario-list">
                             <button class="scenario-card glass active" data-scenario="market" id="btn-scenario-market">
                                 <span class="scenario-emoji">
@@ -281,8 +294,8 @@
                                     </svg>
                                 </span>
                                 <div class="scenario-details">
-                                    <h4>Lanpho Naklua Vis-Markt</h4>
-                                    <p>Zeevruchten bestellen en onderhandelen met een lokale vishandelaar.</p>
+                                    <h4 data-i18n="sim_sc_market_title">Lanpho Naklua Vis-Markt</h4>
+                                    <p data-i18n="sim_sc_market_desc">Zeevruchten bestellen en onderhandelen met een lokale vishandelaar.</p>
                                 </div>
                             </button>
                             <button class="scenario-card glass" data-scenario="taxi" id="btn-scenario-taxi">
@@ -296,8 +309,8 @@
                                     </svg>
                                 </span>
                                 <div class="scenario-details">
-                                    <h4>Taxi naar Walking Street</h4>
-                                    <p>Een Songthaew chauffeur de weg uitleggen en de prijs afspreken.</p>
+                                    <h4 data-i18n="sim_sc_taxi_title">Taxi naar Walking Street</h4>
+                                    <p data-i18n="sim_sc_taxi_desc">Een Songthaew chauffeur de weg uitleggen en de prijs afspreken.</p>
                                 </div>
                             </button>
                             <button class="scenario-card glass" data-scenario="resort" id="btn-scenario-resort">
@@ -309,8 +322,8 @@
                                             <path d="M12 5V2" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
                                         </svg>
                                     </span>
-                                    <h4>Inchecken in Jomtien Resort</h4>
-                                    <p>Praten met de receptionist over hotelvoorzieningen en een borgsom.</p>
+                                    <h4 data-i18n="sim_sc_resort_title">Inchecken in Jomtien Resort</h4>
+                                    <p data-i18n="sim_sc_resort_desc">Praten met de receptionist over hotelvoorzieningen en een borgsom.</p>
                                 </span>
                             </button>
                         </div>
@@ -327,7 +340,7 @@
                                 <button type="button" class="btn-sim-sound" id="btn-sim-sound" title="Geluid Dempen/Inschakelen" aria-label="Geluid aan/uit">
                                     <span id="sim-sound-icon">🔊</span>
                                 </button>
-                                <span class="device-badge" id="sim-device-badge">🎧 Handsfree Modus Actief</span>
+                                <span class="device-badge" id="sim-device-badge" data-i18n="sim_handsfree_badge">🎧 Handsfree Modus Actief</span>
                             </div>
                         </div>
 
@@ -351,8 +364,8 @@
                             </div>
                             <!-- Dynamic Choice reply options buttons will be generated here -->
                             <div class="control-actions" id="simulator-choices">
-                                <button class="btn btn-neon btn-sim-choice" id="simulator-next-btn">Start Gesprek</button>
-                                <button class="btn btn-outline" id="simulator-reset-btn">Reset</button>
+                                <button class="btn btn-neon btn-sim-choice" id="simulator-next-btn" data-i18n="startBtn">Start Gesprek</button>
+                                <button class="btn btn-outline" id="simulator-reset-btn" data-i18n="resetBtn">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -364,24 +377,24 @@
         <section id="booking" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Direct Reserveren</span>
-                    <h2>True Time Thai W4 Pro Huren</h2>
-                    <p class="section-lead-sub">Plan uw reis zorgeloos. Bereken uw prijs en reserveer direct uw AI-oordopjes voor ophalen of gratis bezorging in Pattaya.</p>
+                    <span class="section-tag" data-i18n="book_tag">Direct Reserveren</span>
+                    <h2 data-i18n="book_title">True Time Thai W4 Pro Huren</h2>
+                    <p class="section-lead-sub" data-i18n="book_lead">Plan uw reis zorgeloos. Bereken uw prijs en reserveer direct uw AI-oordopjes voor ophalen of gratis bezorging in Pattaya.</p>
                 </div>
 
                 <div class="booking-layout">
                     <!-- Form Container -->
                     <form class="booking-form glass" id="rental-form">
-                        <h3>Boekingsgegevens</h3>
+                        <h3 data-i18n="form_title">Boekingsgegevens</h3>
                         
                         <!-- Step 1: Dates -->
                         <div class="form-row">
                             <div class="form-group col-6">
-                                <label for="start-date">Startdatum Huur</label>
+                                <label for="start-date" data-i18n="form_label_start">Startdatum Huur</label>
                                 <input type="date" id="start-date" required min="2026-06-01">
                             </div>
                             <div class="form-group col-6">
-                                <label for="end-date">Einddatum Huur</label>
+                                <label for="end-date" data-i18n="form_label_end">Einddatum Huur</label>
                                 <input type="date" id="end-date" required min="2026-06-02">
                             </div>
                         </div>
@@ -389,7 +402,7 @@
                         <!-- Step 2: Units and Locations -->
                         <div class="form-row">
                             <div class="form-group col-6">
-                                <label for="earbud-count">Aantal Sets W4 Pro</label>
+                                <label for="earbud-count" data-i18n="form_label_qty">Aantal Sets W4 Pro</label>
                                 <div class="number-input-wrapper">
                                     <button type="button" class="btn-number" id="btn-qty-dec">-</button>
                                     <input type="number" id="earbud-count" value="1" min="1" max="10" readonly>
@@ -397,32 +410,32 @@
                                 </div>
                             </div>
                             <div class="form-group col-6">
-                                <label for="pickup-loc">Ophaal & Inleverlocatie</label>
+                                <label for="pickup-loc" data-i18n="form_label_loc">Ophaal & Inleverlocatie</label>
                                 <select id="pickup-loc" required>
-                                    <option value="pattaya_office">True Time Thai Office - Beach Road Pattaya</option>
-                                    <option value="hotel_delivery">Hotel Bezorging in Pattaya (Gratis)</option>
+                                    <option value="pattaya_office" data-i18n="form_opt_office">True Time Thai Office - Beach Road Pattaya</option>
+                                    <option value="hotel_delivery" data-i18n="form_opt_hotel">Hotel Bezorging in Pattaya (Gratis)</option>
                                 </select>
                             </div>
                         </div>
 
                         <!-- Step 3: Accessories -->
                         <div class="form-group">
-                            <label>Handige Extra's voor Pattaya</label>
+                            <label data-i18n="form_label_extras">Handige Extra's voor Pattaya</label>
                             <div class="checkbox-grid">
                                 <label class="checkbox-card glass">
                                     <input type="checkbox" id="extra-sim" value="sim">
                                     <span class="check-custom"></span>
                                     <div class="checkbox-details">
-                                        <strong>5G Lokale SIM-kaart (+ ฿350 / €10)</strong>
-                                        <span>Onbeperkt data voor real-time offline AI-vertaling en kaarten.</span>
+                                        <strong data-i18n="form_extra_sim_title">5G Lokale SIM-kaart (+ ฿350 / €10)</strong>
+                                        <span data-i18n="form_extra_sim_desc">Onbeperkt data voor real-time offline AI-vertaling en kaarten.</span>
                                     </div>
                                 </label>
                                 <label class="checkbox-card glass">
                                     <input type="checkbox" id="extra-powerbank" value="powerbank">
                                     <span class="check-custom"></span>
                                     <div class="checkbox-details">
-                                        <strong>Premium Powerbank (+ ฿175 / €5)</strong>
-                                        <span>Altijd extra stroom onderweg voor uw telefoon en laadcase.</span>
+                                        <strong data-i18n="form_extra_pb_title">Premium Powerbank (+ ฿175 / €5)</strong>
+                                        <span data-i18n="form_extra_pb_desc">Altijd extra stroom onderweg voor uw telefoon en laadcase.</span>
                                     </div>
                                 </label>
                             </div>
@@ -431,28 +444,28 @@
                         <!-- Step 4: Contact Details -->
                         <div class="form-row">
                             <div class="form-group col-6">
-                                <label for="cust-name">Volledige Naam</label>
-                                <input type="text" id="cust-name" required placeholder="Bijv. Jan de Vries">
+                                <label for="cust-name" data-i18n="form_label_name">Volledige Naam</label>
+                                <input type="text" id="cust-name" required placeholder="Bijv. Jan de Vries" data-i18n-placeholder="form_placeholder_name">
                             </div>
                             <div class="form-group col-6">
-                                <label for="cust-email">E-mailadres</label>
-                                <input type="email" id="cust-email" required placeholder="Bijv. jan@voorbeeld.nl">
+                                <label for="cust-email" data-i18n="form_label_email">E-mailadres</label>
+                                <input type="email" id="cust-email" required placeholder="Bijv. jan@voorbeeld.nl" data-i18n-placeholder="form_placeholder_email">
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-submit-booking">Bevestig Huuraanvraag</button>
+                        <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-submit-booking" data-i18n="form_btn_submit">Bevestig Huuraanvraag</button>
                     </form>
 
                     <!-- Receipt Preview / Calculation Sidebar -->
                     <div class="booking-receipt-sidebar">
                         <div class="receipt-card glass" id="receipt-box">
                             <div class="receipt-header">
-                                <span class="receipt-title">HUURINVOICE</span>
+                                <span class="receipt-title" data-i18n="receipt_title">HUURINVOICE</span>
                                 <span class="receipt-brand">TRUE TIME THAI</span>
                             </div>
                             <div class="receipt-body">
                                 <div class="receipt-row font-bold">
-                                    <span>Huurperiode:</span>
+                                    <span data-i18n="receipt_period_label">Huurperiode:</span>
                                     <span id="rec-duration">Selecteer datums</span>
                                 </div>
                                 <hr>
@@ -468,28 +481,28 @@
                                     <span id="rec-discount" class="text-green">-฿0</span>
                                 </div>
                                 <div class="receipt-row total-row">
-                                    <span>Totaal (THB):</span>
+                                    <span data-i18n="receipt_total_thb">Totaal (THB):</span>
                                     <span id="rec-total-thb">฿0</span>
                                 </div>
                                 <div class="receipt-row eur-conversion">
-                                    <span>Totaal (EUR schatting):</span>
+                                    <span data-i18n="receipt_total_eur">Totaal (EUR schatting):</span>
                                     <span id="rec-total-eur">€0.00</span>
                                 </div>
                             </div>
                             <div class="receipt-footer">
-                                <p>✓ Geen borg vereist bij creditcard-verificatie</p>
-                                <p>✓ Gratis annuleren tot 24 uur voor aanvang</p>
-                                <div class="hygiene-badge">🧼 UV-C Gedesinfecteerd</div>
+                                <p data-i18n="receipt_foot_1">✓ Geen borg vereist bij creditcard-verificatie</p>
+                                <p data-i18n="receipt_foot_2">✓ Gratis annuleren tot 24 uur voor aanvang</p>
+                                <div class="hygiene-badge" data-i18n="receipt_hygiene_badge">🧼 UV-C Gedesinfecteerd</div>
                             </div>
                         </div>
 
                         <!-- Success popup inside sidebar after submit -->
                         <div class="success-card glass" id="booking-success-card" style="display: none;">
                             <div class="success-icon">🎉</div>
-                            <h3>Reservering Aangevraagd!</h3>
-                            <p>Bedankt voor uw boeking bij True Time Thai. Wij hebben een bevestigingsmail gestuurd naar <strong id="success-email"></strong>.</p>
-                            <p>Uw digitale ophaalbewijs en verdere instructies voor de gekozen locatie volgen spoedig.</p>
-                            <button class="btn btn-neon btn-sm" id="btn-new-booking">Nieuwe Boeking</button>
+                            <h3 data-i18n="success_title">Reservering Aangevraagd!</h3>
+                            <p data-i18n="success_desc_1">Bedankt voor uw boeking bij True Time Thai. Wij hebben een bevestigingsmail gestuurd naar <strong id="success-email"></strong>.</p>
+                            <p data-i18n="success_desc_2">Uw digitale ophaalbewijs en verdere instructies voor de gekozen locatie volgen spoedig.</p>
+                            <button class="btn btn-neon btn-sm" id="btn-new-booking" data-i18n="success_btn_new">Nieuwe Boeking</button>
                         </div>
                     </div>
                 </div>
@@ -500,26 +513,26 @@
         <section id="hygiene" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Veiligheid Eerst</span>
-                    <h2>Strikt Hygiëneprotocol & Info</h2>
-                    <p class="section-lead-sub">Wij begrijpen dat hygiëne cruciaal is bij het delen van technologie. Daarom hanteren wij medische reinigingsstandaarden.</p>
+                    <span class="section-tag" data-i18n="hyg_tag">Veiligheid Eerst</span>
+                    <h2 data-i18n="hyg_title">Strikt Hygiëneprotocol & Info</h2>
+                    <p class="section-lead-sub" data-i18n="hyg_lead">Wij begrijpen dat hygiëne cruciaal is bij het delen van technologie. Daarom hanteren wij medische reinigingsstandaarden.</p>
                 </div>
 
                 <div class="hygiene-timeline">
                     <div class="timeline-step glass">
                         <div class="step-num">01</div>
-                        <h3>UV-C Sterilisatie</h3>
-                        <p>Elke oordopjesset en laadcase ondergaat een intensieve sterilisatie in onze industriële UV-C lichtkamers. Dit elimineert 99,9% van alle bacteriën en virussen.</p>
+                        <h3 data-i18n="hyg_step1_title">UV-C Sterilisatie</h3>
+                        <p data-i18n="hyg_step1_desc">Elke oordopjesset en laadcase ondergaat een intensieve sterilisatie in onze industriële UV-C lichtkamers. Dit elimineert 99,9% van alle bacteriën en virussen.</p>
                     </div>
                     <div class="timeline-step glass">
                         <div class="step-num">02</div>
-                        <h3>Medische Reiniging</h3>
-                        <p>De W4 Pro's worden handmatig gereinigd en ontsmet met biologisch afbreekbare, alcoholvrije medische desinfectiedoekjes die speciaal zijn ontworpen voor audiocomponenten.</p>
+                        <h3 data-i18n="hyg_step2_title">Medische Reiniging</h3>
+                        <p data-i18n="hyg_step2_desc">De W4 Pro's worden handmatig gereinigd en ontsmet met biologisch afbreekbare, alcoholvrije medische desinfectiedoekjes die speciaal zijn ontworpen voor audiocomponenten.</p>
                     </div>
                     <div class="timeline-step glass">
                         <div class="step-num">03</div>
-                        <h3>Verzegeling & Inspectie</h3>
-                        <p>Na een uitgebreide audiotest en batterijcheck wordt het pakket luchtdicht verzegeld in een biologische hygiëneverpakking. U verbreekt zelf de zegel bij ontvangst.</p>
+                        <h3 data-i18n="hyg_step3_title">Verzegeling & Inspectie</h3>
+                        <p data-i18n="hyg_step3_desc">Na een uitgebreide audiotest en batterijcheck wordt het pakket luchtdicht verzegeld in een biologische hygiëneverpakking. U verbreekt zelf de zegel bij ontvangst.</p>
                     </div>
                 </div>
 
@@ -528,17 +541,17 @@
                     <div class="banner-content">
                         <!-- Interactive Category Tabs (Apple Pill Style) -->
                         <div class="hygiene-tabs">
-                            <button class="hygiene-tab active" data-target="1">Comfort</button>
-                            <button class="hygiene-tab" data-target="3">UV-C Sterilisatie</button>
-                            <button class="hygiene-tab" data-target="2">Reiniging</button>
-                            <button class="hygiene-tab" data-target="4">Pasvorm</button>
-                            <button class="hygiene-tab" data-target="5">Verzegeling</button>
+                            <button class="hygiene-tab active" data-target="1" data-i18n="tab_comfort">Comfort</button>
+                            <button class="hygiene-tab" data-target="3" data-i18n="tab_uvc">UV-C Sterilisatie</button>
+                            <button class="hygiene-tab" data-target="2" data-i18n="tab_reiniging">Reiniging</button>
+                            <button class="hygiene-tab" data-target="4" data-i18n="tab_pasvorm">Pasvorm</button>
+                            <button class="hygiene-tab" data-target="5" data-i18n="tab_verzegeling">Verzegeling</button>
                         </div>
 
                         <!-- Dynamic Persuasive Content Area -->
                         <div class="hygiene-dynamic-content" id="hygiene-content-area">
-                            <h3 class="dynamic-title">100% Vrijheid & Natuurlijk Geluid</h3>
-                            <div class="dynamic-text">
+                            <h3 class="dynamic-title" data-i18n="hyg_dynamic_title">100% Vrijheid & Natuurlijk Geluid</h3>
+                            <div class="dynamic-text" data-i18n="hyg_dynamic_text">
                                 <p>Ervaar de ultieme revolutie in audiogemak onder de Thaise zon. Omdat onze oordopjes <em>boven</em> uw gehoorkanaal zweven in plaats van erin, geniet u van uw favoriete muziek of real-time vertalingen zonder zweetophoping of druk. Ideaal voor actieve stranddagen in Jomtien en wandelingen door Pattaya!</p>
                             </div>
                         </div>
@@ -559,7 +572,7 @@
                                     </div>
                                 </div>
                                 <div class="visual-footer">
-                                    <p class="visual-caption">Comfortabel & hygiënisch dragen</p>
+                                    <p class="visual-caption" data-i18n="hyg_cap_1">Comfortabel & hygiënisch dragen</p>
                                 </div>
                             </div>
 
@@ -575,7 +588,7 @@
                                     </div>
                                 </div>
                                 <div class="visual-footer">
-                                    <p class="visual-caption">Grondige medische desinfectie</p>
+                                    <p class="visual-caption" data-i18n="hyg_cap_2">Grondige medische desinfectie</p>
                                 </div>
                             </div>
 
@@ -591,7 +604,7 @@
                                     </div>
                                 </div>
                                 <div class="visual-footer">
-                                    <p class="visual-caption">Intensieve UV-C sterilisatie</p>
+                                    <p class="visual-caption" data-i18n="hyg_cap_3">Intensieve UV-C sterilisatie</p>
                                 </div>
                             </div>
 
@@ -607,7 +620,7 @@
                                     </div>
                                 </div>
                                 <div class="visual-footer">
-                                    <p class="visual-caption">Perfect passend open-oor design</p>
+                                    <p class="visual-caption" data-i18n="hyg_cap_4">Perfect passend open-oor design</p>
                                 </div>
                             </div>
 
@@ -623,7 +636,7 @@
                                     </div>
                                 </div>
                                 <div class="visual-footer">
-                                    <p class="visual-caption">100% hygiënische vacuüm-verzegeling</p>
+                                    <p class="visual-caption" data-i18n="hyg_cap_5">100% hygiënische vacuüm-verzegeling</p>
                                 </div>
                             </div>
 
@@ -637,82 +650,82 @@
         <section id="pricing" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Transparante Prijzen</span>
-                    <h2>Onze Tariefplannen</h2>
-                    <p class="section-lead-sub">Kies het plan dat het beste bij uw verblijf in Thailand past. Geen verborgen kosten, geen ingewikkelde borgregelingen.</p>
+                    <span class="section-tag" data-i18n="pricing_tag">Transparante Prijzen</span>
+                    <h2 data-i18n="pricing_title">Onze Tariefplannen</h2>
+                    <p class="section-lead-sub" data-i18n="pricing_lead">Kies het plan dat het beste bij uw verblijf in Thailand past. Geen verborgen kosten, geen ingewikkelde borgregelingen.</p>
                 </div>
 
                 <div class="pricing-grid">
                     <!-- Plan 1 -->
                     <div class="pricing-card glass">
                         <div class="plan-header">
-                            <h3>Dagverkenner</h3>
-                            <p class="plan-subtitle">Ideaal voor een dagje uit of excursie</p>
+                            <h3 data-i18n="plan_1_title">Dagverkenner</h3>
+                            <p class="plan-subtitle" data-i18n="plan_1_sub">Ideaal voor een dagje uit of excursie</p>
                             <div class="plan-price">
                                 <span class="price-val">฿250</span>
-                                <span class="price-period">/ dag (~ €6,75)</span>
+                                <span class="price-period" data-i18n="plan_1_price_period">/ dag (~ €6,75)</span>
                             </div>
                         </div>
                         <div class="plan-features">
                             <ul>
-                                <li>✓ 1x True Time Thai W4 Pro set</li>
-                                <li>✓ Inclusief oplaadcase & USB-kabel</li>
-                                <li>✓ 102 talen inbegrepen</li>
-                                <li>✓ Ophalen bij Pattaya Office</li>
-                                <li>✗ Geen weekkorting</li>
+                                <li data-i18n="plan_1_feat_1">✓ 1x True Time Thai W4 Pro set</li>
+                                <li data-i18n="plan_1_feat_2">✓ Inclusief oplaadcase & USB-kabel</li>
+                                <li data-i18n="plan_1_feat_3">✓ 102 talen inbegrepen</li>
+                                <li data-i18n="plan_1_feat_4">✓ Ophalen bij Pattaya Office</li>
+                                <li data-i18n="plan_1_feat_5">✗ Geen weekkorting</li>
                             </ul>
                         </div>
                         <div class="plan-action">
-                            <a href="#booking" class="btn btn-outline btn-block select-plan-btn" data-days="1">Selecteer Plan</a>
+                            <a href="#booking" class="btn btn-outline btn-block select-plan-btn" data-days="1" data-i18n="plan_btn">Selecteer Plan</a>
                         </div>
                     </div>
 
                     <!-- Plan 2 (Popular) -->
                     <div class="pricing-card glass popular">
-                        <div class="popular-ribbon">Meest Gekozen</div>
+                        <div class="popular-ribbon" data-i18n="plan_2_badge">Meest Gekozen</div>
                         <div class="plan-header">
-                            <h3>Vakantieganger</h3>
-                            <p class="plan-subtitle">Perfect voor een vakantie in Pattaya</p>
+                            <h3 data-i18n="plan_2_title">Vakantieganger</h3>
+                            <p class="plan-subtitle" data-i18n="plan_2_sub">Perfect voor een vakantie in Pattaya</p>
                             <div class="plan-price">
                                 <span class="price-val">฿200</span>
-                                <span class="price-period">/ dag (~ €5,40)</span>
+                                <span class="price-period" data-i18n="plan_2_price_period">/ dag (~ €5,40)</span>
                             </div>
                         </div>
                         <div class="plan-features">
                             <ul>
-                                <li>✓ 1x True Time Thai W4 Pro set</li>
-                                <li>✓ Inclusief oplaadcase & USB-kabel</li>
-                                <li>✓ <strong>20% Korting</strong> vanaf 5 dagen</li>
-                                <li>✓ Gratis hotelbezorging in Pattaya</li>
-                                <li>✓ Meertalige helpdesk via WhatsApp</li>
+                                <li data-i18n="plan_2_feat_1">✓ 1x True Time Thai W4 Pro set</li>
+                                <li data-i18n="plan_2_feat_2">✓ Inclusief oplaadcase & USB-kabel</li>
+                                <li data-i18n="plan_2_feat_3">✓ <strong>20% Korting</strong> vanaf 5 dagen</li>
+                                <li data-i18n="plan_2_feat_4">✓ Gratis hotelbezorging in Pattaya</li>
+                                <li data-i18n="plan_2_feat_5">✓ Meertalige helpdesk via WhatsApp</li>
                             </ul>
                         </div>
                         <div class="plan-action">
-                            <a href="#booking" class="btn btn-neon btn-block select-plan-btn" data-days="7">Selecteer Plan</a>
+                            <a href="#booking" class="btn btn-neon btn-block select-plan-btn" data-days="7" data-i18n="plan_btn">Selecteer Plan</a>
                         </div>
                     </div>
 
                     <!-- Plan 3 -->
                     <div class="pricing-card glass">
                         <div class="plan-header">
-                            <h3>Zakenreiziger & Expat</h3>
-                            <p class="plan-subtitle">Voor langdurig verblijf of zakelijk succes</p>
+                            <h3 data-i18n="plan_3_title">Zakenreiziger & Expat</h3>
+                            <p class="plan-subtitle" data-i18n="plan_3_sub">Voor langdurig verblijf of zakelijk succes</p>
                             <div class="plan-price">
                                 <span class="price-val">฿150</span>
-                                <span class="price-period">/ dag (~ €4,05)</span>
+                                <span class="price-period" data-i18n="plan_3_price_period">/ dag (~ €4,05)</span>
                             </div>
                         </div>
                         <div class="plan-features">
                             <ul>
-                                <li>✓ 1x True Time Thai W4 Pro set</li>
-                                <li>✓ Inclusief oplaadcase & USB-kabel</li>
-                                <li>✓ Speciale langetermijnprijs (+30 dagen)</li>
-                                <li>✓ VIP bezorging & Hotelbezorging</li>
-                                <li>✓ 24/7 Premium support</li>
+                                <li data-i18n="plan_3_feat_1">✓ 1x True Time Thai W4 Pro set</li>
+                                <li data-i18n="plan_3_feat_2">✓ Inclusief oplaadcase & USB-kabel</li>
+                                <li data-i18n="plan_3_feat_3">✓ Speciale langetermijnprijs (+30 dagen)</li>
+                                <li data-i18n="plan_3_feat_4">✓ VIP bezorging & Hotelbezorging</li>
+                                <li data-i18n="plan_3_feat_5">✓ 24/7 Premium support</li>
                             </ul>
                         </div>
                         <div class="plan-action">
-                            <a href="#booking" class="btn btn-outline btn-block select-plan-btn" data-days="30">Selecteer Plan</a>
+                            <a href="#booking" class="btn btn-outline btn-block select-plan-btn" data-days="30" data-i18n="plan_btn">Selecteer Plan</a>
                         </div>
                     </div>
                 </div>
@@ -720,7 +733,7 @@
                 <!-- Testimonials Slider Shell -->
                 <div class="testimonials-box glass">
                     <div class="section-header text-center">
-                        <h3>Wat Onze Klanten Zeggen</h3>
+                        <h3 data-i18n="reviews_box_title">Wat Onze Klanten Zeggen</h3>
                     </div>
                     <div class="testimonial-slider" id="testimonial-slider">
                         <!-- Populated by JavaScript -->
@@ -733,9 +746,9 @@
         <section id="faq" class="app-section">
             <div class="container faq-container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Vragen?</span>
-                    <h2>Veelgestelde Vragen</h2>
-                    <p class="section-lead-sub">Heeft u twijfels of specifieke vragen? Hier vindt u de antwoorden.</p>
+                    <span class="section-tag" data-i18n="faq_tag">Vragen?</span>
+                    <h2 data-i18n="faq_title">Veelgestelde Vragen</h2>
+                    <p class="section-lead-sub" data-i18n="faq_lead">Heeft u twijfels of specifieke vragen? Hier vindt u de antwoorden.</p>
                 </div>
 
                 <div class="faq-accordion" id="faq-accordion-box">
@@ -748,21 +761,21 @@
         <section id="reviews" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Ervaringen</span>
-                    <h2>Wat Onze Huurders Zeggen</h2>
-                    <p class="section-lead-sub">Lees de onafhankelijke verhalen van reizigers en expats die Pattaya hebben verkend met de True Time Thai W4 Pro.</p>
+                    <span class="section-tag" data-i18n="reviews_tag">Ervaringen</span>
+                    <h2 data-i18n="reviews_title">Wat Onze Huurders Zeggen</h2>
+                    <p class="section-lead-sub" data-i18n="reviews_lead">Lees de onafhankelijke verhalen van reizigers en expats die Pattaya hebben verkend met de True Time Thai W4 Pro.</p>
                 </div>
 
                 <div class="reviews-grid">
                     <!-- Review 1 -->
                     <div class="review-card glass">
                         <div class="review-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="review-text">"Ik was eerst sceptisch over real-time vertaling, maar deze oordopjes zijn werkelijk fantastisch. Op de vismarkt in Naklua kon ik direct grappen maken en onderhandelen met de verkopers. Ze vonden het geweldig dat ik direct Thais terug sprak. Een absolute verrijking voor mijn vakantie!"</p>
+                        <p class="review-text" data-i18n="rev_1_text">"Ik was eerst sceptisch over real-time vertaling, maar deze oordopjes zijn werkelijk fantastisch. Op de vismarkt in Naklua kon ik direct grappen maken en onderhandelen met de verkopers. Ze vonden het geweldig dat ik direct Thais terug sprak. Een absolute verrijking voor mijn vakantie!"</p>
                         <div class="review-author">
                             <div class="author-avatar">👨‍💻</div>
                             <div class="author-details">
-                                <strong>Matthijs Radder</strong>
-                                <span>Toerist uit Rotterdam</span>
+                                <strong data-i18n="rev_1_author">Matthijs Radder</strong>
+                                <span data-i18n="rev_1_details">Toerist uit Rotterdam</span>
                             </div>
                         </div>
                     </div>
@@ -770,12 +783,12 @@
                     <!-- Review 2 -->
                     <div class="review-card glass">
                         <div class="review-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="review-text">"Als expat in Jomtien spreek ik een klein beetje Thais, maar voor ingewikkelde gesprekken over huurcontracten of visumzaken liep ik altijd vast. De W4 Pro heeft me enorm geholpen. De vertaling is razendsnel en de dubbele microfoon filtert het verkeerslawaai prima. Heel erg blij mee!"</p>
+                        <p class="review-text" data-i18n="rev_2_text">"Als expat in Jomtien spreek ik een klein beetje Thais, maar voor ingewikkelde gesprekken over huurcontracten of visumzaken liep ik altijd vast. De W4 Pro heeft me enorm geholpen. De vertaling is razendsnel en de dubbele microfoon filtert het verkeerslawaai prima. Heel erg blij mee!"</p>
                         <div class="review-author">
                             <div class="author-avatar">👩‍🏫</div>
                             <div class="author-details">
-                                <strong>Sarah Jenkins</strong>
-                                <span>Expat uit Birmingham, VK</span>
+                                <strong data-i18n="rev_2_author">Sarah Jenkins</strong>
+                                <span data-i18n="rev_2_details">Expat uit Birmingham, VK</span>
                             </div>
                         </div>
                     </div>
@@ -783,12 +796,12 @@
                     <!-- Review 3 -->
                     <div class="review-card glass">
                         <div class="review-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="review-text">"Geweldige hygiëne! Dat was mijn grootste zorg, maar de oordopjes zaten luchtdicht verzegeld in de verpakking en roken superfris. Omdat ze over je oor hangen en niet in je oor gaan, zweet je ook niet onder de warme Thaise zon. De hotelbezorging in Pattaya was erg soepel geregeld."</p>
+                        <p class="review-text" data-i18n="rev_3_text">"Geweldige hygiëne! Dat was mijn grootste zorg, maar de oordopjes zaten luchtdicht verzegeld in de verpakking en roken superfris. Omdat ze over je oor hangen en niet in je oor gaan, zweet je ook niet onder de warme Thaise zon. De hotelbezorging in Pattaya was erg soepel geregeld."</p>
                         <div class="review-author">
                             <div class="author-avatar">👨‍⚕️</div>
                             <div class="author-details">
-                                <strong>Dieter Meyer</strong>
-                                <span>Zakenreiziger uit Frankfurt</span>
+                                <strong data-i18n="rev_3_author">Dieter Meyer</strong>
+                                <span data-i18n="rev_3_details">Zakenreiziger uit Frankfurt</span>
                             </div>
                         </div>
                     </div>
@@ -796,12 +809,12 @@
                     <!-- Review 4 -->
                     <div class="review-card glass">
                         <div class="review-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="review-text">"Mijn partner en ik hebben twee sets gehuurd voor onze rondreis door Chonburi. Het delen van ervaringen met de lokale bevolking werd hierdoor zo intiem en bijzonder. We hebben fantastische eettentjes ontdekt waar geen woord Engels werd gesproken. Dit hadden we nooit willen missen!"</p>
+                        <p class="review-text" data-i18n="rev_4_text">"Mijn partner en ik hebben twee sets gehuurd voor onze rondreis door Chonburi. Het delen van ervaringen met de lokale bevolking werd hierdoor zo intiem en bijzonder. We hebben fantastische eettentjes ontdekt waar geen woord Engels werd gesproken. Dit hadden we nooit willen missen!"</p>
                         <div class="review-author">
                             <div class="author-avatar">👩‍❤️‍👨</div>
                             <div class="author-details">
-                                <strong>Jan & Annelies</strong>
-                                <span>Reizigers uit Antwerpen</span>
+                                <strong data-i18n="rev_4_author">Jan & Annelies</strong>
+                                <span data-i18n="rev_4_details">Reizigers uit Antwerpen</span>
                             </div>
                         </div>
                     </div>
@@ -809,9 +822,9 @@
 
                 <!-- Interactive Review Call-to-Action -->
                 <div class="reviews-cta glass text-center">
-                    <h3>Uw eigen ervaring delen?</h3>
-                    <p>Heeft u onlangs de True Time Thai oordopjes gehuurd en wilt u uw verhaal delen met toekomstige reizigers? Stuur ons uw review via WhatsApp en ontvang 10% korting op uw volgende huurperiode!</p>
-                    <a href="https://wa.me/66812345678" target="_blank" class="btn btn-neon">Deel uw Ervaring op WhatsApp</a>
+                    <h3 data-i18n="reviews_cta_title">Uw eigen ervaring delen?</h3>
+                    <p data-i18n="reviews_cta_desc">Heeft u onlangs de True Time Thai oordopjes gehuurd en wilt u uw verhaal delen met toekomstige reizigers? Stuur ons uw review via WhatsApp en ontvang 10% korting op uw volgende huurperiode!</p>
+                    <a href="https://wa.me/66812345678" target="_blank" class="btn btn-neon" data-i18n="reviews_cta_btn">Deel uw Ervaring op WhatsApp</a>
                 </div>
             </div>
         </section>
@@ -820,18 +833,18 @@
         <section id="terms" class="app-section">
             <div class="container">
                 <div class="section-header text-center">
-                    <span class="section-tag">Duidelijkheid</span>
-                    <h2>Algemene Huurvoorwaarden</h2>
-                    <p class="section-lead-sub">Transparante regels voor een zorgeloze vertaalervaring. Geen kleine lettertjes, wel heldere afspraken.</p>
+                    <span class="section-tag" data-i18n="terms_tag">Duidelijkheid</span>
+                    <h2 data-i18n="terms_title">Algemene Huurvoorwaarden</h2>
+                    <p class="section-lead-sub" data-i18n="terms_lead">Transparante regels voor een zorgeloze vertaalervaring. Geen kleine lettertjes, wel heldere afspraken.</p>
                 </div>
 
                 <div class="terms-layout">
                     <!-- Navigation sidebar for terms -->
                     <div class="terms-nav glass">
-                        <button class="terms-nav-btn active" data-tab="pickup">1. Ophalen & Inleveren</button>
-                        <button class="terms-nav-btn" data-tab="deposit">2. Borg & Legitimatie</button>
-                        <button class="terms-nav-btn" data-tab="insurance">3. Schade & Verzekering</button>
-                        <button class="terms-nav-btn" data-tab="cancellation">4. Annuleren & Wijzigen</button>
+                        <button class="terms-nav-btn active" data-tab="pickup" data-i18n="terms_tab_1">1. Ophalen & Inleveren</button>
+                        <button class="terms-nav-btn" data-tab="deposit" data-i18n="terms_tab_2">2. Borg & Legitimatie</button>
+                        <button class="terms-nav-btn" data-tab="insurance" data-i18n="terms_tab_3">3. Schade & Verzekering</button>
+                        <button class="terms-nav-btn" data-tab="cancellation" data-i18n="terms_tab_4">4. Annuleren & Wijzigen</button>
                     </div>
 
                     <!-- Terms Content Panel -->
@@ -857,24 +870,24 @@
         <div class="container footer-grid">
             <!-- Contact Details & Form -->
             <div class="footer-contact">
-                <h3>Neem Contact Met Ons Op</h3>
-                <p>Heeft u specifieke vragen over uw boeking, langdurig huren of samenwerkingen? Stuur ons direct een bericht.</p>
+                <h3 data-i18n="contact_title">Neem Contact Met Ons Op</h3>
+                <p data-i18n="contact_desc">Heeft u specifieke vragen over uw boeking, langdurig huren of samenwerkingen? Stuur ons direct een bericht.</p>
                 
                 <form class="contact-form" id="contact-form" action="#" method="POST">
                     <div class="form-group">
-                        <label for="contact-name">Naam</label>
-                        <input type="text" id="contact-name" required placeholder="Uw naam">
+                        <label for="contact-name" data-i18n="contact_label_name">Naam</label>
+                        <input type="text" id="contact-name" required placeholder="Uw naam" data-i18n-placeholder="contact_placeholder_name">
                     </div>
                     <div class="form-group">
-                        <label for="contact-email">E-mail</label>
-                        <input type="email" id="contact-email" required placeholder="Uw e-mailadres">
+                        <label for="contact-email" data-i18n="contact_label_email">E-mail</label>
+                        <input type="email" id="contact-email" required placeholder="Uw e-mailadres" data-i18n-placeholder="contact_placeholder_email">
                     </div>
                     <div class="form-group">
-                        <label for="contact-msg">Bericht</label>
-                        <textarea id="contact-msg" required rows="4" placeholder="Typ hier uw bericht..."></textarea>
+                        <label for="contact-msg" data-i18n="contact_label_msg">Bericht</label>
+                        <textarea id="contact-msg" required rows="4" placeholder="Typ hier uw bericht..." data-i18n-placeholder="contact_placeholder_msg"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-neon" id="btn-submit-contact">Verstuur Bericht</button>
-                    <div class="contact-success" id="contact-success-msg" style="display: none;">
+                    <button type="submit" class="btn btn-neon" id="btn-submit-contact" data-i18n="contact_btn_submit">Verstuur Bericht</button>
+                    <div class="contact-success" id="contact-success-msg" style="display: none;" data-i18n="contact_success">
                         ✓ Uw bericht is succesvol verzonden! We reageren binnen 2 uur via WhatsApp of mail.
                     </div>
                 </form>
@@ -890,7 +903,7 @@
                             <circle cx="12" cy="10" r="3" stroke="var(--thai-gold)" stroke-width="1.5" fill="none"/>
                         </svg>
                     </span>
-                    <p><strong>Hoofdkantoor:</strong> 321 Beach Road, Pattaya City, Chon Buri 20150, Thailand</p>
+                    <p><strong data-i18n="info_office_title">Hoofdkantoor:</strong> 321 Beach Road, Pattaya City, Chon Buri 20150, Thailand</p>
                 </div>
                 <div class="info-item">
                     <span class="info-icon">
@@ -898,7 +911,7 @@
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="var(--neon-cyan)" stroke-width="2" fill="none"/>
                         </svg>
                     </span>
-                    <p><strong>Telefoon / WhatsApp:</strong> +66 (0) 81-234-5678 (Support in NL, EN, TH)</p>
+                    <p><strong data-i18n="info_phone_title">Telefoon / WhatsApp:</strong> +66 (0) 81-234-5678 (Support in NL, EN, TH)</p>
                 </div>
                 <div class="info-item">
                     <span class="info-icon">
@@ -907,7 +920,7 @@
                             <path d="M22 6l-10 7L2 6" stroke="var(--neon-cyan)" stroke-width="2" fill="none"/>
                         </svg>
                     </span>
-                    <p><strong>E-mail:</strong> info@truetimethai.com</p>
+                    <p><strong data-i18n="info_email_title">E-mail:</strong> info@truetimethai.com</p>
                 </div>
                 <div class="info-item">
                     <span class="info-icon">
@@ -916,7 +929,7 @@
                             <path d="M12 6v6l4 2" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round" fill="none"/>
                         </svg>
                     </span>
-                    <p><strong>Openingstijden:</strong> Dagelijks van 08:00 tot 22:00 uur (Pattaya Tijd)</p>
+                    <p><strong data-i18n="info_hours_title">Openingstijden:</strong> <span data-i18n="info_hours_desc">Dagelijks van 08:00 tot 22:00 uur (Pattaya Tijd)</span></p>
                 </div>
                 
                 <!-- Polaroid Photo Carousel of the Office/Reception -->
@@ -928,7 +941,7 @@
                                 <div class="polaroid-img-container">
                                     <img src="assets/store-front.jpg" alt="True Time Thai Kantoor Pattaya Buitenkant">
                                 </div>
-                                <p class="polaroid-caption">Onze winkel in Pattaya</p>
+                                <p class="polaroid-caption" data-i18n="contact_carousel_cap_1">Onze winkel in Pattaya</p>
                             </div>
                         </div>
                         <!-- Slide 2 -->
@@ -937,7 +950,7 @@
                                 <div class="polaroid-img-container">
                                     <img src="assets/store-reception.jpg" alt="True Time Thai Kantoor Pattaya Binnenkant">
                                 </div>
-                                <p class="polaroid-caption">Direct afhalen bij ons kantoor aan Pattaya Beach Road</p>
+                                <p class="polaroid-caption" data-i18n="contact_carousel_cap_2">Direct afhalen bij ons kantoor aan Pattaya Beach Road</p>
                             </div>
                         </div>
                         <!-- Slide 3 -->
@@ -946,7 +959,7 @@
                                 <div class="polaroid-img-container">
                                     <img src="assets/store-reception-new.jpg" alt="True Time Thai Kantoor Receptiebalie">
                                 </div>
-                                <p class="polaroid-caption">Onze medewerkers staan voor u klaar</p>
+                                <p class="polaroid-caption" data-i18n="contact_carousel_cap_3">Onze medewerkers staan voor u klaar</p>
                             </div>
                         </div>
                     </div>
@@ -973,11 +986,11 @@
 
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. Alle rechten voorbehouden.</p>
+                <p data-i18n="footer_copyright">&copy; 2026 True Time Thai. Alle rechten voorbehouden.</p>
                 <div class="bottom-links">
-                    <a href="#hygiene">Hygiënevoorwaarden</a>
-                    <a href="#pricing">Huurvoorwaarden</a>
-                    <a href="#contact">Privacy Policy</a>
+                    <a href="#hygiene" data-i18n="footer_link_1">Hygiënevoorwaarden</a>
+                    <a href="#pricing" data-i18n="footer_link_2">Huurvoorwaarden</a>
+                    <a href="#contact" data-i18n="footer_link_3">Privacy Policy</a>
                 </div>
             </div>
         </div>
