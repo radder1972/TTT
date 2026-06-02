@@ -1261,8 +1261,98 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Contact Section Polaroid Carousel
+    const initContactCarousel = () => {
+        const carousel = document.getElementById('contact-polaroid-carousel');
+        if (!carousel) return;
+
+        const slides = carousel.querySelectorAll('.polaroid-slide');
+        const prevBtn = document.getElementById('contact-carousel-prev');
+        const nextBtn = document.getElementById('contact-carousel-next');
+        const dots = document.querySelectorAll('#contact-carousel-dots .carousel-dot');
+
+        if (slides.length <= 1) return;
+
+        let currentIndex = 0;
+        let autoPlayTimer = null;
+
+        const showSlide = (index) => {
+            if (index < 0) {
+                currentIndex = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentIndex = 0;
+            } else {
+                currentIndex = index;
+            }
+
+            slides.forEach((slide, i) => {
+                if (i === currentIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        };
+
+        const nextSlide = () => {
+            showSlide(currentIndex + 1);
+        };
+
+        const prevSlide = () => {
+            showSlide(currentIndex - 1);
+        };
+
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+
+        if (prevBtn) prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'), 10);
+                showSlide(index);
+                resetAutoPlay();
+            });
+        });
+
+        const startAutoPlay = () => {
+            autoPlayTimer = setInterval(nextSlide, 5000);
+        };
+
+        const stopAutoPlay = () => {
+            if (autoPlayTimer) {
+                clearInterval(autoPlayTimer);
+                autoPlayTimer = null;
+            }
+        };
+
+        const resetAutoPlay = () => {
+            stopAutoPlay();
+            startAutoPlay();
+        };
+
+        startAutoPlay();
+
+        carousel.addEventListener('mouseenter', stopAutoPlay);
+        carousel.addEventListener('mouseleave', startAutoPlay);
+    };
+
     initHeaderScroll();
     initPolaroidStack();
     initHygienePolaroidStack();
     initTermsTabs();
+    initContactCarousel();
 });

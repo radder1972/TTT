@@ -910,12 +910,37 @@
                     <p><strong>Openingstijden:</strong> Dagelijks van 08:00 tot 22:00 uur (Pattaya Tijd)</p>
                 </div>
                 
-                <!-- Polaroid Photo of the Office/Reception -->
-                <div class="polaroid-card">
-                    <div class="polaroid-img-container">
-                        <img src="assets/store-reception.jpg" alt="True Time Thai Kantoor Pattaya">
+                <!-- Polaroid Photo Carousel of the Office/Reception -->
+                <div class="polaroid-carousel-wrapper">
+                    <div class="polaroid-carousel" id="contact-polaroid-carousel">
+                        <!-- Slide 1 -->
+                        <div class="polaroid-slide active">
+                            <div class="polaroid-card">
+                                <div class="polaroid-img-container">
+                                    <img src="assets/store-reception.jpg" alt="True Time Thai Kantoor Pattaya Binnenkant">
+                                </div>
+                                <p class="polaroid-caption">Direct afhalen bij ons kantoor aan Pattaya Beach Road</p>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="polaroid-slide">
+                            <div class="polaroid-card rotate-left">
+                                <div class="polaroid-img-container">
+                                    <img src="assets/store-front.jpg" alt="True Time Thai Kantoor Pattaya Buitenkant">
+                                </div>
+                                <p class="polaroid-caption">Ontspant in Pattaya</p>
+                            </div>
+                        </div>
                     </div>
-                    <p class="polaroid-caption">Direct afhalen bij ons kantoor aan Pattaya Beach Road</p>
+                    <!-- Carousel controls -->
+                    <div class="carousel-nav">
+                        <button type="button" class="carousel-btn prev-btn" id="contact-carousel-prev" aria-label="Vorige foto">‹</button>
+                        <div class="carousel-dots" id="contact-carousel-dots">
+                            <span class="carousel-dot active" data-index="0"></span>
+                            <span class="carousel-dot" data-index="1"></span>
+                        </div>
+                        <button type="button" class="carousel-btn next-btn" id="contact-carousel-next" aria-label="Volgende foto">›</button>
+                    </div>
                 </div>
                 
                 <!-- Trust icons / payment methods -->
