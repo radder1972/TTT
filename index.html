@@ -385,6 +385,11 @@
                                 <input type="date" id="end-date" required min="2026-06-02">
                             </div>
                         </div>
+                        <!-- Availability status indicator [NEW] -->
+                        <div class="availability-status-box" id="availability-status-box">
+                            <span class="availability-dot bg-green" id="availability-dot"></span>
+                            <span id="availability-text">Voer datums in om de voorraad te controleren...</span>
+                        </div>
 
                         <!-- Step 2: Units and Locations -->
                         <div class="form-row">
@@ -1102,12 +1107,14 @@
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiënevoorwaarden</a>
                     <a href="#pricing">Huurvoorwaarden</a>
-                    <a href="#contact">Privacy Policy</a>
+                    <a href="admin.html" target="_blank" class="admin-footer-link">🔑 Beheer</a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- Supabase Client Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
     <script src="app.js?v=2.1"></script>
 </body>
