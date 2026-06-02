@@ -147,128 +147,334 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================================================
        3. INTERACTIVE TRANSLATION SIMULATOR
        ========================================================================== */
+    // Speech Synthesis (TTS) State Configuration
+    let simSoundEnabled = true;
+    let currentSpeechUtterance = null;
+
+    function stopSpeaking() {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        const statusBar = document.getElementById('simulator-ai-status');
+        if (statusBar) {
+            statusBar.classList.remove('playing-audio');
+        }
+    }
+
+    function speakText(text, langCode, callback) {
+        if (!simSoundEnabled || !window.speechSynthesis) {
+            if (callback) callback();
+            return;
+        }
+
+        stopSpeaking();
+
+        // Strip phonetic helper parentheses for natural speech synthesis
+        const textToSpeak = text.replace(/\s*\(.*?\)\s*/g, '');
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        const voices = window.speechSynthesis.getVoices();
+        let bestVoice = null;
+
+        if (langCode === 'nl') {
+            utterance.lang = 'nl-NL';
+            bestVoice = voices.find(v => v.lang.startsWith('nl'));
+        } else if (langCode === 'th') {
+            utterance.lang = 'th-TH';
+            bestVoice = voices.find(v => v.lang.startsWith('th'));
+        } else {
+            utterance.lang = 'en-US';
+            bestVoice = voices.find(v => v.lang.startsWith('en'));
+        }
+
+        if (bestVoice) {
+            utterance.voice = bestVoice;
+        }
+
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+
+        utterance.onstart = () => {
+            const statusBar = document.getElementById('simulator-ai-status');
+            if (statusBar) {
+                statusBar.classList.add('playing-audio');
+            }
+        };
+
+        utterance.onend = () => {
+            const statusBar = document.getElementById('simulator-ai-status');
+            if (statusBar) {
+                statusBar.classList.remove('playing-audio');
+            }
+            if (callback) callback();
+        };
+
+        utterance.onerror = () => {
+            const statusBar = document.getElementById('simulator-ai-status');
+            if (statusBar) {
+                statusBar.classList.remove('playing-audio');
+            }
+            if (callback) callback();
+        };
+
+        currentSpeechUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Force voice list loading in Web Speech API
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
+    }
+
     const scenarios = {
         market: {
             title: "Gesprek op de Lanpho Naklua Markt",
-            steps: [
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Hallo! Hoeveel kosten deze tijgergarnalen per kilo?",
-                    translation: "สวัสดีครับ กุ้งลายเสือพวกนี้กิโลละเท่าไหร่ครับ (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
+            startNode: "greet",
+            nodes: {
+                greet: {
+                    tourist: {
+                        text: "Hallo! Hoeveel kosten deze tijgergarnalen per kilo?",
+                        translation: "สวัสดีครับ กุ้งลายเสือพวกนี้กิโลละเท่าไหร่ครับ (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
+                    },
+                    local: {
+                        name: "P'Som (Vishandelaar)",
+                        text: "สวัสดีจ้า! กิโลละ 450 บาทจ้า ลดได้นิดหน่อยนะจ๊ะ เอาเท่าไหร่ดีจ๊ะ",
+                        translation: "Hallo! Ze kosten 450 Baht per kilo. Ik kan een beetje korting geven. Hoeveel wil je hebben?"
+                    },
+                    choices: [
+                        { text: "Vraag om korting (2 kilo voor 800 Baht)", nextNode: "negotiate_discount" },
+                        { text: "Ga akkoord met de prijs (1 kilo)", nextNode: "agree_price" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "P'Som (Vishandelaar)",
-                    text: "สวัสดีจ้า! กิloละ 450 บาทจ้า ลดได้นิดหน่อยนะจ๊ะ เอาเท่าไหร่ดีจ๊ะ",
-                    translation: "Hallo! Ze kosten 450 Baht per kilo. Ik kan een beetje korting geven. Hoeveel wil je hebben?"
+                negotiate_discount: {
+                    tourist: {
+                        text: "Ik wil graag twee kilo hebben. Kunnen we er 800 Baht van maken voor twee kilo?",
+                        translation: "ขอสองกิโลครับ ลดเหลือแปดร้อยบาทได้ไหมครับ (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
+                    },
+                    local: {
+                        name: "P'Som (Vishandelaar)",
+                        text: "โอเคจ้า คนหล่อ! ได้จ้า สองกิโล 800 บาท เดี๋ยวป้าแถมหอยแมลงภู่ให้ด้วยจ้า",
+                        translation: "Oké knappe man! Dat is goed, twee kilo voor 800 Baht. Ik doe er gratis wat mosselen bij!"
+                    },
+                    choices: [
+                        { text: "Bedank haar vriendelijk", nextNode: "thanks_happy" }
+                    ]
                 },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Ik wil graag twee kilo hebben. Kunnen we er 800 Baht van maken voor twee kilo?",
-                    translation: "ขอสองกิโลครับ ลดเหลือแปดร้อยบาทได้ไหมครับ (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
+                agree_price: {
+                    tourist: {
+                        text: "Dat is een prima prijs. Ik neem één kilo van je over.",
+                        translation: "ราคาดีครับ เอาหนึ่งกิโลครับ (Racha dee krap. Ao nueng kilo krap.)"
+                    },
+                    local: {
+                        name: "P'Som (Vishandelaar)",
+                        text: "ได้เลยจ้า! เดี๋ยวป้าเลือกตัวโตๆ ให้เลยนะจ๊ะ รอสักครู่จ้า",
+                        translation: "Natuurlijk! Ik zal een paar mooie grote voor je uitkiezen. Een momentje geduld alstublieft."
+                    },
+                    choices: [
+                        { text: "Bedank haar", nextNode: "thanks_happy" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "P'Som (Vishandelaar)",
-                    text: "โอเคจ้า คนหล่อ! ได้จ้า สองกิโล 800 บาท เดี๋ยวป้าแถมหอยแมลงภู่ให้ด้วยจ้า",
-                    translation: "Oké knappe man! Dat is goed, twee kilo voor 800 Baht. Ik doe er gratis wat mosselen bij!"
-                },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Geweldig! Heel erg bedankt voor de uitstekende service!",
-                    translation: "เยี่ยมเลยครับ ขอบคุณมากสำหรับบริการที่ดีเยี่ยมนะครับ (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
+                thanks_happy: {
+                    tourist: {
+                        text: "Geweldig! Heel erg bedankt voor de uitstekende service!",
+                        translation: "เยี่ยมเลยครับ ขอบคุณมากสำหรับบริการที่ดีเยี่ยมนะครับ (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
+                    },
+                    local: {
+                        name: "P'Som (Vishandelaar)",
+                        text: "ยินดีมากจ้า เที่ยวพัทยาให้สนุกนะจ๊ะ! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
+                        translation: "Heel graag gedaan, veel plezier in Pattaya!"
+                    },
+                    choices: [] // End node
                 }
-            ]
+            }
         },
         taxi: {
             title: "Songthaew Rit naar Walking Street",
-            steps: [
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Goedenavond, gaat u naar Walking Street?",
-                    translation: "สวัสดีครับ ไปถนนคนเดินวอคกิ้งสตรีทไหมครับ (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
+            startNode: "greet",
+            nodes: {
+                greet: {
+                    tourist: {
+                        text: "Goedenavond, gaat u naar Walking Street?",
+                        translation: "สวัสดีครับ ไปถนนคนเดินวอคกิ้งสตรีทไหมครับ (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
+                    },
+                    local: {
+                        name: "Looong (Chauffeur)",
+                        text: "ไปครับ ขึ้นมาเลยครับ คนละ 20 บาทครับผม",
+                        translation: "Ja, ik ga! Stap maar in, het is 20 Baht per persoon."
+                    },
+                    choices: [
+                        { text: "Stap in voor 20 Baht per persoon", nextNode: "taxi_standard" },
+                        { text: "Vraag om direct bij de ingang afgezet te worden (4 personen)", nextNode: "taxi_direct" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "Looong (Chauffeur)",
-                    text: "ไปครับ ขึ้นมาเลยครับ คนละ 20 บาทครับผม",
-                    translation: "Ja, ik ga! Stap maar in, het is 20 Baht per persoon."
+                taxi_standard: {
+                    tourist: {
+                        text: "Perfect, we stappen in. 20 Baht is prima.",
+                        translation: "ตกลงครับ ขึ้นรถเลย คนละยี่สิบบาทครับ (Tok-long krap, khuen rot loey, khon la yee-sip baht krap.)"
+                    },
+                    local: {
+                        name: "Looong (Chauffeur)",
+                        text: "ดีครับ! เดี๋ยวผ่านถนนเลียบหาดแล้วจะจอดส่งที่สี่แยกข้างหน้านะครับ",
+                        translation: "Mooi! We rijden langs Beach Road en ik zet je af bij de kruising hier vlakbij."
+                    },
+                    choices: [
+                        { text: "Bedank hem bij aankomst", nextNode: "taxi_arrive" }
+                    ]
                 },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Wacht, kunt u ons rechtstreeks bij de ingang afzetten? We zijn met 4 personen.",
-                    translation: "เดี๋ยวครับ ช่วยไปส่งที่หน้าทางเข้าเลยได้ไหมครับ พวกเรามีกันสี่คน (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
+                taxi_direct: {
+                    tourist: {
+                        text: "Wacht, kunt u ons rechtstreeks bij de ingang afzetten? We zijn met 4 personen.",
+                        translation: "เดี๋ยวครับ ช่วยไปส่งที่หน้าทางเข้าเลยได้ไหมครับ พวกเรามีกันสี่คน (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
+                    },
+                    local: {
+                        name: "Looong (Chauffeur)",
+                        text: "ถ้าเหมาไปส่งข้างหน้าเลย คิดเหมา 150 บาทละกันครับ สะดวกกว่า ไม่ต้องเดินไกล",
+                        translation: "Als je de hele bus huurt om direct voor de ingang afgezet te worden, reken ik 150 Baht in totaal. Dat is comfortabeler en scheelt lopen."
+                    },
+                    choices: [
+                        { text: "Accepteer 150 Baht voor directe rit", nextNode: "taxi_direct_accept" },
+                        { text: "Rijd toch mee voor 20 Baht p.p.", nextNode: "taxi_standard" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "Looong (Chauffeur)",
-                    text: "ถ้าเหมาไปส่งข้างหน้าเลย คิดเหมา 150 บาทละกันครับ สะดวกกว่า ไม่ต้องเดินไกล",
-                    translation: "Als je de hele bus huurt om direct voor de ingang afgezet te worden, reken ik 150 Baht in totaal. Dat is comfortabeler en scheelt lopen."
+                taxi_direct_accept: {
+                    tourist: {
+                        text: "150 Baht is perfect. Laten we gaan. Dank u wel!",
+                        translation: "ร้อยห้าสิบบาทตกลงครับ ไปกันเลย ขอบคุณครับ (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
+                    },
+                    local: {
+                        name: "Looong (Chauffeur)",
+                        text: "ได้เลยครับ! นั่งให้สบายเลย เดี๋ยวซิ่งไปส่งให้ถึงที่เลยครับ",
+                        translation: "Geen probleem! Ga lekker zitten, ik breng je er direct naartoe."
+                    },
+                    choices: [
+                        { text: "Bedank hem bij aankomst", nextNode: "taxi_arrive" }
+                    ]
                 },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "150 Baht is perfect. Laten we gaan. Dank u wel!",
-                    translation: "ร้อยห้าสิบบาทตกลงครับ ไปกันเลย ขอบคุณครับ (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
+                taxi_arrive: {
+                    tourist: {
+                        text: "We zijn er! Dank u wel voor de veilige rit.",
+                        translation: "ถึงแล้วครับ ขอบคุณที่ขับรถมาส่งอย่างปลอดภัยนะครับ (Thueng laew krap. Khop khun tee khap rot ma song yangปลอดภัย na krap.)"
+                    },
+                    local: {
+                        name: "Looong (Chauffeur)",
+                        text: "เที่ยวให้สนุกนะครับ โชคดีครับ! (Thiew hai sanook na krap. Chok dee krap!)",
+                        translation: "Veel plezier daar en succes!"
+                    },
+                    choices: []
                 }
-            ]
+            }
         },
         resort: {
             title: "Inchecken bij Jomtien Bay Resort",
-            steps: [
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Hallo, ik wil graag inchecken. Mijn reservering staat op naam van Matthijs.",
-                    translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ในชื่อ แมทธิว ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+            startNode: "greet",
+            nodes: {
+                greet: {
+                    tourist: {
+                        text: "Hallo, ik wil graag inchecken. Mijn reservering staat op naam van Matthijs.",
+                        translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ในชื่อ แมทธิว ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "สวัสดีค่ะ ยินดีต้อนรับค่ะ ขอเอกสารยืนยันการจองกับพาสปอร์ตด้วยนะคะ",
+                        translation: "Hallo, welkom! Mag ik uw boekingsbevestiging en uw paspoort alstublieft?"
+                    },
+                    choices: [
+                        { text: "Overhandig paspoort & Boekingsbewijs", nextNode: "docs_provided" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "Kwan (Receptionist)",
-                    text: "สวัสดีค่ะ ยินดีต้อนรับค่ะ ขอเอกสารยืนยันการจองกับพาสปอร์ตด้วยนะคะ",
-                    translation: "Hallo, welkom! Mag ik uw boekingsbevestiging en uw paspoort alstublieft?"
+                docs_provided: {
+                    tourist: {
+                        text: "Alstublieft. Hier zijn mijn paspoort en boekingsbewijs.",
+                        translation: "นี่ครับ พาสปอร์ตกับใบจองครับ (Nee krap, passport kab bai jong krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "ขอบคุณค่ะ จองห้องดีลักซ์ไว้ 5 คืนนะคะ รบกวนสอบถามว่าต้องการถามข้อมูลเพิ่มเติมเกี่ยวกับการเข้าพักไหมคะ",
+                        translation: "Dank u wel. U heeft een Deluxe kamer geboekt voor 5 nachten. Wilt u nog specifieke informatie over uw verblijf?"
+                    },
+                    choices: [
+                        { text: "Vraag naar ontbijt & Openingstijden zwembad", nextNode: "pool_breakfast" },
+                        { text: "Vraag naar wifi-code & Borgsom", nextNode: "wifi_deposit" }
+                    ]
                 },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Alstublieft. Is het ontbijt inbegrepen en hoe laat is het zwembad geopend?",
-                    translation: "นี่ครับ รวมอาหารเช้าด้วยไหมครับ แล้วสระว่ายน้ำเปิดถึงกี่โมงครับ (Nee krap. Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
+                pool_breakfast: {
+                    tourist: {
+                        text: "Is het ontbijt inbegrepen en hoe laat is het zwembad geopend?",
+                        translation: "รวมอาหารเช้าด้วยไหมครับ แล้วสระว่ายน้ำเปิดถึงกี่โมงครับ (Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "รวมอาหารเช้าเรียบร้อยค่ะ ทานได้ที่ห้องอาหารชั้นหนึ่ง ส่วนสระว่ายน้ำเปิดเจ็ดโมงเช้าถึงสี่ทุ่มค่ะ",
+                        translation: "Ja, ontbijt is inbegrepen en wordt geserveerd in het restaurant op de eerste verdieping. Het zwembad is open van 07:00 tot 22:00 uur."
+                    },
+                    choices: [
+                        { text: "Rond check-in af", nextNode: "checkin_done" }
+                    ]
                 },
-                {
-                    speaker: "local",
-                    name: "Kwan (Receptionist)",
-                    text: "รวมอาหารเช้าเรียบร้อยค่ะ ทานได้ที่ห้องอาหารชั้นหนึ่ง ส่วนสระว่ายน้ำเปิดเจ็ดโมงเช้าถึงสี่ทุ่มค่ะ",
-                    translation: "Ja, ontbijt is inbegrepen en wordt geserveerd in het restaurant op de eerste verdieping. Het zwembad is open van 07:00 tot 22:00 uur."
+                wifi_deposit: {
+                    tourist: {
+                        text: "Wat is de wifi-code en hoe zit het met de borgsom?",
+                        translation: "รหัสไวไฟอะไรครับ แล้วต้องวางเงินมัดจำเท่าไหร่ครับ (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "ไวไฟใช้ได้ฟรีทั่วทั้งรีสอร์ทค่ะ รหัสอยู่บนซองคีย์การ์ด ส่วนมัดจำคีย์การ์ด 1,000 บาทหรือสแกนบัตรเครดิตค่ะ",
+                        translation: "Wifi is gratis in het hele resort, de code staat op uw sleutelkaart-envelop. De borg is 1.000 Baht in contanten of een creditcard-afdruk."
+                    },
+                    choices: [
+                        { text: "Rond check-in af", nextNode: "checkin_done" }
+                    ]
                 },
-                {
-                    speaker: "tourist",
-                    name: "Jij (Toerist)",
-                    text: "Fantastisch. Hartelijk dank voor de heldere uitleg.",
-                    translation: "ยอดเยี่ยมมาก ขอบคุณมากสำหรับคำอธิบายที่ชัดเจนนะครับ (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen na krap.)"
+                checkin_done: {
+                    tourist: {
+                        text: "Fantastisch. Hartelijk dank voor de heldere uitleg en de sleutels.",
+                        translation: "ยอดเยี่ยมมาก ขอบคุณมากสำหรับคำอธิบายที่ชัดเจนและคีย์การ์ดนะครับ (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "ยินดีค่ะ นี่ค่ะคีย์การ์ดห้อง 402 ขอให้พักผ่อนอย่างมีความสุขนะคะ! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
+                        translation: "Graag gedaan! Hier is uw sleutelkaart voor kamer 402. Een heel fijn verblijf gewenst!"
+                    },
+                    choices: []
                 }
-            ]
+            }
         }
     };
 
     let currentScenario = 'market';
-    let currentStep = 0;
+    let currentNodeId = 'greet';
+    let isTransitioning = false;
 
     const simMessages = document.getElementById('simulator-messages');
     const simTitleText = document.getElementById('simulator-title-text');
-    const simNextBtn = document.getElementById('simulator-next-btn');
-    const simResetBtn = document.getElementById('simulator-reset-btn');
+    const simChoices = document.getElementById('simulator-choices');
     const simAiStatus = document.getElementById('simulator-ai-status');
+    const simAiStatusText = document.getElementById('simulator-ai-status-text');
     const simStatusIndicator = document.getElementById('simulator-status-indicator');
+    const btnSimSound = document.getElementById('btn-sim-sound');
+    const simSoundIcon = document.getElementById('sim-sound-icon');
 
     // Setup Scenario buttons
     const scenarioMarketBtn = document.getElementById('btn-scenario-market');
     const scenarioTaxiBtn = document.getElementById('btn-scenario-taxi');
     const scenarioResortBtn = document.getElementById('btn-scenario-resort');
+
+    // Sound Toggle Manager
+    if (btnSimSound && simSoundIcon) {
+        btnSimSound.addEventListener('click', () => {
+            simSoundEnabled = !simSoundEnabled;
+            if (simSoundEnabled) {
+                simSoundIcon.textContent = "🔊";
+                btnSimSound.title = "Geluid Dempen";
+            } else {
+                simSoundIcon.textContent = "🔇";
+                btnSimSound.title = "Geluid Inschakelen";
+                stopSpeaking();
+            }
+        });
+    }
 
     function updateScenarioActiveState(activeId) {
         document.querySelectorAll('.scenario-card').forEach(btn => {
@@ -280,98 +486,202 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetSimulator(scenarioId = currentScenario) {
+        stopSpeaking();
         currentScenario = scenarioId;
-        currentStep = 0;
+        currentNodeId = scenarios[scenarioId].startNode;
+        isTransitioning = false;
+        
         updateScenarioActiveState(scenarioId);
         
         if (simTitleText) simTitleText.textContent = scenarios[scenarioId].title;
         if (simMessages) {
             simMessages.innerHTML = `
-                <div class="msg-bubble glass msg-local" style="align-self: center; border-radius: var(--radius-md); text-align: center;">
-                    <div class="msg-text">💡 Klik op <strong>"Start Gesprek"</strong> om het AI-oordopjes gesprek te simuleren!</div>
+                <div class="msg-bubble glass msg-local" style="align-self: center; border-radius: var(--radius-md); text-align: center; max-width: 90%;">
+                    <div class="msg-text">💡 Kies een scenario aan de linkerkant of klik op <strong>"Start Gesprek"</strong> om te beginnen!</div>
                 </div>
             `;
         }
-        if (simNextBtn) {
-            simNextBtn.textContent = "Start Gesprek";
-            simNextBtn.disabled = false;
-        }
+        
         if (simAiStatus) simAiStatus.style.display = 'none';
         if (simStatusIndicator) {
             simStatusIndicator.classList.remove('online');
             simStatusIndicator.classList.add('blinking');
         }
+
+        renderChoices();
     }
 
-    function playNextStep() {
-        const scenario = scenarios[currentScenario];
-        const stepData = scenario.steps[currentStep];
-        
-        if (!stepData) return;
+    function playNodeTurn(nodeId) {
+        if (isTransitioning) return;
+        isTransitioning = true;
 
-        // Change next button to show thinking
-        if (simNextBtn) simNextBtn.disabled = true;
-        if (simAiStatus) simAiStatus.style.display = 'flex';
+        const node = scenarios[currentScenario].nodes[nodeId];
+        if (!node) return;
+
+        // Hide buttons during voice input/translation simulation
+        if (simChoices) {
+            simChoices.innerHTML = '<span class="text-muted" style="font-size:0.85rem; padding: 10px;">Gesprek is bezig...</span>';
+        }
+
+        // --- STEP 1: Tourist speaks ---
+        if (simAiStatus) {
+            simAiStatus.style.display = 'flex';
+            if (simAiStatusText) simAiStatusText.textContent = "U praat in het Nederlands...";
+        }
         if (simStatusIndicator) {
             simStatusIndicator.classList.remove('blinking');
             simStatusIndicator.classList.add('online');
         }
 
-        // Simulate translation delay of 1.2 seconds
+        // 1.2s delay for voice translation processing
         setTimeout(() => {
-            if (currentStep === 0 && simMessages) {
-                // Clear the greeting tip
-                simMessages.innerHTML = '';
-            }
-
-            if (simAiStatus) simAiStatus.style.display = 'none';
-
-            // Create message bubble
-            const bubble = document.createElement('div');
-            bubble.className = `msg-bubble glass ${stepData.speaker === 'tourist' ? 'msg-tourist' : 'msg-local'}`;
-            
-            bubble.innerHTML = `
-                <div class="msg-meta">${stepData.name}</div>
-                <div class="msg-text">${stepData.text}</div>
-                <div class="msg-trans">🔊 Vertaling: "${stepData.translation}"</div>
+            // Append Tourist speech bubble
+            const touristBubble = document.createElement('div');
+            touristBubble.className = "msg-bubble glass msg-tourist";
+            touristBubble.innerHTML = `
+                <div class="msg-meta">Jij (Toerist)</div>
+                <div class="msg-text">${node.tourist.text} <button class="btn-replay-speech btn-speak-main" title="Beluister origineel" type="button">🔊</button></div>
+                <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Beluister vertaling" type="button">🔊</button> Vertaling: "${node.tourist.translation}"</div>
             `;
+            
+            // Register Speech Replay button clicks
+            touristBubble.querySelector('.btn-speak-main').addEventListener('click', (e) => {
+                e.stopPropagation();
+                speakText(node.tourist.text, 'nl');
+            });
+            touristBubble.querySelector('.btn-speak-trans').addEventListener('click', (e) => {
+                e.stopPropagation();
+                speakText(node.tourist.translation, 'th');
+            });
 
             if (simMessages) {
-                simMessages.appendChild(bubble);
-                // Scroll to bottom
+                // Clear initial tip on start
+                if (nodeId === scenarios[currentScenario].startNode) {
+                    simMessages.innerHTML = '';
+                }
+                simMessages.appendChild(touristBubble);
                 simMessages.scrollTop = simMessages.scrollHeight;
             }
 
-            currentStep++;
+            // Speak tourist voice in Dutch, then wait for it to end
+            speakText(node.tourist.text, 'nl', () => {
+                // Tourist finished speaking. Wait 1.5s (natural pause) before starting local response
+                setTimeout(() => {
+                    if (simAiStatusText) simAiStatusText.textContent = "Lokale gesprekspartner antwoordt...";
+                    if (simAiStatus) simAiStatus.style.display = 'flex';
+                    
+                    // 1.5s delay for Local response translation processing
+                    setTimeout(() => {
+                        // Append Local speech bubble
+                        const localBubble = document.createElement('div');
+                        localBubble.className = "msg-bubble glass msg-local";
+                        localBubble.innerHTML = `
+                            <div class="msg-meta">${node.local.name}</div>
+                            <div class="msg-text">${node.local.text} <button class="btn-replay-speech btn-speak-main" title="Beluister origineel" type="button">🔊</button></div>
+                            <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Beluister vertaling" type="button">🔊</button> Vertaling: "${node.local.translation}"</div>
+                        `;
 
-            if (simNextBtn) {
-                simNextBtn.disabled = false;
-                if (currentStep < scenario.steps.length) {
-                    simNextBtn.textContent = "Volgende Zin";
-                } else {
-                    simNextBtn.textContent = "Gesprek Voltooid";
-                    simNextBtn.disabled = true;
-                }
-            }
-        }, 1200);
+                        // Register Speech Replays for Local
+                        localBubble.querySelector('.btn-speak-main').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            speakText(node.local.text, 'th');
+                        });
+                        localBubble.querySelector('.btn-speak-trans').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            speakText(node.local.translation, 'nl');
+                        });
+
+                        if (simMessages) {
+                            simMessages.appendChild(localBubble);
+                            simMessages.scrollTop = simMessages.scrollHeight;
+                        }
+
+                        // Speak local voice in Thai, then wait for it to end
+                        speakText(node.local.text, 'th', () => {
+                            // Local finished speaking. Wait 1.0s (natural pause) before showing choices
+                            setTimeout(() => {
+                                if (simAiStatus) simAiStatus.style.display = 'none';
+                                isTransitioning = false;
+                                currentNodeId = nodeId;
+                                renderChoices();
+                            }, 1000);
+                        });
+
+                    }, 1500); // Local response delay
+
+                }, 1500); // Pause between tourist and local speaking
+            });
+
+        }, 1200); // Tourist translation delay
     }
 
-    // Attach Event Listeners
-    if (simNextBtn) {
-        simNextBtn.addEventListener('click', () => {
-            const scenario = scenarios[currentScenario];
-            if (currentStep < scenario.steps.length) {
-                playNextStep();
-            }
+    function renderChoices() {
+        if (!simChoices) return;
+        simChoices.innerHTML = '';
+
+        const node = scenarios[currentScenario].nodes[currentNodeId];
+        const isStart = simMessages && simMessages.innerHTML.includes('💡');
+        
+        if (isStart) {
+            const startBtn = document.createElement('button');
+            startBtn.className = "btn btn-neon btn-sim-choice";
+            startBtn.id = "simulator-next-btn";
+            startBtn.textContent = "Start Gesprek";
+            startBtn.type = "button";
+            startBtn.addEventListener('click', () => {
+                playNodeTurn(scenarios[currentScenario].startNode);
+            });
+            simChoices.appendChild(startBtn);
+            
+            const resetBtn = document.createElement('button');
+            resetBtn.className = "btn btn-outline";
+            resetBtn.textContent = "Reset";
+            resetBtn.type = "button";
+            resetBtn.addEventListener('click', () => resetSimulator());
+            simChoices.appendChild(resetBtn);
+            return;
+        }
+
+        if (!node || node.choices.length === 0) {
+            // Reached conversation endpoint
+            const endText = document.createElement('span');
+            endText.className = "text-green font-bold";
+            endText.style.fontSize = "0.95rem";
+            endText.style.padding = "10px";
+            endText.textContent = "✓ Gesprek voltooid!";
+            simChoices.appendChild(endText);
+
+            const resetBtn = document.createElement('button');
+            resetBtn.className = "btn btn-neon btn-sim-choice";
+            resetBtn.textContent = "Kies scenario (Reset)";
+            resetBtn.type = "button";
+            resetBtn.addEventListener('click', () => resetSimulator());
+            simChoices.appendChild(resetBtn);
+            return;
+        }
+
+        // Render decision branch choices buttons
+        node.choices.forEach(choice => {
+            const choiceBtn = document.createElement('button');
+            choiceBtn.className = "btn btn-neon btn-sim-choice";
+            choiceBtn.textContent = choice.text;
+            choiceBtn.type = "button";
+            choiceBtn.addEventListener('click', () => {
+                playNodeTurn(choice.nextNode);
+            });
+            simChoices.appendChild(choiceBtn);
         });
+
+        // Add Reset button
+        const resetBtn = document.createElement('button');
+        resetBtn.className = "btn btn-outline";
+        resetBtn.textContent = "Reset";
+        resetBtn.type = "button";
+        resetBtn.addEventListener('click', () => resetSimulator());
+        simChoices.appendChild(resetBtn);
     }
 
-    if (simResetBtn) {
-        simResetBtn.addEventListener('click', () => {
-            resetSimulator();
-        });
-    }
-
+    // Connect Scenario Sidebar buttons
     if (scenarioMarketBtn) {
         scenarioMarketBtn.addEventListener('click', () => resetSimulator('market'));
     }
@@ -381,6 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (scenarioResortBtn) {
         scenarioResortBtn.addEventListener('click', () => resetSimulator('resort'));
     }
+
 
     // Initialize Simulator
     resetSimulator('market');
@@ -637,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Totaal_Bedrag_EUR: totalEur
             };
             
-            fetch("https://formsubmit.co/ajax/matthias.radder@gmail.com", {
+            fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
                 method: "POST",
                 headers: { 
                     'Content-Type': 'application/json',
@@ -872,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Bericht: msg
             };
             
-            fetch("https://formsubmit.co/ajax/matthias.radder@gmail.com", {
+            fetch("https://formsubmit.co/ajax/info@truetimethai.com", {
                 method: "POST",
                 headers: { 
                     'Content-Type': 'application/json',

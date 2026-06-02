@@ -268,7 +268,7 @@
                     <p class="section-lead-sub">Test hoe de True Time Thai W4 Pro in real-time gesprekken vertaalt in Pattaya. Kies een scenario en start de ervaring.</p>
                 </div>
 
-                <div class="simulator-layout">
+                <div class="simulator-layout" id="simulator-layout-container">
                     <!-- Scenario Chooser -->
                     <div class="simulator-scenarios">
                         <h3>Kies een Scenario</h3>
@@ -317,14 +317,17 @@
                     </div>
 
                     <!-- Simulator Chat Interface -->
-                    <div class="simulator-chatbox glass">
+                    <div class="simulator-chatbox glass" id="sim-chatbox-device">
                         <div class="chatbox-header">
                             <div class="chatbox-title">
                                 <span class="status-indicator blinking" id="simulator-status-indicator"></span>
                                 <span id="simulator-title-text">Gesprek op de Lanpho Naklua Markt</span>
                             </div>
                             <div class="chatbox-device">
-                                <span class="device-badge">🎧 True Time Thai W4 Pro Actief</span>
+                                <button type="button" class="btn-sim-sound" id="btn-sim-sound" title="Geluid Dempen/Inschakelen" aria-label="Geluid aan/uit">
+                                    <span id="sim-sound-icon">🔊</span>
+                                </button>
+                                <span class="device-badge" id="sim-device-badge">🎧 Handsfree Modus Actief</span>
                             </div>
                         </div>
 
@@ -335,12 +338,20 @@
 
                         <!-- Chat Translation Overlay / Action -->
                         <div class="chatbox-controls">
+                            <!-- Voice Waveform Visualizer in AI status bar -->
                             <div class="ai-status-bar" id="simulator-ai-status" style="display: none;">
-                                <div class="spinner"></div>
-                                <span>Timekettle AI vertaalt spraak naar het Thais...</span>
+                                <div class="visualizer-container">
+                                    <span class="waveform-bar bar-1"></span>
+                                    <span class="waveform-bar bar-2"></span>
+                                    <span class="waveform-bar bar-3"></span>
+                                    <span class="waveform-bar bar-4"></span>
+                                    <span class="waveform-bar bar-5"></span>
+                                </div>
+                                <span id="simulator-ai-status-text">Timekettle AI vertaalt spraak...</span>
                             </div>
-                            <div class="control-actions">
-                                <button class="btn btn-neon" id="simulator-next-btn">Start Gesprek</button>
+                            <!-- Dynamic Choice reply options buttons will be generated here -->
+                            <div class="control-actions" id="simulator-choices">
+                                <button class="btn btn-neon btn-sim-choice" id="simulator-next-btn">Start Gesprek</button>
                                 <button class="btn btn-outline" id="simulator-reset-btn">Reset</button>
                             </div>
                         </div>
