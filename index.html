@@ -577,7 +577,10 @@
                         <p>Bedankt voor uw boeking bij True Time Thai. Wij hebben een bevestigingsmail met uw betaalbewijs gestuurd naar <strong id="success-email"></strong>.</p>
                         <p>Uw transactie-ID is: <strong id="success-transaction-id" style="color: var(--neon-cyan);"></strong>.</p>
                         <p>Uw digitale ophaalbewijs en verdere instructies voor de gekozen locatie volgen spoedig.</p>
-                        <button class="btn btn-neon btn-sm" id="btn-new-booking">Nieuwe Boeking</button>
+                        <div class="success-actions" style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                            <button class="btn btn-neon btn-sm" id="btn-new-booking">Nieuwe Boeking</button>
+                            <button type="button" class="btn btn-outline btn-sm" id="btn-print-invoice">🖨️ Print Factuur</button>
+                        </div>
                     </div>
 
                     <!-- Receipt Preview / Calculation Sidebar -->
@@ -586,6 +589,21 @@
                             <div class="receipt-header">
                                 <span class="receipt-title">HUURINVOICE</span>
                                 <span class="receipt-brand">TRUE TIME THAI</span>
+                            </div>
+                            <!-- Client info (hidden until paid) -->
+                            <div class="receipt-client-info" id="receipt-client-info" style="display: none; padding: 15px 15px 5px 15px; border-bottom: 1px dashed var(--border-glass); font-size: 0.8rem;">
+                                <div class="receipt-row-item" style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                    <span class="text-muted">Huurder:</span>
+                                    <strong id="rec-client-name" style="color: var(--text-light);">-</strong>
+                                </div>
+                                <div class="receipt-row-item" style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                    <span class="text-muted">E-mail:</span>
+                                    <span id="rec-client-email" style="color: var(--text-light);">-</span>
+                                </div>
+                                <div class="receipt-row-item" style="display: flex; justify-content: space-between;">
+                                    <span class="text-muted">Transactie-ID:</span>
+                                    <span id="rec-client-txid" style="color: var(--neon-cyan); font-family: monospace; font-size: 0.75rem;">-</span>
+                                </div>
                             </div>
                             <div class="receipt-body">
                                 <div class="receipt-row font-bold">
