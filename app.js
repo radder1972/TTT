@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Supabase Connection & Configuration
     // ==========================================================================
     const SUPABASE_URL = "https://uuciegboqicihcanjqbh.supabase.co";
-    const SUPABASE_ANON_KEY = ""; // <-- PLAK HIER UW SUPABASE ANON KEY OM LIVE TE GAAN
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Y2llZ2JvcWljaWhjYW5qcWJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MjI4NzcsImV4cCI6MjA5NTk5ODg3N30.-gA94kM_Vn0pMW3WThcMM3e2abCmGTuLSBa0BspJvNg"; // <-- PLAK HIER UW SUPABASE ANON KEY OM LIVE TE GAAN
 
     let supabaseClient = null;
     let isSimulated = true;
