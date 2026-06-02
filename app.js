@@ -734,7 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
             role: "Expat uit het Verenigd Koninkrijk"
         },
         {
-            text: "Perfecte service! Ik had de oordopjes gehuurd met airport pickup in Bangkok. Ze lagen keurig voor me klaar in een luchtdichte verpakking. De meegeleverde 5G simkaart werkte direct. Absolute aanrader voor iedere reiziger!",
+            text: "Perfecte service! Ik had de oordopjes gehuurd met gratis hotelbezorging in Pattaya. Ze lagen keurig op me te wachten bij de receptie in een luchtdichte verpakking. De meegeleverde 5G simkaart werkte direct. Absolute aanrader voor iedere reiziger!",
             author: "Dieter Meyer",
             role: "Zakenreiziger uit Duitsland"
         }
@@ -778,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const faqs = [
         {
             q: "Hoe werkt de huurservice in de praktijk?",
-            a: "Het is heel eenvoudig! U reserveert de oordopjes vooraf via ons platform. U kunt de sets ophalen op onze stand op Bangkok Suvarnabhumi Airport (BKK), op ons hoofdkantoor aan Beach Road in Pattaya, of u kiest voor <strong>gratis bezorging direct bij uw hotel of resort in Pattaya</strong>. Bij het inleveren kiest u simpelweg weer de locatie die u het beste uitkomt."
+            a: "Het is heel eenvoudig! U reserveert de oordopjes vooraf via ons platform. U kunt de sets ophalen op ons hoofdkantoor aan Beach Road in Pattaya, of u kiest voor <strong>gratis bezorging direct bij uw hotel of resort in Pattaya</strong>. Bij het inleveren kiest u simpelweg weer de locatie die u het beste uitkomt."
         },
         {
             q: "Zijn de gehuurde oordopjes wel echt hygiënisch en schoon?",
@@ -1192,9 +1192,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pickup: {
                 title: "1. Ophalen & Inleveren van de Apparatuur",
                 content: `
-                    <p>Bij het boeken selecteert u uw gewenste ophaal- en inleverlocatie. Wij bieden momenteel drie handige opties aan in Bangkok en Pattaya:</p>
+                    <p>Bij het boeken selecteert u uw gewenste ophaal- en inleverlocatie. Wij bieden momenteel twee handige opties aan in Pattaya:</p>
                     <ul>
-                        <li><strong>Bangkok Suvarnabhumi Airport (BKK) Stand:</strong> Onze stand op de luchthaven is 24/7 geopend. Ideaal om direct bij aankomst uw sets in ontvangst te nemen.</li>
                         <li><strong>Pattaya Beach Road Office:</strong> Geopend van 08:00 tot 22:00 uur. Ons kantoor ligt centraal en is eenvoudig te bereiken.</li>
                         <li><strong>Gratis Hotelbezorging & Inlevering:</strong> Wij bezorgen de verzegelde sets gratis bij de receptie van uw hotel of resort in Pattaya (inclusief Jomtien en Naklua). U kunt de set bij vertrek simpelweg weer achterlaten bij de receptie.</li>
                     </ul>
