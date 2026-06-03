@@ -3572,6 +3572,26 @@ hr {
 }
 
 /* 16.2 Dashboard Layout */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 32px;
+}
+
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (min-width: 1025px) {
+    .dashboard-layout {
+        grid-template-columns: 1.3fr 0.7fr;
+    }
+}
+
 .dashboard-welcome {
     margin-bottom: 32px;
 }
