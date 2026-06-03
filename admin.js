@@ -859,6 +859,29 @@ window.showView = function(viewName) {
     }
 };
 
+// Sync total stock setting with actual count of devices
+async function syncTotalStockWithDevices() {
+    const count = activeDevices.length;
+    totalStock = count;
+    
+    // Update local storage
+    localStorage.setItem('ttt_total_stock', count.toString());
+    
+    // Recalculate stats on dashboard
+    calculateDashboardStats();
+    
+    // Update Supabase setting if not simulated
+    if (!isSimulated && window.supabaseClient) {
+        try {
+            await supabaseClient
+                .from('settings')
+                .upsert({ key: 'total_stock', value: count.toString() });
+        } catch (e) {
+            console.error("Fout bij syncen van live totale voorraad:", e);
+        }
+    }
+}
+
 // Fetch device list from Supabase or LocalStorage fallback
 window.loadDevices = async function() {
     if (isSimulated) {
@@ -899,6 +922,7 @@ window.loadDevices = async function() {
             activeDevices = JSON.parse(devicesStr);
         }
     }
+    await syncTotalStockWithDevices();
     renderDevicesTable();
 };
 
@@ -1008,12 +1032,27 @@ function calculateDeviceStats() {
     const total = activeDevices.length;
     const available = activeDevices.filter(d => d.status === 'AVAILABLE').length;
     const rented = activeDevices.filter(d => d.status === 'RENTED').length;
-    const cleaning = activeDevices.filter(d => d.status === 'CLEANING' || d.status === 'MAINTENANCE').length;
+    const cleaning = activeDevices.filter(d => d.status === 'CLEANING').length;
+    const maintenance = activeDevices.filter(d => d.status === 'MAINTENANCE').length;
+    const totalCleaningAndMaintenance = cleaning + maintenance;
 
     if (totalWidget) totalWidget.textContent = total;
     if (availableWidget) availableWidget.textContent = available;
     if (rentedWidget) rentedWidget.textContent = rented;
-    if (cleaningWidget) cleaningWidget.textContent = cleaning;
+    if (cleaningWidget) cleaningWidget.textContent = totalCleaningAndMaintenance;
+
+    // Sidebar status indicators
+    const sbTotal = document.getElementById('sb-total-devices');
+    const sbAvailable = document.getElementById('sb-available-devices');
+    const sbRented = document.getElementById('sb-rented-devices');
+    const sbCleaning = document.getElementById('sb-cleaning-devices');
+    const sbMaintenance = document.getElementById('sb-maintenance-devices');
+
+    if (sbTotal) sbTotal.textContent = total;
+    if (sbAvailable) sbAvailable.textContent = available;
+    if (sbRented) sbRented.textContent = rented;
+    if (sbCleaning) sbCleaning.textContent = cleaning;
+    if (sbMaintenance) sbMaintenance.textContent = maintenance;
 }
 
 // Add device form submit handler
