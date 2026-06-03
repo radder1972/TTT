@@ -474,7 +474,7 @@ function renderBookingsTable() {
 
         // Add Print Invoice button to actions
         const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="printBookingInvoice('${b.id}')" title="Print Factuur">
-            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;">
+            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/>
             </svg>
         </button>`;
@@ -850,7 +850,7 @@ window.renderDevicesTable = function() {
                 <td><span class="small">${lastCheckedFormatted}</span></td>
                 <td>
                     <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="deleteDevice('${d.id}')" title="Headset Verwijderen" style="width: 28px; height: 28px; border-radius: 50%; color: var(--thai-red);">
-                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                         </svg>
