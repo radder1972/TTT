@@ -201,7 +201,7 @@ async function checkAuthSession() {
     if (isSimulated) {
         const isLoggedIn = localStorage.getItem('ttt_admin_auth') === 'true';
         if (isLoggedIn) {
-            currentSessionUser = { email: "admin@truetimethai.com" };
+            currentSessionUser = { email: "info@truetimethai.com" };
             if (loginSection) loginSection.style.display = 'none';
             if (dashboardSection) dashboardSection.style.display = 'block';
             if (logoutWrapper) logoutWrapper.style.display = 'block';
@@ -241,12 +241,12 @@ async function handleLogin(e) {
 
     if (isSimulated) {
         // Simulated Authentication
-        if (email === "admin@truetimethai.com" && password === "pattaya2026") {
+        if (email === "info@truetimethai.com" && password === "R@dd3r1972?12345") {
             localStorage.setItem('ttt_admin_auth', 'true');
             alert("Inloggen succesvol!");
             checkAuthSession();
         } else {
-            alert("Foutief e-mailadres of wachtwoord! Probeer admin@truetimethai.com / pattaya2026");
+            alert("Foutief e-mailadres of wachtwoord! Probeer info@truetimethai.com / R@dd3r1972?12345");
         }
         if (loginBtn) loginBtn.disabled = false;
     } else {
