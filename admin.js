@@ -1,4 +1,4 @@
-// ==========================================================================
+﻿// ==========================================================================
 // True Time Thai - Admin Dashboard Logic
 // Supports both simulated LocalStorage database and live Supabase client.
 // ==========================================================================
@@ -471,9 +471,9 @@ async function loadBookings() {
             } else {
                 activeBookings = (data || []).map(order => {
                     const customer = order.customers || {};
-                    const headsetLine = (order.rental_order_lines || []).find(l => l.product_id === 'p1111111-1111-1111-1111-111111111111');
-                    const simLine = (order.rental_order_lines || []).find(l => l.product_id === 'p2222222-2222-2222-2222-222222222222');
-                    const powerbankLine = (order.rental_order_lines || []).find(l => l.product_id === 'p3333333-3333-3333-3333-333333333333');
+                    const headsetLine = (order.rental_order_lines || []).find(l => l.product_id === 'e1111111-1111-1111-1111-111111111111');
+                    const simLine = (order.rental_order_lines || []).find(l => l.product_id === 'e2222222-2222-2222-2222-222222222222');
+                    const powerbankLine = (order.rental_order_lines || []).find(l => l.product_id === 'e3333333-3333-3333-3333-333333333333');
                     
                     return {
                         id: order.id,
@@ -535,7 +535,7 @@ function calculateDashboardStats() {
         .reduce((sum, b) => sum + parseInt(b.total_price_thb), 0);
         
     const revWidget = document.getElementById('stat-total-revenue');
-    if (revWidget) revWidget.textContent = `฿${totalRev.toLocaleString()}`;
+    if (revWidget) revWidget.textContent = `à¸¿${totalRev.toLocaleString()}`;
 
     // 4. Available W4 Pro sets now: totalStock - activeRentals
     const availableNow = totalStock - activeRentals;
@@ -592,8 +592,8 @@ function renderBookingsTable() {
 
         // Format accessories
         const extras = [];
-        if (b.extra_sim === true || b.extra_sim === "Yes (+ ฿350 each)" || b.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("SIM");
-        if (b.extra_powerbank === true || b.extra_powerbank === "Yes (+ ฿175 each)" || b.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
+        if (b.extra_sim === true || b.extra_sim === "Yes (+ à¸¿350 each)" || b.extra_sim === "Ja (+ à¸¿350 per stuk)") extras.push("SIM");
+        if (b.extra_powerbank === true || b.extra_powerbank === "Yes (+ à¸¿175 each)" || b.extra_powerbank === "Ja (+ à¸¿175 per stuk)") extras.push("Powerbank");
         const extrasText = extras.length > 0 ? ` (+ ${extras.join(' & ')})` : '';
 
         // Table Row HTML - simplified to 6 columns
@@ -611,7 +611,7 @@ function renderBookingsTable() {
                     <span class="text-muted small">${extrasText || 'No extras'}</span>
                 </td>
                 <td>
-                    <strong>฿${parseInt(b.total_price_thb).toLocaleString()}</strong>
+                    <strong>à¸¿${parseInt(b.total_price_thb).toLocaleString()}</strong>
                 </td>
                 <td>
                     <span class="admin-status-pill ${statusClass}">${statusLabel}</span>
@@ -663,8 +663,8 @@ window.renderBookingDetails = function(bookingId) {
 
     // Extras formatting
     const extras = [];
-    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)" || booking.extra_sim === "Yes (+ ฿350 each)") extras.push("5G SIM Card");
-    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)" || booking.extra_powerbank === "Yes (+ ฿175 each)") extras.push("Power Bank");
+    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ à¸¿350 per stuk)" || booking.extra_sim === "Yes (+ à¸¿350 each)") extras.push("5G SIM Card");
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ à¸¿175 per stuk)" || booking.extra_powerbank === "Yes (+ à¸¿175 each)") extras.push("Power Bank");
     const extrasText = extras.length > 0 ? extras.join(' & ') : 'No extras';
 
     // Status pill & label
@@ -698,7 +698,7 @@ window.renderBookingDetails = function(bookingId) {
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 4px; width: 12px; height: 12px;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
                         ${d.serial_number}
                         ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
-                            <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Unlink headset">✕</span>
+                            <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Unlink headset">âœ•</span>
                         ` : ''}
                     </span>
                 `).join('')}
@@ -725,7 +725,7 @@ window.renderBookingDetails = function(bookingId) {
             </div>
         `;
     } else if (assignedDevices.length >= booking.earbud_count) {
-        selectDropdownHtml = `<p class="text-green small" style="margin-top: 4px; font-weight: bold;">✓ All ${booking.earbud_count} headsets linked</p>`;
+        selectDropdownHtml = `<p class="text-green small" style="margin-top: 4px; font-weight: bold;">âœ“ All ${booking.earbud_count} headsets linked</p>`;
     }
 
     devicesHtml = `
@@ -740,7 +740,7 @@ window.renderBookingDetails = function(bookingId) {
     if (booking.signature_data) {
         contractHtml = `
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">✓ Signed</div>
+                <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">âœ“ Signed</div>
                 <div style="display: flex; gap: 8px;">
                     <button type="button" class="btn btn-xs btn-outline" style="padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" onclick="viewSignedContract('${booking.id}')">
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -834,7 +834,7 @@ window.renderBookingDetails = function(bookingId) {
                     <table class="details-table">
                         <tr>
                             <th>Total:</th>
-                            <td><strong style="color: var(--success); font-size: 1.15rem;">฿${parseInt(booking.total_price_thb).toLocaleString()}</strong></td>
+                            <td><strong style="color: var(--success); font-size: 1.15rem;">à¸¿${parseInt(booking.total_price_thb).toLocaleString()}</strong></td>
                         </tr>
                         <tr>
                             <th>Method:</th>
@@ -842,7 +842,7 @@ window.renderBookingDetails = function(bookingId) {
                         </tr>
                         <tr>
                             <th>Status:</th>
-                            <td><span class="text-green" style="font-weight: bold;">✓ ${booking.payment_status}</span></td>
+                            <td><span class="text-green" style="font-weight: bold;">âœ“ ${booking.payment_status}</span></td>
                         </tr>
                         <tr>
                             <th>Transaction ID:</th>
@@ -1014,7 +1014,7 @@ window.printBookingInvoice = function(id) {
     document.getElementById('print-cust-name').textContent = booking.customer_name;
     document.getElementById('print-cust-email').textContent = booking.customer_email;
     document.getElementById('print-pickup-loc').textContent = formatLocationText(booking.pickup_location);
-    document.getElementById('print-total-thb').textContent = `฿${parseInt(booking.total_price_thb).toLocaleString()}`;
+    document.getElementById('print-total-thb').textContent = `à¸¿${parseInt(booking.total_price_thb).toLocaleString()}`;
     document.getElementById('print-pay-method').textContent = booking.payment_method;
     document.getElementById('print-txn-id').textContent = booking.transaction_id;
     
@@ -1041,24 +1041,24 @@ window.printBookingInvoice = function(id) {
     let itemsHtml = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
             <span>W4 Pro AI Translation Earbuds Rental (${booking.earbud_count}x set, ${days}d):</span>
-            <span>฿${(booking.earbud_count * 250 * days).toLocaleString()}</span>
+            <span>à¸¿${(booking.earbud_count * 250 * days).toLocaleString()}</span>
         </div>
     `;
     
-    if (booking.extra_sim === true || booking.extra_sim === "Yes (+ ฿350 each)" || booking.extra_sim === "Ja (+ ฿350 per stuk)") {
+    if (booking.extra_sim === true || booking.extra_sim === "Yes (+ à¸¿350 each)" || booking.extra_sim === "Ja (+ à¸¿350 per stuk)") {
         itemsHtml += `
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span>5G Local SIM Card (${booking.earbud_count}x flat):</span>
-                <span>฿${(booking.earbud_count * 350).toLocaleString()}</span>
+                <span>à¸¿${(booking.earbud_count * 350).toLocaleString()}</span>
             </div>
         `;
     }
     
-    if (booking.extra_powerbank === true || booking.extra_powerbank === "Yes (+ ฿175 each)" || booking.extra_powerbank === "Ja (+ ฿175 per stuk)") {
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Yes (+ à¸¿175 each)" || booking.extra_powerbank === "Ja (+ à¸¿175 per stuk)") {
         itemsHtml += `
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span>Premium Power Bank (${booking.earbud_count}x flat):</span>
-                <span>฿${(booking.earbud_count * 175).toLocaleString()}</span>
+                <span>à¸¿${(booking.earbud_count * 175).toLocaleString()}</span>
             </div>
         `;
     }
@@ -1186,7 +1186,7 @@ async function seedLiveDevices() {
         for (let i = 1; i <= 30; i++) {
             const numStr = String(i).padStart(3, '0');
             dummyDevices.push({
-                product_id: 'p1111111-1111-1111-1111-111111111111',
+                product_id: 'e1111111-1111-1111-1111-111111111111',
                 serial_number: `W4-${numStr}`,
                 status: 'AVAILABLE',
                 notes: `Set W4-${numStr} - Standard active set.`,
@@ -1334,7 +1334,7 @@ window.handleAddDevice = async function(e) {
     }
 
     const newDevice = {
-        product_id: 'p1111111-1111-1111-1111-111111111111',
+        product_id: 'e1111111-1111-1111-1111-111111111111',
         serial_number: serial,
         status: 'AVAILABLE',
         notes: notes || `Set ${serial} - Manually registered.`,
@@ -1844,9 +1844,9 @@ window.sendPickupNotification = function(bookingId) {
 
 Your booking for the True Time Thai W4 Pro AI Translation Earbuds is starting soon!
 
-📍 Pickup Location: ${formatLocationText(booking.pickup_location)}
-📅 Start Date: ${formatDateString(booking.start_date)}
-🎧 Number of Sets: ${booking.earbud_count}
+ðŸ“ Pickup Location: ${formatLocationText(booking.pickup_location)}
+ðŸ“… Start Date: ${formatDateString(booking.start_date)}
+ðŸŽ§ Number of Sets: ${booking.earbud_count}
 
 We look forward to welcoming you and helping you experience a hassle-free journey in Pattaya! Please remember to bring a security deposit of 1,000 THB (or a copy of your passport).
 
@@ -1874,8 +1874,8 @@ We hope you had a fantastic time using the True Time Thai translation earbuds!
 
 This is a friendly reminder that your rental period ends on ${formatDateString(booking.end_date)}. Please return the equipment (earbuds, charging case, power bank, and charging cables) on time to avoid additional charges.
 
-📍 Return Location: ${formatLocationText(booking.pickup_location)}
-📅 End Date: ${formatDateString(booking.end_date)}
+ðŸ“ Return Location: ${formatLocationText(booking.pickup_location)}
+ðŸ“… End Date: ${formatDateString(booking.end_date)}
 
 See you soon for the return!
 
@@ -1890,3 +1890,4 @@ window.confirmSendNotification = function() {
     closeAdminModal('modal-notification-preview');
     alert("Message successfully sent via simulated email & SMS gateway!");
 };
+
