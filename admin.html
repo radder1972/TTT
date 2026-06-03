@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.0.2">
+    <link rel="stylesheet" href="styles.css?v=4.1.1">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -441,71 +441,33 @@
 
             <!-- SECTION: VIEW CUSTOMERS (Initially Hidden) -->
             <div id="view-customers" style="display: none;">
-                <div class="dashboard-layout">
-                    <!-- Left: Customers Table -->
-                    <div class="dashboard-content-card glass">
-                        <div class="card-header-actions">
-                            <h3>Customer Registry</h3>
-                            <div class="search-filter-row">
-                                <input type="text" id="customer-search" placeholder="Search by name, email, or city...">
-                            </div>
-                        </div>
-
-                        <div class="table-scroll-wrapper">
-                            <table class="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>City</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customers-table-body">
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted">Loading customers...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="dashboard-content-card glass">
+                    <div class="card-header-actions">
+                        <h3>Customer Registry</h3>
+                        <div class="search-filter-row">
+                            <input type="text" id="customer-search" placeholder="Search by name, email, or city...">
+                            <button type="button" class="btn btn-sm btn-neon" onclick="openCustomerAddModal()" style="margin: 0; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Add New Customer">+</button>
                         </div>
                     </div>
 
-                    <!-- Right: Customer Form -->
-                    <div class="dashboard-sidebar">
-                        <div class="sidebar-card glass">
-                            <h4 id="customer-form-title">Add New Customer</h4>
-                            <p class="text-muted" id="customer-form-desc">Register or edit a customer profile.</p>
-                            
-                            <form id="add-customer-form" style="margin-top: 16px;">
-                                <input type="hidden" id="input-customer-id" value="">
-                                <div class="form-group" style="margin-bottom: 12px;">
-                                    <label for="input-customer-name">Full Name</label>
-                                    <input type="text" id="input-customer-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 12px;">
-                                    <label for="input-customer-email">Email Address</label>
-                                    <input type="email" id="input-customer-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 12px;">
-                                    <label for="input-customer-phone">Phone Number</label>
-                                    <input type="text" id="input-customer-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 12px;">
-                                    <label for="input-customer-city">City / Province</label>
-                                    <input type="text" id="input-customer-city" placeholder="e.g. Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 16px;">
-                                    <label for="input-customer-address">Address / Hotel Room</label>
-                                    <textarea id="input-customer-address" placeholder="Hotel Name, Street Address, Room..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
-                                </div>
-                                <div style="display: flex; gap: 8px;">
-                                    <button type="button" class="btn btn-sm btn-outline" id="btn-cancel-customer-edit" style="display: none; flex: 1; height: 36px;">Cancel</button>
-                                    <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-customer" style="flex: 2; height: 36px; margin: 0;">Save Customer</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="table-scroll-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                    <th>Address</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading customers...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -538,7 +500,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.0.2</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.1.1</span></p>
         </div>
     </footer>
 
@@ -739,9 +701,49 @@
         </div>
     </div>
 
+    <!-- MODAL 5: Add/Edit Customer Form -->
+    <div id="modal-customer-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3 id="customer-form-title">Add New Customer</h3>
+                <button type="button" class="btn-modal-close" onclick="closeCustomerModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted" id="customer-form-desc">Register or edit a customer profile.</p>
+                <form id="add-customer-form" style="margin-top: 16px;">
+                    <input type="hidden" id="input-customer-id" value="">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-name">Full Name</label>
+                        <input type="text" id="input-customer-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-email">Email Address</label>
+                        <input type="email" id="input-customer-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-phone">Phone Number</label>
+                        <input type="text" id="input-customer-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-city">City / Province</label>
+                        <input type="text" id="input-customer-city" placeholder="e.g. Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="input-customer-address">Address / Hotel Room</label>
+                        <textarea id="input-customer-address" placeholder="Hotel Name, Street Address, Room..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeCustomerModal()" style="flex: 1; height: 36px;">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-customer" style="flex: 2; height: 36px; margin: 0;">Save Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=4.0.2"></script>
+    <script src="admin.js?v=4.1.1"></script>
 </body>
 </html>
