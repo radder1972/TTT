@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+﻿﻿/* ==========================================================================
    True Time Thai - Web Application Logic (app.js)
    Features: SPA Router, Simulator, Booking Engine, Testimonials, FAQ Accordion
    ========================================================================== */
@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    const scenarios = {
+        const scenarios = {
         market: {
             title: "Conversation at Lanpho Naklua Fish Market",
             startNode: "greet",
@@ -699,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         text: "à¸¢à¸´à¸™à¸”à¸µà¸¡à¸²à¸à¸ˆà¹‰à¸² à¹€à¸—à¸µà¹ˆà¸¢à¸§à¸žà¸±à¸—à¸¢à¸²à¹ƒà¸«à¹‰à¸ªà¸™à¸¸à¸à¸™à¸°à¸ˆà¹Šà¸°! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
                         translation: "You are very welcome, have fun in Pattaya!"
                     },
-                    choices: [] // End node
+                    choices: []
                 }
             }
         },
@@ -743,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¸–à¹‰à¸²à¹€à¸«à¸¡à¸²à¹„à¸›à¸ªà¹ˆà¸‡à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¹€à¸¥à¸¢ à¸„à¸´à¸”à¹€à¸«à¸¡à¸² 150 à¸šà¸²à¸—à¸¥à¸°à¸à¸±à¸™à¸„à¸£à¸±à¸š à¸ªà¸°à¸”à¸§à¸à¸à¸§à¹ˆà¸² à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸”à¸´à¸™à¹„à¸à¸¥",
+                        text: "à¸–à¹‰à¸²à¹€à¸«à¸¡à¸²à¹„à¸›à¸ªà¹ˆà¸‡à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¹€à¸¥à¸¢ à¸„à¸´à¸”à¹€à¸«à¸¡à¸² 150 à¸šà¸²à¸—à¸¥à¸°à¸à¸±à¸™à¸„à¸£à¸±à¸š à¸ªà¸°à¸”à¸§à¸à¸à¸§à¹ˆà¸² à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸”à¸´à¸™à¹„gel",
                         translation: "If you charter the bus to drop you off directly at the entrance, I will charge 150 Baht in total. It is more convenient and saves walking."
                     },
                     choices: [
@@ -762,7 +762,42 @@ document.addEventListener('DOMContentLoaded', () => {
                         translation: "No problem! Have a comfortable seat, I'll drive you there directly."
                     },
                     choices: [
-                        { text: "Thank him upon arrival", nextNo                docs_provided: {
+                        { text: "Thank him upon arrival", nextNode: "taxi_arrive" }
+                    ]
+                },
+                taxi_arrive: {
+                    tourist: {
+                        text: "We are here! Thank you for the safe ride.",
+                        translation: "à¸–à¸¶à¸‡à¹à¸¥à¹‰à¸§à¸„à¸£à¸±à¸š à¸‚à¸­à¸šà¸„à¸¸à¸“à¸—à¸µà¹ˆà¸‚à¸±à¸šà¸£à¸–à¸¡à¸²à¸ªà¹ˆà¸‡à¸­à¸¢à¹ˆà¸²à¸‡à¸›à¸¥à¸­à¸”à¸ à¸±à¸¢à¸™à¸°à¸„à¸£à¸±à¸š (Thueng laew krap. Khop khun tee khap rot ma song yangà¸›à¸¥à¸­à¸”à¸ à¸±à¸¢ na krap.)"
+                    },
+                    local: {
+                        name: "Looong (Driver)",
+                        text: "à¹€à¸—à¸µà¹ˆà¸¢à¸§à¹ƒà¸«à¹‰à¸ªà¸™à¸¸à¸à¸™à¸°à¸„à¸£à¸±à¸š à¹‚à¸Šà¸„à¸”à¸µà¸„à¸£à¸±à¸š! (Thiew hai sanook na krap. Chok dee krap!)",
+                        translation: "Have fun there and good luck!"
+                    },
+                    choices: []
+                }
+            }
+        },
+        resort: {
+            title: "Checking in at Jomtien Bay Resort",
+            startNode: "greet",
+            nodes: {
+                greet: {
+                    tourist: {
+                        text: "Hello, I would like to check in. My reservation is under the name of Matthijs.",
+                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¸‚à¸­à¹€à¸Šà¹‡à¸„à¸­à¸´à¸™à¸„à¸£à¸±à¸š à¸ˆà¸­à¸‡à¹„à¸§à¹‰ inà¸Šà¸·à¹ˆà¸­ à¹à¸¡à¸—à¸˜à¸´à¸§ à¸„à¸£à¸±à¸š (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¹ˆà¸° à¸¢à¸´à¸™à¸”à¸µà¸•à¹‰à¸­à¸™à¸£à¸±à¸šà¸„à¹ˆà¸° à¸‚à¸­à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¸·à¸™à¸¢à¸±à¸™à¸à¸²à¸£à¸ˆà¸­à¸‡à¸à¸±à¸šà¸žà¸²à¸ªà¸›à¸­à¸£à¹Œà¸•à¸”à¹‰à¸§à¸¢à¸™à¸°à¸„à¸°",
+                        translation: "Hello, welcome! May I have your booking confirmation and passport, please?"
+                    },
+                    choices: [
+                        { text: "Provide passport & booking confirmation", nextNode: "docs_provided" }
+                    ]
+                },
+                docs_provided: {
                     tourist: {
                         text: "Here you go. Here are my passport and booking confirmation.",
                         translation: "à¸™à¸µà¹ˆà¸„à¸£à¸±à¸š à¸žà¸²à¸ªà¸›à¸­à¸£à¹Œà¸•à¸à¸±à¸šà¹ƒà¸šà¸ˆà¸­à¸‡à¸„à¸£à¸±à¸š (Nee krap, passport kab bai jong krap.)"
@@ -814,43 +849,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: "Kwan (Receptionist)",
                         text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
                         translation: "You're welcome! Here is your keycard for room 402. Have a wonderful stay!"
-                    },
-                    choices: []
-                }ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
-                    },
-                    local: {
-                        name: "Kwan (Receptionist)",
-                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
-                        translation: "You're welcome! Here is your keycard for room 402. Have a wonderful stay!"
-                        translation: "Yes, breakfast is included and is served in the restaurant on the first floor. The pool is open from 7:00 AM to 10:00 PM."
-                    },
-                    choices: [
-                        { text: "Finish check-in", nextNode: "checkin_done" }
-                    ]
-                },
-                wifi_deposit: {
-                    tourist: {
-                        text: "Wat is de wifi-code en hoe zit het met de borgsom?",
-                        translation: "à¸£à¸«à¸±à¸ªà¹„à¸§à¹„à¸Ÿà¸­à¸°à¹„à¸£à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸•à¹‰à¸­à¸‡à¸§à¸²à¸‡à¹€à¸‡à¸´à¸™à¸¡à¸±à¸”à¸ˆà¸³à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
-                    },
-                    local: {
-                        name: "Kwan (Receptionist)",
-                        text: "à¹„à¸§à¹„à¸Ÿà¹ƒà¸Šà¹‰à¹„à¸”à¹‰à¸Ÿà¸£à¸µà¸—à¸±à¹ˆà¸§à¸—à¸±à¹‰à¸‡à¸£à¸µà¸ªà¸­à¸£à¹Œà¸—à¸„à¹ˆà¸° à¸£à¸«à¸±à¸ªà¸­à¸¢à¸¹à¹ˆà¸šà¸™à¸‹à¸­à¸‡à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” à¸ªà¹ˆà¸§à¸™à¸¡à¸±à¸”à¸ˆà¸³à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” 1,000 à¸šà¸²à¸—à¸«à¸£à¸·à¸­à¸ªà¹à¸à¸™à¸šà¸±à¸•à¸£à¹€à¸„à¸£à¸”à¸´à¸•à¸„à¹ˆà¸°",
-                        translation: "Wifi is gratis in het hele resort, de code staat op uw sleutelkaart-envelop. De borg is 1.000 Baht in contanten of een creditcard-afdruk."
-                    },
-                    choices: [
-                        { text: "Rond check-in af", nextNode: "checkin_done" }
-                    ]
-                },
-                checkin_done: {
-                    tourist: {
-                        text: "Fantastisch. Hartelijk dank voor de heldere uitleg en de sleutels.",
-                        translation: "à¸¢à¸­à¸”à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸¡à¸²à¸ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸—à¸µà¹ˆà¸Šà¸±à¸”à¹€à¸ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
-                    },
-                    local: {
-                        name: "Kwan (Receptionist)",
-                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
-                        translation: "Graag gedaan! Hier is uw sleutelkaart voor kamer 402. Een heel fijn verblijf gewenst!"
                     },
                     choices: []
                 }
