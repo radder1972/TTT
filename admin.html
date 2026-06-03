@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.5.1">
+    <link rel="stylesheet" href="styles.css?v=2.5.2">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -299,7 +299,13 @@
                             
                             <div class="sidebar-stats-list" style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
                                 <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                                    <span style="font-weight: bold; color: var(--text-light);"><span style="margin-right: 8px;">🎧</span>Totaal Geregistreerd:</span>
+                                    <span style="font-weight: bold; color: var(--text-light); display: inline-flex; align-items: center; gap: 8px;">
+                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;" fill="none" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+                                            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+                                        </svg>
+                                        Totaal Geregistreerd:
+                                    </span>
                                     <strong id="sb-total-devices" style="font-size: 1.1rem; color: var(--neon-cyan);">0</strong>
                                 </div>
                                 <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
@@ -370,7 +376,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.5.1</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.5.2</span></p>
         </div>
     </footer>
 
@@ -574,6 +580,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=2.5.1"></script>
+    <script src="admin.js?v=2.5.2"></script>
 </body>
 </html>
