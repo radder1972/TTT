@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return [];
                 }
                 return (data || []).map(order => {
-                    const line = (order.rental_order_lines || []).find(l => l.product_id === 'p1111111-1111-1111-1111-111111111111');
+                    const line = (order.rental_order_lines || []).find(l => l.product_id === 'e1111111-1111-1111-1111-111111111111');
                     return {
                         ...order,
                         earbud_count: line ? parseInt(line.quantity) : 1
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lines.push({
                 id: 'l_' + Math.random().toString(36).substr(2, 9),
                 order_id: record.id,
-                product_id: 'p1111111-1111-1111-1111-111111111111',
+                product_id: 'e1111111-1111-1111-1111-111111111111',
                 quantity: earbudCount,
                 agreed_price_per_day: 250
             });
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lines.push({
                     id: 'l_' + Math.random().toString(36).substr(2, 9),
                     order_id: record.id,
-                    product_id: 'p2222222-2222-2222-2222-222222222222',
+                    product_id: 'e2222222-2222-2222-2222-222222222222',
                     quantity: earbudCount,
                     agreed_price_per_day: 350
                 });
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lines.push({
                     id: 'l_' + Math.random().toString(36).substr(2, 9),
                     order_id: record.id,
-                    product_id: 'p3333333-3333-3333-3333-333333333333',
+                    product_id: 'e3333333-3333-3333-3333-333333333333',
                     quantity: earbudCount,
                     agreed_price_per_day: 175
                 });
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const orderLines = [
                     {
                         order_id: orderId,
-                        product_id: 'p1111111-1111-1111-1111-111111111111',
+                        product_id: 'e1111111-1111-1111-1111-111111111111',
                         quantity: earbudCount,
                         agreed_price_per_day: 250
                     }
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (extraSim) {
                     orderLines.push({
                         order_id: orderId,
-                        product_id: 'p2222222-2222-2222-2222-222222222222',
+                        product_id: 'e2222222-2222-2222-2222-222222222222',
                         quantity: earbudCount,
                         agreed_price_per_day: 350
                     });
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (extraPowerbank) {
                     orderLines.push({
                         order_id: orderId,
-                        product_id: 'p3333333-3333-3333-3333-333333333333',
+                        product_id: 'e3333333-3333-3333-3333-333333333333',
                         quantity: earbudCount,
                         agreed_price_per_day: 175
                     });
@@ -2438,4 +2438,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initTermsTabs();
     initContactCarousel();
 });
+
 
