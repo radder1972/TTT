@@ -646,34 +646,52 @@ window.renderBookingDetails = function(bookingId) {
     // Devices assigned logic
     const assignedDevices = activeDevices.filter(d => d.assigned_booking_id === booking.id);
     let devicesHtml = '';
+    
+    // 1. Build list of currently assigned devices
+    let assignedListHtml = '';
     if (assignedDevices.length > 0) {
-        devicesHtml = `
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    ${assignedDevices.map(d => `<span class="tag-device">🎧 ${d.serial_number}</span>`).join('')}
-                </div>
-                ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
-                    <button type="button" class="btn btn-xs btn-outline" onclick="unassignDeviceFromBooking('${booking.id}')" style="margin-top: 4px; max-width: 140px; color: var(--thai-red); border-color: var(--thai-red); padding: 4px 8px; font-size: 0.75rem;">✕ Ontkoppelen</button>
-                ` : ''}
+        assignedListHtml = `
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                ${assignedDevices.map(d => `
+                    <span class="tag-device" style="position: relative; padding-right: 22px;">
+                        🎧 ${d.serial_number}
+                        ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
+                            <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Koppeling verbreken">✕</span>
+                        ` : ''}
+                    </span>
+                `).join('')}
             </div>
         `;
-    } else if (booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP') {
+    } else {
+        assignedListHtml = `<p class="text-muted small" style="margin-bottom: 8px;">Geen headsets gekoppeld</p>`;
+    }
+
+    // 2. Build dropdown selector if more headsets can be assigned
+    let selectDropdownHtml = '';
+    if ((booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP') && assignedDevices.length < booking.earbud_count) {
         const availableDevices = activeDevices.filter(d => d.status === 'AVAILABLE');
         let selectOptions = `<option value="">Koppel een headset...</option>`;
         availableDevices.forEach(d => {
             selectOptions += `<option value="${d.id}">${d.serial_number}</option>`;
         });
-        devicesHtml = `
+        selectDropdownHtml = `
             <div>
                 <select class="device-status-select" onchange="assignDeviceToBooking('${booking.id}', this.value)" style="width: 100%; max-width: 220px; height: 36px; padding: 6px 12px; font-size: 0.85rem;">
                     ${selectOptions}
                 </select>
-                <p class="text-muted small" style="margin-top: 4px; font-size: 0.75rem;">Koppel een headset om de boeking actief te maken.</p>
+                <p class="text-muted small" style="margin-top: 4px; font-size: 0.75rem;">Koppel headset ${assignedDevices.length + 1} van ${booking.earbud_count}</p>
             </div>
         `;
-    } else {
-        devicesHtml = `<span class="text-muted">Geen headsets gekoppeld</span>`;
+    } else if (assignedDevices.length >= booking.earbud_count) {
+        selectDropdownHtml = `<p class="text-green small" style="margin-top: 4px; font-weight: bold;">✓ Alle ${booking.earbud_count} headsets gekoppeld</p>`;
     }
+
+    devicesHtml = `
+        <div>
+            ${assignedListHtml}
+            ${selectDropdownHtml}
+        </div>
+    `;
 
     // Contract Status
     let contractHtml = '';
@@ -1435,6 +1453,38 @@ window.unassignDeviceFromBooking = async function(bookingId) {
             .from('devices')
             .update({ assigned_booking_id: null, status: 'AVAILABLE', last_checked: timestamp })
             .eq('assigned_booking_id', bookingId);
+
+        if (error) {
+            alert("Fout bij ontkoppelen headset: " + error.message);
+        } else {
+            alert("Koppeling succesvol live verbroken.");
+            await loadDashboardData();
+        }
+    }
+};
+
+// Unassign a single device by its deviceId
+window.unassignSingleDevice = async function(deviceId) {
+    if (!confirm("Weet u zeker dat u deze headset-koppeling wilt verbreken?")) return;
+    const timestamp = new Date().toISOString();
+
+    if (isSimulated) {
+        const devicesStr = localStorage.getItem('ttt_devices') || '[]';
+        const devices = JSON.parse(devicesStr);
+        const dIndex = devices.findIndex(d => d.id === deviceId);
+        if (dIndex !== -1) {
+            devices[dIndex].assigned_booking_id = null;
+            devices[dIndex].status = 'AVAILABLE';
+            devices[dIndex].last_checked = timestamp;
+            localStorage.setItem('ttt_devices', JSON.stringify(devices));
+            alert("Koppeling verbroken. Headset is weer beschikbaar.");
+            await loadDashboardData();
+        }
+    } else {
+        const { error } = await supabaseClient
+            .from('devices')
+            .update({ assigned_booking_id: null, status: 'AVAILABLE', last_checked: timestamp })
+            .eq('id', deviceId);
 
         if (error) {
             alert("Fout bij ontkoppelen headset: " + error.message);
