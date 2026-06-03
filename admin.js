@@ -2410,6 +2410,16 @@ window.deleteProduct = async function(id) {
 };
 
 // Customer Submission (Add or Edit)
+window.openCustomerAddModal = function() {
+    cancelCustomerEdit();
+    openAdminModal('modal-customer-form');
+};
+
+window.closeCustomerModal = function() {
+    cancelCustomerEdit();
+    closeAdminModal('modal-customer-form');
+};
+
 window.handleAddCustomer = async function(e) {
     e.preventDefault();
     const idInput = document.getElementById('input-customer-id');
@@ -2450,7 +2460,7 @@ window.handleAddCustomer = async function(e) {
                 custs[idx] = { ...custs[idx], ...customerData };
                 localStorage.setItem('ttt_customers', JSON.stringify(custs));
                 alert("Customer updated in simulation!");
-                cancelCustomerEdit();
+                closeCustomerModal();
                 await loadCustomersData();
             }
         } else {
@@ -2463,7 +2473,7 @@ window.handleAddCustomer = async function(e) {
                     alert("Error updating customer: " + error.message);
                 } else {
                     alert("Customer updated live!");
-                    cancelCustomerEdit();
+                    closeCustomerModal();
                     await loadCustomersData();
                 }
             } catch (err) {
@@ -2486,11 +2496,7 @@ window.handleAddCustomer = async function(e) {
             custs.push(customerData);
             localStorage.setItem('ttt_customers', JSON.stringify(custs));
             alert("Customer registered in simulation!");
-            nameInput.value = '';
-            emailInput.value = '';
-            phoneInput.value = '';
-            cityInput.value = '';
-            addressInput.value = '';
+            closeCustomerModal();
             await loadCustomersData();
         } else {
             try {
@@ -2501,11 +2507,7 @@ window.handleAddCustomer = async function(e) {
                     alert("Error adding customer: " + error.message);
                 } else {
                     alert("Customer registered live!");
-                    nameInput.value = '';
-                    emailInput.value = '';
-                    phoneInput.value = '';
-                    cityInput.value = '';
-                    addressInput.value = '';
+                    closeCustomerModal();
                     await loadCustomersData();
                 }
             } catch (err) {
@@ -2528,7 +2530,11 @@ window.editCustomer = function(id) {
     
     document.getElementById('customer-form-title').textContent = "Edit Customer";
     document.getElementById('customer-form-desc').textContent = "Update this customer details.";
-    document.getElementById('btn-cancel-customer-edit').style.display = 'block';
+    
+    const cancelBtn = document.getElementById('btn-cancel-customer-edit');
+    if (cancelBtn) cancelBtn.style.display = 'block';
+    
+    openAdminModal('modal-customer-form');
 };
 
 window.cancelCustomerEdit = function() {
@@ -2541,7 +2547,9 @@ window.cancelCustomerEdit = function() {
     
     document.getElementById('customer-form-title').textContent = "Add New Customer";
     document.getElementById('customer-form-desc').textContent = "Register or edit a customer profile.";
-    document.getElementById('btn-cancel-customer-edit').style.display = 'none';
+    
+    const cancelBtn = document.getElementById('btn-cancel-customer-edit');
+    if (cancelBtn) cancelBtn.style.display = 'none';
 };
 
 window.deleteCustomer = async function(id) {
