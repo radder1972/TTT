@@ -172,71 +172,48 @@
                 </div>
             </div>
 
-            <!-- Main Dashboard Area (List & Sidebar Controls) -->
-            <div class="dashboard-layout">
-                
-                <!-- Left Column: Bookings list -->
-                <div class="dashboard-content-card glass">
-                    <div class="card-header-actions">
-                        <h3>Boekingen & Reserveringen</h3>
-                        
-                        <!-- Search & Status filter tabs -->
-                        <div class="search-filter-row">
-                            <input type="text" id="booking-search" placeholder="Zoek op naam of email...">
-                            <select id="booking-status-filter">
-                                <option value="ALL">Alle Statussen</option>
-                                <option value="CONFIRMED">Gereserveerd / Betaald</option>
-                                <option value="PICKED_UP">Opgehaald / Actief</option>
-                                <option value="RETURNED">Ingeleverd / Compleet</option>
-                                <option value="CANCELLED">Geannuleerd</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Bookings Table container -->
-                    <div class="table-scroll-wrapper">
-                        <table class="admin-table" id="bookings-table">
-                            <thead>
-                                <tr>
-                                    <th>Klant</th>
-                                    <th>Periode</th>
-                                    <th>Sets</th>
-                                    <th>Bedrag</th>
-                                    <th>Locatie</th>
-                                    <th>Betaling</th>
-                                    <th>Status</th>
-                                    <th>Actie</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bookings-table-body">
-                                <tr>
-                                    <td colspan="8" class="text-center text-muted">Boekingen worden geladen...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Right Column: Settings & Operational actions -->
-                <div class="dashboard-sidebar">
+            <!-- Main Dashboard Area (Full Width Bookings Table) -->
+            <div class="dashboard-content-card glass">
+                <div class="card-header-actions">
+                    <h3>Boekingen & Reserveringen</h3>
                     
-                    <!-- Inventory Management Card -->
-                    <div class="sidebar-card glass">
-                        <h4>Voorraadinstellingen</h4>
-                        <p class="text-muted">Pas het totaal aantal beschikbare W4 Pro sets in Pattaya aan.</p>
-                        
-                        <div class="form-group" style="margin-top: 16px;">
-                            <label for="input-total-stock">Totale Voorraad Sets</label>
-                            <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
-                                <input type="number" id="input-total-stock" min="1" max="200" value="30" style="margin: 0; width: 100px; height: 36px;">
-                                <button type="button" class="btn btn-xs btn-neon" id="btn-save-stock" style="white-space: nowrap; height: 36px; line-height: 1;">Opslaan</button>
-                            </div>
-                        </div>
+                    <!-- Search & Status filter tabs -->
+                    <div class="search-filter-row">
+                        <input type="text" id="booking-search" placeholder="Zoek op naam of email...">
+                        <select id="booking-status-filter">
+                            <option value="ALL">Alle Statussen</option>
+                            <option value="CONFIRMED">Gereserveerd / Betaald</option>
+                            <option value="PICKED_UP">Opgehaald / Actief</option>
+                            <option value="RETURNED">Ingeleverd / Compleet</option>
+                            <option value="CANCELLED">Geannuleerd</option>
+                        </select>
                     </div>
-
                 </div>
 
-            </div> <!-- End view-bookings -->
+                <!-- Bookings Table container -->
+                <div class="table-scroll-wrapper">
+                    <table class="admin-table" id="bookings-table">
+                        <thead>
+                            <tr>
+                                <th>Klant</th>
+                                <th>Periode</th>
+                                <th>Sets</th>
+                                <th>Bedrag</th>
+                                <th>Locatie</th>
+                                <th>Betaling</th>
+                                <th>Status</th>
+                                <th>Actie</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">Boekingen worden geladen...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- End view-bookings -->
 
             <!-- SECTION: VIEW INVENTORY (Initially Hidden) -->
             <div id="view-inventory" style="display: none;">
@@ -336,8 +313,23 @@
                         </div>
                     </div>
 
-                    <!-- Right: Add Headset Card -->
+                    <!-- Right: Inventory & Headset Controls -->
                     <div class="dashboard-sidebar">
+                        <!-- Inventory Management Card -->
+                        <div class="sidebar-card glass">
+                            <h4>Voorraadinstellingen</h4>
+                            <p class="text-muted">Pas het totaal aantal beschikbare W4 Pro sets in Pattaya aan.</p>
+                            
+                            <div class="form-group" style="margin-top: 16px;">
+                                <label for="input-total-stock">Totale Voorraad Sets</label>
+                                <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
+                                    <input type="number" id="input-total-stock" min="1" max="200" value="30" style="margin: 0; width: 100px; height: 36px;">
+                                    <button type="button" class="btn btn-xs btn-neon" id="btn-save-stock" style="white-space: nowrap; height: 36px; line-height: 1;">Opslaan</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Headset Registreren Card -->
                         <div class="sidebar-card glass">
                             <h4>Headset Registreren</h4>
                             <p class="text-muted">Voeg een nieuwe Timekettle W4 Pro set toe aan de actieve voorraad.</p>
