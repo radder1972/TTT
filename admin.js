@@ -423,6 +423,14 @@ function renderBookingsTable() {
             actionsHtml = `<span class="text-muted">-</span>`;
         }
 
+        // Add Print Invoice button to actions
+        const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline" onclick="printBookingInvoice('${b.id}')" title="Print Factuur" style="margin-left: 5px; padding: 2px 6px;">🖨️</button>`;
+        if (actionsHtml === `<span class="text-muted">-</span>`) {
+            actionsHtml = printBtnHtml;
+        } else {
+            actionsHtml += printBtnHtml;
+        }
+
         // Format accessories
         const extras = [];
         if (b.extra_sim === true || b.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("SIM");
@@ -520,4 +528,86 @@ function formatLocationText(locText) {
     if (locText.includes("Office")) return "Kantoor Beach Road";
     if (locText.includes("Bezorging") || locText.includes("delivery")) return "Hotel Bezorging";
     return locText;
+}
+
+// 9. Print Invoice function for admins
+window.printBookingInvoice = function(id) {
+    const booking = activeBookings.find(b => b.id === id);
+    if (!booking) {
+        alert("Boeking niet gevonden!");
+        return;
+    }
+    
+    // Populate printable fields
+    document.getElementById('print-invoice-id').textContent = booking.id;
+    document.getElementById('print-invoice-period').textContent = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+    document.getElementById('print-cust-name').textContent = booking.customer_name;
+    document.getElementById('print-cust-email').textContent = booking.customer_email;
+    document.getElementById('print-pickup-loc').textContent = formatLocationText(booking.pickup_location);
+    document.getElementById('print-total-thb').textContent = `฿${parseInt(booking.total_price_thb).toLocaleString()}`;
+    document.getElementById('print-pay-method').textContent = booking.payment_method;
+    document.getElementById('print-txn-id').textContent = booking.transaction_id;
+    
+    // Status styling and text
+    const statusEl = document.getElementById('print-pay-status');
+    if (booking.status === 'CANCELLED') {
+        statusEl.textContent = 'GEANNULEERD';
+        statusEl.style.color = '#dc3545';
+    } else if (booking.status === 'RETURNED') {
+        statusEl.textContent = 'INGELEVERD / COMPLEET';
+        statusEl.style.color = '#007bff';
+    } else if (booking.status === 'PICKED_UP') {
+        statusEl.textContent = 'IN GEBRUIK (ACTIEF)';
+        statusEl.style.color = '#ffc107';
+    } else {
+        statusEl.textContent = 'BETAALD / RESERVERING';
+        statusEl.style.color = '#28a745';
+    }
+    
+    // Populate items lists
+    const itemsContainer = document.getElementById('print-invoice-items');
+    const days = calculateDaysBetween(booking.start_date, booking.end_date);
+    
+    let itemsHtml = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span>Huur W4 Pro AI oordopjes (${booking.earbud_count}x set, ${days}d):</span>
+            <span>฿${(booking.earbud_count * 250 * days).toLocaleString()}</span>
+        </div>
+    `;
+    
+    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)" || booking.extra_sim === "Ja (+ ?350 per stuk)") {
+        itemsHtml += `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span>5G Lokale SIM-kaart (${booking.earbud_count}x flat):</span>
+                <span>฿${(booking.earbud_count * 350).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)" || booking.extra_powerbank === "Ja (+ ?175 per stuk)") {
+        itemsHtml += `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span>Premium Powerbank (${booking.earbud_count}x flat):</span>
+                <span>฿${(booking.earbud_count * 175).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    itemsContainer.innerHTML = itemsHtml;
+    
+    // Trigger printing
+    window.print();
+};
+
+// Helper to calculate days in print view
+function calculateDaysBetween(startStr, endStr) {
+    try {
+        const start = new Date(startStr);
+        const end = new Date(endStr);
+        const diffTime = end - start;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays > 0 ? diffDays : 1;
+    } catch (e) {
+        return 1;
+    }
 }
