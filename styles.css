@@ -3769,9 +3769,16 @@ hr {
     box-shadow: 0 0 6px rgba(0, 102, 204, 0.1);
 }
 
-.btn-print-admin {
-    margin-left: 10px !important;
-    padding: 4px 10px !important;
+.btn-print-admin-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin-left: 8px !important;
+    vertical-align: middle !important;
+    border-radius: 50% !important;
 }
 
 .status-indicator-box {
