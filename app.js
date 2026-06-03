@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    True Time Thai - Web Application Logic (app.js)
    Features: SPA Router, Simulator, Booking Engine, Testimonials, FAQ Accordion
    ========================================================================== */
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 isSimulated = false;
                 console.log("Supabase live client initialized successfully in app.js.");
             } catch (error) {
-                console.error("Fout bij initialiseren live Supabase client, fallback naar simulatie:", error);
+                console.error("Error initializing live Supabase client, fallback to simulation:", error);
                 isSimulated = true;
             }
         } else {
             isSimulated = true;
-            console.log("Supabase Anon Key is leeg in app.js. Systeem draait in Simulatiemodus.");
+            console.log("Supabase Anon Key is empty in app.js. System is running in Simulation Mode.");
         }
     }
     initDatabase();
@@ -58,14 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             try {
                 const { data, error } = await supabaseClient
-                    .from('bookings')
-                    .select('*')
+                    .from('rental_orders')
+                    .select('*, rental_order_lines(quantity, product_id)')
                     .not('status', 'in', '("CANCELLED","RETURNED")');
                 if (error) {
                     console.error("Error fetching active bookings:", error);
                     return [];
                 }
-                return data || [];
+                return (data || []).map(order => {
+                    const line = (order.rental_order_lines || []).find(l => l.product_id === 'p1111111-1111-1111-1111-111111111111');
+                    return {
+                        ...order,
+                        earbud_count: line ? parseInt(line.quantity) : 1
+                    };
+                });
             } catch (e) {
                 console.error("Error fetching bookings from Supabase:", e);
                 return [];
@@ -87,51 +93,226 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function saveBookingToDatabase(paymentMethod, txnId, bookingData) {
-        const earbudCount = parseInt(bookingData.Aantal_Sets_W4_Pro);
-        const totalThb = parseInt(bookingData.Totaal_Bedrag_THB.replace(/[^0-9]/g, ''));
+        const earbudCount = parseInt(bookingData.quantity);
+        const totalThb = typeof bookingData.total_thb === 'string'
+            ? parseInt(bookingData.total_thb.replace(/[^0-9]/g, ''))
+            : parseInt(bookingData.total_thb);
         
-        const extraSim = bookingData.Inclusief_5G_SIM_Kaart === "Ja (+ ฿350 per stuk)" || bookingData.Inclusief_5G_SIM_Kaart === true;
-        const extraPowerbank = bookingData.Inclusief_Powerbank === "Ja (+ ฿175 per stuk)" || bookingData.Inclusief_Powerbank === true;
+        const extraSim = bookingData.extra_sim === true || bookingData.extra_sim === "Yes (+ à¸¿350 each)";
+        const extraPowerbank = bookingData.extra_powerbank === true || bookingData.extra_powerbank === "Yes (+ à¸¿175 each)";
 
         const record = {
-            customer_name: bookingData.Naam,
-            customer_email: bookingData.E_mailadres,
-            start_date: bookingData.Startdatum,
-            end_date: bookingData.Einddatum,
+            customer_name: bookingData.name,
+            customer_email: bookingData.email,
+            start_date: bookingData.start_date,
+            end_date: bookingData.end_date,
             earbud_count: earbudCount,
-            pickup_location: bookingData.Ophaal_en_Inleverlocatie,
+            pickup_location: bookingData.pickup_location,
             extra_sim: extraSim,
             extra_powerbank: extraPowerbank,
             total_price_thb: totalThb,
             payment_method: paymentMethod,
-            payment_status: "BETAALD",
+            payment_status: "PAID",
             transaction_id: txnId,
             status: "CONFIRMED"
         };
 
         if (isSimulated) {
+            // Save flat record cache for dashboard/reports simulation compatibility
             const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
             const bookings = JSON.parse(bookingsStr);
             record.id = 'b_' + Math.random().toString(36).substr(2, 9);
             record.created_at = new Date().toISOString();
             bookings.push(record);
             localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
-            console.log("Booking saved to localStorage simulation:", record);
+
+            // 1. Customer
+            const customersStr = localStorage.getItem('ttt_customers') || '[]';
+            const customers = JSON.parse(customersStr);
+            let customer = customers.find(c => c.email === bookingData.email);
+            if (!customer) {
+                customer = {
+                    id: 'c_' + Math.random().toString(36).substr(2, 9),
+                    name: bookingData.name,
+                    email: bookingData.email,
+                    phone: null,
+                    address: null,
+                    city: null,
+                    created_at: record.created_at
+                };
+                customers.push(customer);
+                localStorage.setItem('ttt_customers', JSON.stringify(customers));
+            }
+
+            // 2. Order
+            const ordersStr = localStorage.getItem('ttt_rental_orders') || '[]';
+            const orders = JSON.parse(ordersStr);
+            const newOrder = {
+                id: record.id,
+                customer_id: customer.id,
+                start_date: bookingData.start_date,
+                end_date: bookingData.end_date,
+                total_price: totalThb,
+                status: "CONFIRMED",
+                payment_method: paymentMethod,
+                payment_status: "PAID",
+                transaction_id: txnId,
+                pickup_location: bookingData.pickup_location,
+                created_at: record.created_at
+            };
+            orders.push(newOrder);
+            localStorage.setItem('ttt_rental_orders', JSON.stringify(orders));
+
+            // 3. Order Lines
+            const linesStr = localStorage.getItem('ttt_rental_order_lines') || '[]';
+            const lines = JSON.parse(linesStr);
+            lines.push({
+                id: 'l_' + Math.random().toString(36).substr(2, 9),
+                order_id: record.id,
+                product_id: 'p1111111-1111-1111-1111-111111111111',
+                quantity: earbudCount,
+                agreed_price_per_day: 250
+            });
+            if (extraSim) {
+                lines.push({
+                    id: 'l_' + Math.random().toString(36).substr(2, 9),
+                    order_id: record.id,
+                    product_id: 'p2222222-2222-2222-2222-222222222222',
+                    quantity: earbudCount,
+                    agreed_price_per_day: 350
+                });
+            }
+            if (extraPowerbank) {
+                lines.push({
+                    id: 'l_' + Math.random().toString(36).substr(2, 9),
+                    order_id: record.id,
+                    product_id: 'p3333333-3333-3333-3333-333333333333',
+                    quantity: earbudCount,
+                    agreed_price_per_day: 175
+                });
+            }
+            localStorage.setItem('ttt_rental_order_lines', JSON.stringify(lines));
+
+            // 4. Invoice
+            const invoicesStr = localStorage.getItem('ttt_invoices') || '[]';
+            const invoices = JSON.parse(invoicesStr);
+            const vatAmount = Math.round(totalThb - (totalThb / 1.07));
+            invoices.push({
+                id: 'i_' + Math.random().toString(36).substr(2, 9),
+                order_id: record.id,
+                date: bookingData.start_date,
+                total_amount: totalThb,
+                vat: vatAmount,
+                payment_status: 'paid'
+            });
+            localStorage.setItem('ttt_invoices', JSON.stringify(invoices));
+
+            console.log("Booking saved to localStorage simulation relational tables:", record);
             return record.id;
         } else {
             try {
-                const { data, error } = await supabaseClient
-                    .from('bookings')
-                    .insert([record])
-                    .select();
-                
-                if (error) {
-                    throw error;
+                // Relational database insertion flow
+                // 1. Get or Create Customer
+                let customerId = null;
+                const { data: customerData, error: customerFetchError } = await supabaseClient
+                    .from('customers')
+                    .select('id')
+                    .eq('email', bookingData.email)
+                    .maybeSingle();
+
+                if (customerFetchError) throw customerFetchError;
+
+                if (customerData) {
+                    customerId = customerData.id;
+                } else {
+                    const { data: newCust, error: custInsertError } = await supabaseClient
+                        .from('customers')
+                        .insert([{
+                            name: bookingData.name,
+                            email: bookingData.email,
+                            phone: null,
+                            address: null,
+                            city: null
+                        }])
+                        .select('id')
+                        .single();
+                    if (custInsertError) throw custInsertError;
+                    customerId = newCust.id;
                 }
-                console.log("Booking saved to Supabase live:", data);
-                return data && data[0] ? data[0].id : txnId;
+
+                // 2. Insert Order
+                const orderRecord = {
+                    customer_id: customerId,
+                    start_date: bookingData.start_date,
+                    end_date: bookingData.end_date,
+                    total_price: totalThb,
+                    status: "CONFIRMED",
+                    payment_method: paymentMethod,
+                    payment_status: "PAID",
+                    transaction_id: txnId,
+                    pickup_location: bookingData.pickup_location
+                };
+                
+                const { data: newOrder, error: orderInsertError } = await supabaseClient
+                    .from('rental_orders')
+                    .insert([orderRecord])
+                    .select('id')
+                    .single();
+                if (orderInsertError) throw orderInsertError;
+                const orderId = newOrder.id;
+
+                // 3. Insert Order Lines
+                const orderLines = [
+                    {
+                        order_id: orderId,
+                        product_id: 'p1111111-1111-1111-1111-111111111111',
+                        quantity: earbudCount,
+                        agreed_price_per_day: 250
+                    }
+                ];
+                
+                if (extraSim) {
+                    orderLines.push({
+                        order_id: orderId,
+                        product_id: 'p2222222-2222-2222-2222-222222222222',
+                        quantity: earbudCount,
+                        agreed_price_per_day: 350
+                    });
+                }
+                
+                if (extraPowerbank) {
+                    orderLines.push({
+                        order_id: orderId,
+                        product_id: 'p3333333-3333-3333-3333-333333333333',
+                        quantity: earbudCount,
+                        agreed_price_per_day: 175
+                    });
+                }
+                
+                const { error: linesInsertError } = await supabaseClient
+                    .from('rental_order_lines')
+                    .insert(orderLines);
+                if (linesInsertError) throw linesInsertError;
+
+                // 4. Insert Invoice
+                const vatAmount = Math.round(totalThb - (totalThb / 1.07));
+                const invoiceRecord = {
+                    order_id: orderId,
+                    date: bookingData.start_date,
+                    total_amount: totalThb,
+                    vat: vatAmount,
+                    payment_status: 'paid'
+                };
+                
+                const { error: invoiceInsertError } = await supabaseClient
+                    .from('invoices')
+                    .insert([invoiceRecord]);
+                if (invoiceInsertError) throw invoiceInsertError;
+
+                console.log("Booking successfully completed in live relational database!");
+                return orderId;
             } catch (error) {
-                console.error("Fout bij opslaan in Supabase database:", error);
+                console.error("Error saving to live database:", error);
                 throw error;
             }
         }
@@ -150,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitBtn = document.getElementById('btn-submit-booking');
 
         if (!startDate || !endDate || isNaN(quantity)) {
-            if (availText) availText.textContent = "Voer datums in om de voorraad te controleren...";
+            if (availText) availText.textContent = "Enter dates to check stock availability...";
             if (availDot) {
                 availDot.className = "availability-dot";
                 availDot.style.backgroundColor = "#ccc";
@@ -163,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const end = new Date(endDate);
 
         if (isNaN(start.getTime()) || isNaN(end.getTime()) || start >= end) {
-            if (availText) availText.textContent = "Voer een geldige huurperiode in...";
+            if (availText) availText.textContent = "Please enter a valid rental period...";
             if (availDot) {
                 availDot.className = "availability-dot";
                 availDot.style.backgroundColor = "#ccc";
@@ -172,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (availText) availText.textContent = "Beschikbaarheid controleren...";
+        if (availText) availText.textContent = "Checking availability...";
         if (availDot) {
             availDot.className = "availability-dot";
             availDot.style.backgroundColor = "#ffc107";
@@ -208,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     availDot.style.backgroundColor = "";
                 }
                 if (availText) {
-                    availText.textContent = `✓ ${available} sets beschikbaar in deze periode.`;
+                    availText.textContent = `âœ“ ${available} sets available in this period.`;
                 }
                 if (submitBtn) submitBtn.disabled = false;
             } else {
@@ -218,20 +399,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (availText) {
                     if (available <= 0) {
-                        availText.textContent = `✗ Uitverkocht! Geen sets beschikbaar van ${formatDateString(startDate)} t/m ${formatDateString(endDate)}.`;
+                        availText.textContent = `âœ— Sold out! No sets available from ${formatDateString(startDate)} to ${formatDateString(endDate)}.`;
                     } else {
-                        availText.textContent = `✗ Onvoldoende voorraad! Nog slechts ${available} set(s) beschikbaar.`;
+                        availText.textContent = `âœ— Insufficient stock! Only ${available} set(s) available.`;
                     }
                 }
                 if (submitBtn) submitBtn.disabled = true;
             }
         } catch (error) {
-            console.error("Fout bij controleren beschikbaarheid:", error);
+            console.error("Error checking availability:", error);
             if (availDot) {
                 availDot.className = "availability-dot bg-green";
             }
             if (availText) {
-                availText.textContent = "✓ Beschikbaarheid gecontroleerd (Simulatie)";
+                availText.textContent = "âœ“ Availability checked (Simulation)";
             }
             if (submitBtn) submitBtn.disabled = false;
         }
@@ -315,28 +496,28 @@ document.addEventListener('DOMContentLoaded', () => {
        2. LANGUAGE SHOWCASE GRID
        ========================================================================== */
     const languages = [
-        { name: "Nederlands (Dutch)", category: "West-Germaans", flag: "🇳🇱" },
-        { name: "English (British)", category: "14 Engelse Accenten", flag: "🇬🇧" },
-        { name: "English (American)", category: "14 Engelse Accenten", flag: "🇺🇸" },
-        { name: "English (Australian)", category: "14 Engelse Accenten", flag: "🇦🇺" },
-        { name: "English (Indian)", category: "14 Engelse Accenten", flag: "🇮🇳" },
-        { name: "Thai English (Tinglish)", category: "14 Engelse Accenten", flag: "🇹🇭" },
-        { name: "Thai (ไทย)", category: "Thais - Doeltaal", flag: "🇹🇭" },
-        { name: "Deutsch (German)", category: "West-Germaans", flag: "🇩🇪" },
-        { name: "Français (French)", category: "Romaans", flag: "🇫🇷" },
-        { name: "Español (Spanish)", category: "Romaans", flag: "🇪🇸" },
-        { name: "Italiano (Italian)", category: "Romaans", flag: "🇮🇹" },
-        { name: "Português (Portuguese)", category: "Romaans", flag: "🇵🇹" },
-        { name: "日本語 (Japanese)", category: "Oost-Aziatisch", flag: "🇯🇵" },
-        { name: "한국어 (Korean)", category: "Oost-Aziatisch", flag: "🇰🇷" },
-        { name: "简体中文 (Chinese Simplified)", category: "Oost-Aziatisch", flag: "🇨🇳" },
-        { name: "Русский (Russian)", category: "Slavisch", flag: "🇷🇺" },
-        { name: "العربية (Arabic)", category: "Semitisch", flag: "🇸🇦" },
-        { name: "Bahasa Indonesia", category: "Austronesisch", flag: "🇮🇩" },
-        { name: "Tiếng Việt (Vietnamese)", category: "Austroaziatisch", flag: "🇻🇳" },
-        { name: "Türkçe (Turkish)", category: "Turks", flag: "🇹🇷" },
-        { name: "Polski (Polish)", category: "Slavisch", flag: "🇵🇱" },
-        { name: "Svenska (Swedish)", category: "Noord-Germaans", flag: "🇸🇪" }
+        { name: "Nederlands (Dutch)", category: "West-Germaans", flag: "ðŸ‡³ðŸ‡±" },
+        { name: "English (British)", category: "14 Engelse Accenten", flag: "ðŸ‡¬ðŸ‡§" },
+        { name: "English (American)", category: "14 Engelse Accenten", flag: "ðŸ‡ºðŸ‡¸" },
+        { name: "English (Australian)", category: "14 Engelse Accenten", flag: "ðŸ‡¦ðŸ‡º" },
+        { name: "English (Indian)", category: "14 Engelse Accenten", flag: "ðŸ‡®ðŸ‡³" },
+        { name: "Thai English (Tinglish)", category: "14 Engelse Accenten", flag: "ðŸ‡¹ðŸ‡­" },
+        { name: "Thai (à¹„à¸—à¸¢)", category: "Thais - Doeltaal", flag: "ðŸ‡¹ðŸ‡­" },
+        { name: "Deutsch (German)", category: "West-Germaans", flag: "ðŸ‡©ðŸ‡ª" },
+        { name: "FranÃ§ais (French)", category: "Romaans", flag: "ðŸ‡«ðŸ‡·" },
+        { name: "EspaÃ±ol (Spanish)", category: "Romaans", flag: "ðŸ‡ªðŸ‡¸" },
+        { name: "Italiano (Italian)", category: "Romaans", flag: "ðŸ‡®ðŸ‡¹" },
+        { name: "PortuguÃªs (Portuguese)", category: "Romaans", flag: "ðŸ‡µðŸ‡¹" },
+        { name: "æ—¥æœ¬èªž (Japanese)", category: "Oost-Aziatisch", flag: "ðŸ‡¯ðŸ‡µ" },
+        { name: "í•œêµ­ì–´ (Korean)", category: "Oost-Aziatisch", flag: "ðŸ‡°ðŸ‡·" },
+        { name: "ç®€ä½“ä¸­æ–‡ (Chinese Simplified)", category: "Oost-Aziatisch", flag: "ðŸ‡¨ðŸ‡³" },
+        { name: "Ð ÑƒÑÑÐºÐ¸Ð¹ (Russian)", category: "Slavisch", flag: "ðŸ‡·ðŸ‡º" },
+        { name: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© (Arabic)", category: "Semitisch", flag: "ðŸ‡¸ðŸ‡¦" },
+        { name: "Bahasa Indonesia", category: "Austronesisch", flag: "ðŸ‡®ðŸ‡©" },
+        { name: "Tiáº¿ng Viá»‡t (Vietnamese)", category: "Austroaziatisch", flag: "ðŸ‡»ðŸ‡³" },
+        { name: "TÃ¼rkÃ§e (Turkish)", category: "Turks", flag: "ðŸ‡¹ðŸ‡·" },
+        { name: "Polski (Polish)", category: "Slavisch", flag: "ðŸ‡µðŸ‡±" },
+        { name: "Svenska (Swedish)", category: "Noord-Germaans", flag: "ðŸ‡¸ðŸ‡ª" }
     ];
 
     const languagesList = document.getElementById('languages-list');
@@ -462,197 +643,199 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const scenarios = {
         market: {
-            title: "Gesprek op de Lanpho Naklua Markt",
+            title: "Conversation at Lanpho Naklua Fish Market",
             startNode: "greet",
             nodes: {
                 greet: {
                     tourist: {
-                        text: "Hallo! Hoeveel kosten deze tijgergarnalen per kilo?",
-                        translation: "สวัสดีครับ กุ้งลายเสือพวกนี้กิโลละเท่าไหร่ครับ (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
+                        text: "Hello! How much do these tiger prawns cost per kilo?",
+                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¸à¸¸à¹‰à¸‡à¸¥à¸²à¸¢à¹€à¸ªà¸·à¸­à¸žà¸§à¸à¸™à¸µà¹‰à¸à¸´à¹‚à¸¥à¸¥à¸°à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
                     },
                     local: {
-                        name: "P'Som (Vishandelaar)",
-                        text: "สวัสดีจ้า! กิโลละ 450 บาทจ้า ลดได้นิดหน่อยนะจ๊ะ เอาเท่าไหร่ดีจ๊ะ",
-                        translation: "Hallo! Ze kosten 450 Baht per kilo. Ik kan een beetje korting geven. Hoeveel wil je hebben?"
+                        name: "P'Som (Fishmonger)",
+                        text: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸ˆà¹‰à¸²! à¸à¸´à¹‚à¸¥à¸¥à¸° 450 à¸šà¸²à¸—à¸ˆà¹‰à¸² à¸¥à¸”à¹„à¸”à¹‰à¸™à¸´à¸”à¸«à¸™à¹ˆà¸­à¸¢à¸™à¸°à¸ˆà¹Šà¸° à¹€à¸­à¸²à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸”à¸µà¸ˆà¹Šà¸°",
+                        translation: "Hello! They cost 450 Baht per kilo. I can give a small discount. How much would you like?"
                     },
                     choices: [
-                        { text: "Vraag om korting (2 kilo voor 800 Baht)", nextNode: "negotiate_discount" },
-                        { text: "Ga akkoord met de prijs (1 kilo)", nextNode: "agree_price" }
+                        { text: "Ask for a discount (2 kilos for 800 Baht)", nextNode: "negotiate_discount" },
+                        { text: "Agree to the price (1 kilo)", nextNode: "agree_price" }
                     ]
                 },
                 negotiate_discount: {
                     tourist: {
-                        text: "Ik wil graag twee kilo hebben. Kunnen we er 800 Baht van maken voor twee kilo?",
-                        translation: "ขอสองกิโลครับ ลดเหลือแปดร้อยบาทได้ไหมครับ (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
+                        text: "I would like two kilos. Can we make it 800 Baht for two kilos?",
+                        translation: "à¸‚à¸­à¸ªà¸­à¸‡à¸à¸´à¹‚à¸¥à¸„à¸£à¸±à¸š à¸¥à¸”à¹€à¸«à¸¥à¸·à¸­à¹à¸›à¸”à¸£à¹‰à¸­à¸¢à¸šà¸²à¸—à¹„à¸”à¹‰à¹„à¸«à¸¡à¸„à¸£à¸±à¸š (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
                     },
                     local: {
-                        name: "P'Som (Vishandelaar)",
-                        text: "โอเคจ้า คนหล่อ! ได้จ้า สองกิโล 800 บาท เดี๋ยวป้าแถมหอยแมลงภู่ให้ด้วยจ้า",
-                        translation: "Oké knappe man! Dat is goed, twee kilo voor 800 Baht. Ik doe er gratis wat mosselen bij!"
+                        name: "P'Som (Fishmonger)",
+                        text: "à¹‚à¸­à¹€à¸„à¸ˆà¹‰à¸² à¸„à¸™à¸«à¸¥à¹ˆà¸­! à¹„à¸”à¹‰à¸ˆà¹‰à¸² à¸ªà¸­à¸‡à¸à¸´à¹‚à¸¥ 800 à¸šà¸²à¸— à¹€à¸”à¸µà¹‹à¸¢à¸§à¸›à¹‰à¸²à¹à¸–à¸¡à¸«à¸­à¸¢à¹à¸¡à¸¥à¸‡à¸ à¸¹à¹ˆà¹ƒà¸«à¹‰à¸”à¹‰à¸§à¸¢à¸ˆà¹‰à¸²",
+                        translation: "Okay handsome! Sure, two kilos for 800 Baht. I will throw in some free mussels too!"
                     },
                     choices: [
-                        { text: "Bedank haar vriendelijk", nextNode: "thanks_happy" }
+                        { text: "Thank her politely", nextNode: "thanks_happy" }
                     ]
                 },
                 agree_price: {
                     tourist: {
-                        text: "Dat is een prima prijs. Ik neem één kilo van je over.",
-                        translation: "ราคาดีครับ เอาหนึ่งกิโลครับ (Racha dee krap. Ao nueng kilo krap.)"
+                        text: "That is a good price. I will take one kilo.",
+                        translation: "à¸£à¸²à¸„à¸²à¸”à¸µà¸„à¸£à¸±à¸š à¹€à¸­à¸²à¸«à¸™à¸¶à¹ˆà¸‡à¸à¸´à¹‚à¸¥à¸„à¸£à¸±à¸š (Racha dee krap. Ao nueng kilo krap.)"
                     },
                     local: {
-                        name: "P'Som (Vishandelaar)",
-                        text: "ได้เลยจ้า! เดี๋ยวป้าเลือกตัวโตๆ ให้เลยนะจ๊ะ รอสักครู่จ้า",
-                        translation: "Natuurlijk! Ik zal een paar mooie grote voor je uitkiezen. Een momentje geduld alstublieft."
+                        name: "P'Som (Fishmonger)",
+                        text: "à¹„à¸”à¹‰à¹€à¸¥à¸¢à¸ˆà¹‰à¸²! à¹€à¸”à¸µà¹‹à¸¢à¸§à¸›à¹‰à¸²à¹€à¸¥à¸·à¸­à¸à¸•à¸±à¸§à¹‚à¸•à¹† à¹ƒà¸«à¹‰à¹€à¸¥à¸¢à¸™à¸°à¸ˆà¹Šà¸° à¸£à¸­à¸ªà¸±à¸à¸„à¸£à¸¹à¹ˆà¸ˆà¹‰à¸²",
+                        translation: "Sure! I will select some nice big ones for you. A moment please."
                     },
                     choices: [
-                        { text: "Bedank haar", nextNode: "thanks_happy" }
+                        { text: "Thank her", nextNode: "thanks_happy" }
                     ]
                 },
                 thanks_happy: {
                     tourist: {
-                        text: "Geweldig! Heel erg bedankt voor de uitstekende service!",
-                        translation: "เยี่ยมเลยครับ ขอบคุณมากสำหรับบริการที่ดีเยี่ยมนะครับ (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
+                        text: "Great! Thank you very much for the excellent service!",
+                        translation: "à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸šà¸£à¸´à¸à¸²à¸£à¸—à¸µà¹ˆà¸”à¸µà¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸™à¸°à¸„à¸£à¸±à¸š (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
                     },
                     local: {
-                        name: "P'Som (Vishandelaar)",
-                        text: "ยินดีมากจ้า เที่ยวพัทยาให้สนุกนะจ๊ะ! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
-                        translation: "Heel graag gedaan, veel plezier in Pattaya!"
+                        name: "P'Som (Fishmonger)",
+                        text: "à¸¢à¸´à¸™à¸”à¸µà¸¡à¸²à¸à¸ˆà¹‰à¸² à¹€à¸—à¸µà¹ˆà¸¢à¸§à¸žà¸±à¸—à¸¢à¸²à¹ƒà¸«à¹‰à¸ªà¸™à¸¸à¸à¸™à¸°à¸ˆà¹Šà¸°! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
+                        translation: "You are very welcome, have fun in Pattaya!"
                     },
                     choices: [] // End node
                 }
             }
         },
         taxi: {
-            title: "Songthaew Rit naar Walking Street",
+            title: "Songthaew Ride to Walking Street",
             startNode: "greet",
             nodes: {
                 greet: {
                     tourist: {
-                        text: "Goedenavond, gaat u naar Walking Street?",
-                        translation: "สวัสดีครับ ไปถนนคนเดินวอคกิ้งสตรีทไหมครับ (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
+                        text: "Good evening, are you going to Walking Street?",
+                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¹„à¸›à¸–à¸™à¸™à¸„à¸™à¹€à¸”à¸´à¸™à¸§à¸­à¸„à¸à¸´à¹‰à¸‡à¸ªà¸•à¸£à¸µà¸—à¹„à¸«à¸¡à¸„à¸£à¸±à¸š (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
                     },
                     local: {
-                        name: "Looong (Chauffeur)",
-                        text: "ไปครับ ขึ้นมาเลยครับ คนละ 20 บาทครับผม",
-                        translation: "Ja, ik ga! Stap maar in, het is 20 Baht per persoon."
+                        name: "Looong (Driver)",
+                        text: "à¹„à¸›à¸„à¸£à¸±à¸š à¸‚à¸¶à¹‰à¸™à¸¡à¸²à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š à¸„à¸™à¸¥à¸° 20 à¸šà¸²à¸—à¸„à¸£à¸±à¸šà¸œà¸¡",
+                        translation: "Yes, I am! Get in, it is 20 Baht per person."
                     },
                     choices: [
-                        { text: "Stap in voor 20 Baht per persoon", nextNode: "taxi_standard" },
-                        { text: "Vraag om direct bij de ingang afgezet te worden (4 personen)", nextNode: "taxi_direct" }
+                        { text: "Hop in for 20 Baht per person", nextNode: "taxi_standard" },
+                        { text: "Ask to be dropped off directly at the entrance (4 people)", nextNode: "taxi_direct" }
                     ]
                 },
                 taxi_standard: {
                     tourist: {
-                        text: "Perfect, we stappen in. 20 Baht is prima.",
-                        translation: "ตกลงครับ ขึ้นรถเลย คนละยี่สิบบาทครับ (Tok-long krap, khuen rot loey, khon la yee-sip baht krap.)"
+                        text: "Perfect, we will get in. 20 Baht is fine.",
+                        translation: "à¸•à¸à¸¥à¸‡à¸„à¸£à¸±à¸š à¸‚à¸¶à¹‰à¸™à¸£à¸–à¹€à¸¥à¸¢ à¸„à¸™à¸¥à¸°à¸¢à¸µà¹ˆà¸ªà¸´à¸šà¸šà¸²à¸—à¸„à¸£à¸±à¸š (Tok-long krap, khuen rot loey, khon la yee-sip baht krap.)"
                     },
                     local: {
-                        name: "Looong (Chauffeur)",
-                        text: "ดีครับ! เดี๋ยวผ่านถนนเลียบหาดแล้วจะจอดส่งที่สี่แยกข้างหน้านะครับ",
-                        translation: "Mooi! We rijden langs Beach Road en ik zet je af bij de kruising hier vlakbij."
+                        name: "Looong (Driver)",
+                        text: "à¸”à¸µà¸„à¸£à¸±à¸š! à¹€à¸”à¸µà¹‹à¸¢à¸§à¸œà¹ˆà¸²à¸™à¸–à¸™à¸™à¹€à¸¥à¸µà¸¢à¸šà¸«à¸²à¸”à¹à¸¥à¹‰à¸§à¸ˆà¸°à¸ˆà¸­à¸”à¸ªà¹ˆà¸‡à¸—à¸µà¹ˆà¸ªà¸µà¹ˆà¹à¸¢à¸à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¸™à¸°à¸„à¸£à¸±à¸š",
+                        translation: "Great! We will drive along Beach Road and I will drop you off at the intersection nearby."
                     },
                     choices: [
-                        { text: "Bedank hem bij aankomst", nextNode: "taxi_arrive" }
+                        { text: "Thank him upon arrival", nextNode: "taxi_arrive" }
                     ]
                 },
                 taxi_direct: {
                     tourist: {
-                        text: "Wacht, kunt u ons rechtstreeks bij de ingang afzetten? We zijn met 4 personen.",
-                        translation: "เดี๋ยวครับ ช่วยไปส่งที่หน้าทางเข้าเลยได้ไหมครับ พวกเรามีกันสี่คน (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
+                        text: "Wait, can you drop us off directly at the entrance? We are 4 people.",
+                        translation: "à¹€à¸”à¸µà¹‹à¸¢à¸§à¸„à¸£à¸±à¸š à¸Šà¹ˆà¸§à¸¢à¹„à¸›à¸ªà¹ˆà¸‡à¸—à¸µà¹ˆà¸«à¸™à¹‰à¸²à¸—à¸²à¸‡à¹€à¸‚à¹‰à¸²à¹€à¸¥à¸¢à¹„à¸”à¹‰à¹„à¸«à¸¡à¸„à¸£à¸±à¸š à¸žà¸§à¸à¹€à¸£à¸²à¸¡à¸µà¸à¸±à¸™à¸ªà¸µà¹ˆà¸„à¸™ (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
                     },
                     local: {
-                        name: "Looong (Chauffeur)",
-                        text: "ถ้าเหมาไปส่งข้างหน้าเลย คิดเหมา 150 บาทละกันครับ สะดวกกว่า ไม่ต้องเดินไกล",
-                        translation: "Als je de hele bus huurt om direct voor de ingang afgezet te worden, reken ik 150 Baht in totaal. Dat is comfortabeler en scheelt lopen."
+                        name: "Looong (Driver)",
+                        text: "à¸–à¹‰à¸²à¹€à¸«à¸¡à¸²à¹„à¸›à¸ªà¹ˆà¸‡à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¹€à¸¥à¸¢ à¸„à¸´à¸”à¹€à¸«à¸¡à¸² 150 à¸šà¸²à¸—à¸¥à¸°à¸à¸±à¸™à¸„à¸£à¸±à¸š à¸ªà¸°à¸”à¸§à¸à¸à¸§à¹ˆà¸² à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸”à¸´à¸™à¹„à¸à¸¥",
+                        translation: "If you charter the bus to drop you off directly at the entrance, I will charge 150 Baht in total. It is more convenient and saves walking."
                     },
                     choices: [
-                        { text: "Accepteer 150 Baht voor directe rit", nextNode: "taxi_direct_accept" },
-                        { text: "Rijd toch mee voor 20 Baht p.p.", nextNode: "taxi_standard" }
+                        { text: "Accept 150 Baht for the direct ride", nextNode: "taxi_direct_accept" },
+                        { text: "Ride along for 20 Baht p.p. instead", nextNode: "taxi_standard" }
                     ]
                 },
                 taxi_direct_accept: {
                     tourist: {
-                        text: "150 Baht is perfect. Laten we gaan. Dank u wel!",
-                        translation: "ร้อยห้าสิบบาทตกลงครับ ไปกันเลย ขอบคุณครับ (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
+                        text: "150 Baht is perfect. Let's go. Thank you!",
+                        translation: "à¸£à¹‰à¸­à¸¢à¸«à¹‰à¸²à¸ªà¸´à¸šà¸šà¸²à¸—à¸•à¸à¸¥à¸‡à¸„à¸£à¸±à¸š à¹„à¸›à¸à¸±à¸™à¹€à¸¥à¸¢ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸„à¸£à¸±à¸š (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
                     },
                     local: {
-                        name: "Looong (Chauffeur)",
-                        text: "ได้เลยครับ! นั่งให้สบายเลย เดี๋ยวซิ่งไปส่งให้ถึงที่เลยครับ",
-                        translation: "Geen probleem! Ga lekker zitten, ik breng je er direct naartoe."
+                        name: "Looong (Driver)",
+                        text: "à¹„à¸”à¹‰à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š! à¸™à¸±à¹ˆà¸‡à¹ƒà¸«à¹‰à¸ªà¸šà¸²à¸¢à¹€à¸¥à¸¢ à¹€à¸”à¸µà¹‹à¸¢à¸§à¸‹à¸´à¹ˆà¸‡à¹„à¸›à¸ªà¹ˆà¸‡à¹ƒà¸«à¹‰à¸–à¸¶à¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸¢à¸„à¸£à¸±à¸š",
+                        translation: "No problem! Have a comfortable seat, I'll drive you there directly."
                     },
                     choices: [
-                        { text: "Bedank hem bij aankomst", nextNode: "taxi_arrive" }
-                    ]
-                },
-                taxi_arrive: {
+                        { text: "Thank him upon arrival", nextNo                docs_provided: {
                     tourist: {
-                        text: "We zijn er! Dank u wel voor de veilige rit.",
-                        translation: "ถึงแล้วครับ ขอบคุณที่ขับรถมาส่งอย่างปลอดภัยนะครับ (Thueng laew krap. Khop khun tee khap rot ma song yangปลอดภัย na krap.)"
-                    },
-                    local: {
-                        name: "Looong (Chauffeur)",
-                        text: "เที่ยวให้สนุกนะครับ โชคดีครับ! (Thiew hai sanook na krap. Chok dee krap!)",
-                        translation: "Veel plezier daar en succes!"
-                    },
-                    choices: []
-                }
-            }
-        },
-        resort: {
-            title: "Inchecken bij Jomtien Bay Resort",
-            startNode: "greet",
-            nodes: {
-                greet: {
-                    tourist: {
-                        text: "Hallo, ik wil graag inchecken. Mijn reservering staat op naam van Matthijs.",
-                        translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ในชื่อ แมทธิว ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+                        text: "Here you go. Here are my passport and booking confirmation.",
+                        translation: "à¸™à¸µà¹ˆà¸„à¸£à¸±à¸š à¸žà¸²à¸ªà¸›à¸­à¸£à¹Œà¸•à¸à¸±à¸šà¹ƒà¸šà¸ˆà¸­à¸‡à¸„à¸£à¸±à¸š (Nee krap, passport kab bai jong krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "สวัสดีค่ะ ยินดีต้อนรับค่ะ ขอเอกสารยืนยันการจองกับพาสปอร์ตด้วยนะคะ",
-                        translation: "Hallo, welkom! Mag ik uw boekingsbevestiging en uw paspoort alstublieft?"
+                        text: "à¸‚à¸­à¸šà¸„à¸¸à¸“à¸„à¹ˆà¸° à¸ˆà¸­à¸‡à¸«à¹‰à¸­à¸‡à¸”à¸µà¸¥à¸±à¸à¸‹à¹Œà¹„à¸§à¹‰ 5 à¸„à¸·à¸™à¸™à¸°à¸„à¸° à¸£à¸šà¸à¸§à¸™à¸ªà¸­à¸šà¸–à¸²à¸¡à¸§à¹ˆà¸²à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸–à¸²à¸¡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸šà¸à¸²à¸£à¹€à¸‚à¹‰à¸²à¸žà¸±à¸à¹„à¸«à¸¡à¸„à¸°",
+                        translation: "Thank you. You booked a Deluxe room for 5 nights. Would you like any additional information about your stay?"
                     },
                     choices: [
-                        { text: "Overhandig paspoort & Boekingsbewijs", nextNode: "docs_provided" }
-                    ]
-                },
-                docs_provided: {
-                    tourist: {
-                        text: "Alstublieft. Hier zijn mijn paspoort en boekingsbewijs.",
-                        translation: "นี่ครับ พาสปอร์ตกับใบจองครับ (Nee krap, passport kab bai jong krap.)"
-                    },
-                    local: {
-                        name: "Kwan (Receptionist)",
-                        text: "ขอบคุณค่ะ จองห้องดีลักซ์ไว้ 5 คืนนะคะ รบกวนสอบถามว่าต้องการถามข้อมูลเพิ่มเติมเกี่ยวกับการเข้าพักไหมคะ",
-                        translation: "Dank u wel. U heeft een Deluxe kamer geboekt voor 5 nachten. Wilt u nog specifieke informatie over uw verblijf?"
-                    },
-                    choices: [
-                        { text: "Vraag naar ontbijt & Openingstijden zwembad", nextNode: "pool_breakfast" },
-                        { text: "Vraag naar wifi-code & Borgsom", nextNode: "wifi_deposit" }
+                        { text: "Ask about breakfast & pool opening hours", nextNode: "pool_breakfast" },
+                        { text: "Ask about Wi-Fi code & security deposit", nextNode: "wifi_deposit" }
                     ]
                 },
                 pool_breakfast: {
                     tourist: {
-                        text: "Is het ontbijt inbegrepen en hoe laat is het zwembad geopend?",
-                        translation: "รวมอาหารเช้าด้วยไหมครับ แล้วสระว่ายน้ำเปิดถึงกี่โมงครับ (Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
+                        text: "Is breakfast included and what time does the pool open?",
+                        translation: "à¸£à¸§à¸¡à¸­à¸²à¸«à¸²à¸£à¹€à¸Šà¹‰à¸²à¸”à¹‰à¸§à¸¢à¹„à¸«à¸¡à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸ªà¸£à¸°à¸§à¹ˆà¸²à¸¢à¸™à¹‰à¸³à¹€à¸›à¸´à¸”à¸–à¸¶à¸‡à¸à¸µà¹ˆà¹‚à¸¡à¸‡à¸„à¸£à¸±à¸š (Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "รวมอาหารเช้าเรียบร้อยค่ะ ทานได้ที่ห้องอาหารชั้นหนึ่ง ส่วนสระว่ายน้ำเปิดเจ็ดโมงเช้าถึงสี่ทุ่มค่ะ",
-                        translation: "Ja, ontbijt is inbegrepen en wordt geserveerd in het restaurant op de eerste verdieping. Het zwembad is open van 07:00 tot 22:00 uur."
+                        text: "à¸£à¸§à¸¡à¸­à¸²à¸«à¸²à¸£à¹€à¸Šà¹‰à¸²à¹€à¸£à¸µà¸¢à¸šà¸£à¹‰à¸­à¸¢à¸„à¹ˆà¸° à¸—à¸²à¸™à¹„à¸”à¹‰à¸—à¸µà¹ˆà¸«à¹‰à¸­à¸‡à¸­à¸²à¸«à¸²à¸£à¸Šà¸±à¹‰à¸™à¸«à¸™à¸¶à¹ˆà¸‡ à¸ªà¹ˆà¸§à¸™à¸ªà¸£à¸°à¸§à¹ˆà¸²à¸¢à¸™à¹‰à¸³à¹€à¸›à¸´à¸”à¹€à¸ˆà¹‡à¸”à¹‚à¸¡à¸‡à¹€à¸Šà¹‰à¸²à¸–à¸¶à¸‡à¸ªà¸µà¹ˆà¸—à¸¸à¹ˆà¸¡à¸„à¹ˆà¸°",
+                        translation: "Yes, breakfast is included and is served in the restaurant on the first floor. The pool is open from 7:00 AM to 10:00 PM."
                     },
                     choices: [
-                        { text: "Rond check-in af", nextNode: "checkin_done" }
+                        { text: "Finish check-in", nextNode: "checkin_done" }
+                    ]
+                },
+                wifi_deposit: {
+                    tourist: {
+                        text: "What is the Wi-Fi code and how does the security deposit work?",
+                        translation: "à¸£à¸«à¸±à¸ªà¹„à¸§à¹„à¸Ÿà¸­à¸°à¹„à¸£à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸•à¹‰à¸­à¸‡à¸§à¸²à¸‡à¹€à¸‡à¸´à¸™à¸¡à¸±à¸”à¸ˆà¸³à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "à¹„à¸§à¹„à¸Ÿà¹ƒà¸Šà¹‰à¹„à¸”à¹‰à¸Ÿà¸£à¸µà¸—à¸±à¹ˆà¸§à¸—à¸±à¹‰à¸‡à¸£à¸µà¸ªà¸­à¸£à¹Œà¸—à¸„à¹ˆà¸° à¸£à¸«à¸±à¸ªà¸­à¸¢à¸¹à¹ˆà¸šà¸™à¸‹à¸­à¸‡à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” à¸ªà¹ˆà¸§à¸™à¸¡à¸±à¸”à¸ˆà¸³à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” 1,000 à¸šà¸²à¸—à¸«à¸£à¸·à¸­à¸ªà¹à¸à¸™à¸šà¸±à¸•à¸£à¹€à¸„à¸£à¸”à¸´à¸•à¸„à¹ˆà¸°",
+                        translation: "Wi-Fi is free throughout the resort, the code is on your keycard envelope. The deposit is 1,000 Baht in cash or a credit card imprint."
+                    },
+                    choices: [
+                        { text: "Finish check-in", nextNode: "checkin_done" }
+                    ]
+                },
+                checkin_done: {
+                    tourist: {
+                        text: "Fantastic. Thank you very much for the clear explanation and the keys.",
+                        translation: "à¸¢à¸­à¸”à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸¡à¸²à¸ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸—à¸µà¹ˆà¸Šà¸±à¸”à¹€à¸ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
+                        translation: "You're welcome! Here is your keycard for room 402. Have a wonderful stay!"
+                    },
+                    choices: []
+                }ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
+                    },
+                    local: {
+                        name: "Kwan (Receptionist)",
+                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
+                        translation: "You're welcome! Here is your keycard for room 402. Have a wonderful stay!"
+                        translation: "Yes, breakfast is included and is served in the restaurant on the first floor. The pool is open from 7:00 AM to 10:00 PM."
+                    },
+                    choices: [
+                        { text: "Finish check-in", nextNode: "checkin_done" }
                     ]
                 },
                 wifi_deposit: {
                     tourist: {
                         text: "Wat is de wifi-code en hoe zit het met de borgsom?",
-                        translation: "รหัสไวไฟอะไรครับ แล้วต้องวางเงินมัดจำเท่าไหร่ครับ (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
+                        translation: "à¸£à¸«à¸±à¸ªà¹„à¸§à¹„à¸Ÿà¸­à¸°à¹„à¸£à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸•à¹‰à¸­à¸‡à¸§à¸²à¸‡à¹€à¸‡à¸´à¸™à¸¡à¸±à¸”à¸ˆà¸³à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "ไวไฟใช้ได้ฟรีทั่วทั้งรีสอร์ทค่ะ รหัสอยู่บนซองคีย์การ์ด ส่วนมัดจำคีย์การ์ด 1,000 บาทหรือสแกนบัตรเครดิตค่ะ",
+                        text: "à¹„à¸§à¹„à¸Ÿà¹ƒà¸Šà¹‰à¹„à¸”à¹‰à¸Ÿà¸£à¸µà¸—à¸±à¹ˆà¸§à¸—à¸±à¹‰à¸‡à¸£à¸µà¸ªà¸­à¸£à¹Œà¸—à¸„à¹ˆà¸° à¸£à¸«à¸±à¸ªà¸­à¸¢à¸¹à¹ˆà¸šà¸™à¸‹à¸­à¸‡à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” à¸ªà¹ˆà¸§à¸™à¸¡à¸±à¸”à¸ˆà¸³à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” 1,000 à¸šà¸²à¸—à¸«à¸£à¸·à¸­à¸ªà¹à¸à¸™à¸šà¸±à¸•à¸£à¹€à¸„à¸£à¸”à¸´à¸•à¸„à¹ˆà¸°",
                         translation: "Wifi is gratis in het hele resort, de code staat op uw sleutelkaart-envelop. De borg is 1.000 Baht in contanten of een creditcard-afdruk."
                     },
                     choices: [
@@ -662,11 +845,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkin_done: {
                     tourist: {
                         text: "Fantastisch. Hartelijk dank voor de heldere uitleg en de sleutels.",
-                        translation: "ยอดเยี่ยมมาก ขอบคุณมากสำหรับคำอธิบายที่ชัดเจนและคีย์การ์ดนะครับ (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
+                        translation: "à¸¢à¸­à¸”à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸¡à¸²à¸ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸—à¸µà¹ˆà¸Šà¸±à¸”à¹€à¸ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "ยินดีค่ะ นี่ค่ะคีย์การ์ดห้อง 402 ขอให้พักผ่อนอย่างมีความสุขนะคะ! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
+                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
                         translation: "Graag gedaan! Hier is uw sleutelkaart voor kamer 402. Een heel fijn verblijf gewenst!"
                     },
                     choices: []
@@ -698,11 +881,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSimSound.addEventListener('click', () => {
             simSoundEnabled = !simSoundEnabled;
             if (simSoundEnabled) {
-                simSoundIcon.textContent = "🔊";
-                btnSimSound.title = "Geluid Dempen";
+                simSoundIcon.textContent = "ðŸ”Š";
+                btnSimSound.title = "Mute Sound";
             } else {
-                simSoundIcon.textContent = "🔇";
-                btnSimSound.title = "Geluid Inschakelen";
+                simSoundIcon.textContent = "ðŸ”‡";
+                btnSimSound.title = "Unmute Sound";
                 stopSpeaking();
             }
         });
@@ -729,7 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (simMessages) {
             simMessages.innerHTML = `
                 <div class="msg-bubble glass msg-local" style="align-self: center; border-radius: var(--radius-md); text-align: center; max-width: 90%;">
-                    <div class="msg-text">💡 Kies een scenario aan de linkerkant of klik op <strong>"Start Gesprek"</strong> om te beginnen!</div>
+                    <div class="msg-text">ðŸ’¡ Kies een scenario aan de linkerkant of klik op <strong>"Start Gesprek"</strong> om te beginnen!</div>
                 </div>
             `;
         }
@@ -758,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- STEP 1: Tourist speaks ---
         if (simAiStatus) {
             simAiStatus.style.display = 'flex';
-            if (simAiStatusText) simAiStatusText.textContent = "U praat in het Nederlands...";
+            if (simAiStatusText) simAiStatusText.textContent = "You are speaking in English...";
         }
         if (simStatusIndicator) {
             simStatusIndicator.classList.remove('blinking');
@@ -771,15 +954,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const touristBubble = document.createElement('div');
             touristBubble.className = "msg-bubble glass msg-tourist";
             touristBubble.innerHTML = `
-                <div class="msg-meta">Jij (Toerist)</div>
-                <div class="msg-text">${node.tourist.text} <button class="btn-replay-speech btn-speak-main" title="Beluister origineel" type="button">🔊</button></div>
-                <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Beluister vertaling" type="button">🔊</button> Vertaling: "${node.tourist.translation}"</div>
+                <div class="msg-meta">You (Tourist)</div>
+                <div class="msg-text">${node.tourist.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">ðŸ”Š</button></div>
+                <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">ðŸ”Š</button> Translation: "${node.tourist.translation}"</div>
             `;
             
             // Register Speech Replay button clicks
             touristBubble.querySelector('.btn-speak-main').addEventListener('click', (e) => {
                 e.stopPropagation();
-                speakText(node.tourist.text, 'nl');
+                speakText(node.tourist.text, 'en');
             });
             touristBubble.querySelector('.btn-speak-trans').addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -795,11 +978,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 simMessages.scrollTop = simMessages.scrollHeight;
             }
 
-            // Speak tourist voice in Dutch, then wait for it to end
-            speakText(node.tourist.text, 'nl', () => {
+            // Speak tourist voice in English, then wait for it to end
+            speakText(node.tourist.text, 'en', () => {
                 // Tourist finished speaking. Wait 1.5s (natural pause) before starting local response
                 setTimeout(() => {
-                    if (simAiStatusText) simAiStatusText.textContent = "Lokale gesprekspartner antwoordt...";
+                    if (simAiStatusText) simAiStatusText.textContent = "Local conversation partner is responding...";
                     if (simAiStatus) simAiStatus.style.display = 'flex';
                     
                     // 1.5s delay for Local response translation processing
@@ -809,8 +992,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         localBubble.className = "msg-bubble glass msg-local";
                         localBubble.innerHTML = `
                             <div class="msg-meta">${node.local.name}</div>
-                            <div class="msg-text">${node.local.text} <button class="btn-replay-speech btn-speak-main" title="Beluister origineel" type="button">🔊</button></div>
-                            <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Beluister vertaling" type="button">🔊</button> Vertaling: "${node.local.translation}"</div>
+                            <div class="msg-text">${node.local.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">ðŸ”Š</button></div>
+                            <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">ðŸ”Š</button> Translation: "${node.local.translation}"</div>
                         `;
 
                         // Register Speech Replays for Local
@@ -820,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         localBubble.querySelector('.btn-speak-trans').addEventListener('click', (e) => {
                             e.stopPropagation();
-                            speakText(node.local.translation, 'nl');
+                            speakText(node.local.translation, 'en');
                         });
 
                         if (simMessages) {
@@ -852,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
         simChoices.innerHTML = '';
 
         const node = scenarios[currentScenario].nodes[currentNodeId];
-        const isStart = simMessages && simMessages.innerHTML.includes('💡');
+        const isStart = simMessages && simMessages.innerHTML.includes('ðŸ’¡');
         
         if (isStart) {
             const startBtn = document.createElement('button');
@@ -880,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
             endText.className = "text-green font-bold";
             endText.style.fontSize = "0.95rem";
             endText.style.padding = "10px";
-            endText.textContent = "✓ Gesprek voltooid!";
+            endText.textContent = "âœ“ Gesprek voltooid!";
             simChoices.appendChild(endText);
 
             const resetBtn = document.createElement('button');
@@ -1020,23 +1203,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const quantity = parseInt(earbudCountInput ? earbudCountInput.value : 1);
         
         if (days <= 0) {
-            if (recDuration) recDuration.textContent = 'Selecteer datums';
+            if (recDuration) recDuration.textContent = 'Select dates';
             if (recItemsList) {
                 recItemsList.innerHTML = `
                     <div class="receipt-row-item text-muted">
-                        <span>Voer geldige huurperiode in</span>
+                        <span>Enter valid rental period</span>
                         <span>-</span>
                     </div>
                 `;
             }
             if (recDiscountBox) recDiscountBox.style.display = 'none';
-            if (recTotalThb) recTotalThb.textContent = '฿0';
-            if (recTotalEur) recTotalEur.textContent = '€0.00';
+            if (recTotalThb) recTotalThb.textContent = 'à¸¿0';
+            if (recTotalEur) recTotalEur.textContent = 'â‚¬0.00';
             return;
         }
 
         // 1. Duration text
-        if (recDuration) recDuration.textContent = `${days} ${days === 1 ? 'dag' : 'dagen'}`;
+        if (recDuration) recDuration.textContent = `${days} ${days === 1 ? 'day' : 'days'}`;
 
         // 2. Base Cost
         const baseCostPerDay = DAILY_RATE;
@@ -1067,16 +1250,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (recItemsList) {
             let itemsHtml = `
                 <div class="receipt-row-item">
-                    <span>Huur W4 Pro (${quantity}x set, ${days}d à ฿250):</span>
-                    <span>฿${rawRentalTotal}</span>
+                    <span>W4 Pro Rental (${quantity}x set, ${days}d @ à¸¿250):</span>
+                    <span>à¸¿${rawRentalTotal}</span>
                 </div>
             `;
 
             if (hasSim) {
                 itemsHtml += `
                     <div class="receipt-row-item">
-                        <span>5G SIM-kaart (${quantity}x flat):</span>
-                        <span>฿${simCost}</span>
+                        <span>5G SIM Card (${quantity}x flat):</span>
+                        <span>à¸¿${simCost}</span>
                     </div>
                 `;
             }
@@ -1084,8 +1267,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (hasPowerbank) {
                 itemsHtml += `
                     <div class="receipt-row-item">
-                        <span>Premium Powerbank (${quantity}x flat):</span>
-                        <span>฿${powerbankCost}</span>
+                        <span>Premium Power Bank (${quantity}x flat):</span>
+                        <span>à¸¿${powerbankCost}</span>
                     </div>
                 `;
             }
@@ -1096,13 +1279,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 5. Update discounts & totals
         if (discountAmount > 0) {
             if (recDiscountBox) recDiscountBox.style.display = 'flex';
-            if (recDiscount) recDiscount.textContent = `-฿${discountAmount} (${discountPercent * 100}%)`;
+            if (recDiscount) recDiscount.textContent = `-à¸¿${discountAmount} (${discountPercent * 100}%)`;
         } else {
             if (recDiscountBox) recDiscountBox.style.display = 'none';
         }
 
-        if (recTotalThb) recTotalThb.textContent = `฿${totalThb}`;
-        if (recTotalEur) recTotalEur.textContent = `€${totalEur.toFixed(2)}`;
+        if (recTotalThb) recTotalThb.textContent = `à¸¿${totalThb}`;
+        if (recTotalEur) recTotalEur.textContent = `â‚¬${totalEur.toFixed(2)}`;
 
         // Check availability in the background
         checkAvailability();
@@ -1162,17 +1345,17 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Store active data for payment steps
             activeBookingData = {
-                Naam: name,
-                E_mailadres: email,
-                Startdatum: startDate,
-                Einddatum: endDate,
-                Aantal_Sets_W4_Pro: earbudCount,
-                Ophaal_en_Inleverlocatie: pickupLoc,
-                Inclusief_5G_SIM_Kaart: hasSim ? "Ja (+ ฿350 per stuk)" : "Nee",
-                Inclusief_Powerbank: hasPowerbank ? "Ja (+ ฿175 per stuk)" : "Nee",
-                Huurperiode: durationText,
-                Totaal_Bedrag_THB: totalThb,
-                Totaal_Bedrag_EUR: totalEur
+                name: name,
+                email: email,
+                start_date: startDate,
+                end_date: endDate,
+                quantity: earbudCount,
+                pickup_location: pickupLoc,
+                extra_sim: hasSim ? "Yes (+ à¸¿350 each)" : "No",
+                extra_powerbank: hasPowerbank ? "Yes (+ à¸¿175 each)" : "No",
+                duration: durationText,
+                total_thb: totalThb,
+                total_eur: totalEur
             };
 
             // Switch to payment step wizard
@@ -1206,7 +1389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (payCardBtn) {
             originalPayCardText = payCardBtn.textContent;
             payCardBtn.disabled = true;
-            payCardBtn.textContent = "Verwerken...";
+            payCardBtn.textContent = "Processing...";
         }
         if (cancelBtn) cancelBtn.disabled = true;
 
@@ -1215,11 +1398,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(dbId => {
                 const finalFormData = {
                     ...bookingData,
-                    _subject: `🎉 Betaalde Boeking van ${bookingData.Naam} (${paymentMethod})`,
-                    _replyto: bookingData.E_mailadres,
-                    Betalingsstatus: `BETAALD via ${paymentMethod}`,
-                    Transactie_ID: txnId,
-                    Betalingskenmerk: `True Time Thai Pattaya - ${txnId}`,
+                    _subject: `ðŸŽ‰ Paid Booking from ${bookingData.name} (${paymentMethod})`,
+                    _replyto: bookingData.email,
+                    Payment_Status: `PAID via ${paymentMethod}`,
+                    Transaction_ID: txnId,
+                    Payment_Reference: `True Time Thai Pattaya - ${txnId}`,
                     Database_ID: dbId
                 };
 
@@ -1234,7 +1417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Netwerkfout bij verzenden van betalingsbevestiging");
+                    throw new Error("Network error sending booking confirmation");
                 }
                 return response.json();
             })
@@ -1251,7 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (rentalForm) rentalForm.style.display = 'none';
                 
                 if (successCard) successCard.style.display = 'block';
-                if (successEmailSpan) successEmailSpan.textContent = bookingData.E_mailadres;
+                if (successEmailSpan) successEmailSpan.textContent = bookingData.email;
                 if (successTxnSpan) successTxnSpan.textContent = txnId;
 
                 // Populate receipt customer details
@@ -1260,8 +1443,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const recClientTxid = document.getElementById('rec-client-txid');
                 const recClientInfo = document.getElementById('receipt-client-info');
 
-                if (recClientName) recClientName.textContent = bookingData.Naam;
-                if (recClientEmail) recClientEmail.textContent = bookingData.E_mailadres;
+                if (recClientName) recClientName.textContent = bookingData.name;
+                if (recClientEmail) recClientEmail.textContent = bookingData.email;
                 if (recClientTxid) recClientTxid.textContent = txnId;
                 if (recClientInfo) recClientInfo.style.display = 'block';
 
@@ -1275,8 +1458,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                console.error("Fout bij afhandelen boeking:", error);
-                alert("Er is helaas een fout opgetreden bij het registreren van uw betaling. Neem direct contact op via WhatsApp met transactie-ID: " + txnId);
+                console.error("Error processing booking:", error);
+                alert("An error occurred while registering your payment. Please contact us via WhatsApp immediately with Transaction ID: " + txnId);
             })
             .finally(() => {
                 if (payCardBtn) {
@@ -1350,7 +1533,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formatted += val[i];
             }
             e.target.value = formatted;
-            if (cardNumberDisplay) cardNumberDisplay.textContent = formatted || '•••• •••• •••• ••••';
+            if (cardNumberDisplay) cardNumberDisplay.textContent = formatted || 'â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢';
             
             if (cardBrandLogo) {
                 if (val.startsWith('4')) {
@@ -1394,7 +1577,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (val.length > 3) val = val.substring(0, 3);
             e.target.value = val;
             if (cardCvvDisplay) {
-                cardCvvDisplay.textContent = val || '•••';
+                cardCvvDisplay.textContent = val || 'â€¢â€¢â€¢';
             }
         });
 
@@ -1417,26 +1600,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardCvv = cardCvvInput ? cardCvvInput.value.trim() : '';
 
             if (cardNumber.length < 15) {
-                alert("Voer een geldig creditcardnummer in.");
+                alert("Please enter a valid credit card number.");
                 return;
             }
             if (cardHolder.length === 0) {
-                alert("Voer de naam van de kaarthouder in.");
+                alert("Please enter the cardholder's name.");
                 return;
             }
             if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
-                alert("Voer een geldige vervaldatum in (MM/JJ).");
+                alert("Please enter a valid expiration date (MM/YY).");
                 return;
             }
             if (cardCvv.length < 3) {
-                alert("Voer een geldige CVV code in.");
+                alert("Please enter a valid CVV code.");
                 return;
             }
 
             // Simulate card validation
             const originalText = payCardBtn.textContent;
             payCardBtn.disabled = true;
-            payCardBtn.textContent = "Kaart verifiëren...";
+            payCardBtn.textContent = "Verifying card...";
             
             setTimeout(() => {
                 const mockTxnId = 'TXN_' + Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -1471,7 +1654,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (statusOverlay) statusOverlay.style.display = 'none';
         if (statusMsg) {
-            statusMsg.innerHTML = '<span class="pp-pulse"></span> Wachten op scan door uw bankieren-app...';
+            statusMsg.innerHTML = '<span class="pp-pulse"></span> Waiting for scan by your banking app...';
         }
 
         let timeLeft = 5 * 60;
@@ -1501,16 +1684,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusOverlay.style.display = 'flex';
             }
             if (statusText) {
-                statusText.textContent = "Betaling ontvangen! Verifiëren...";
+                statusText.textContent = "Payment received! Verifying...";
             }
             if (statusMsg) {
-                statusMsg.textContent = "Betaling ontvangen. Transactie wordt verwerkt...";
+                statusMsg.textContent = "Payment received. Transaction is processing...";
             }
 
             // After 3.0s total, verify success & submit
             promptPaySimTimeout2 = setTimeout(() => {
                 if (statusText) {
-                    statusText.textContent = "Verificatie succesvol! Boeking verwerken...";
+                    statusText.textContent = "Verification successful! Processing booking...";
                 }
                 const mockTxnId = 'TXN_' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 submitBooking('PromptPay (Simulated)', mockTxnId, bookingData);
@@ -1552,10 +1735,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cardExpiryInput) cardExpiryInput.value = '';
             if (cardCvvInput) cardCvvInput.value = '';
             
-            if (cardNumberDisplay) cardNumberDisplay.textContent = '•••• •••• •••• ••••';
+            if (cardNumberDisplay) cardNumberDisplay.textContent = 'â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢';
             if (cardHolderDisplay) cardHolderDisplay.textContent = 'NAAM KAARTHOUDER';
             if (cardExpiryDisplay) cardExpiryDisplay.textContent = 'MM/JJ';
-            if (cardCvvDisplay) cardCvvDisplay.textContent = '•••';
+            if (cardCvvDisplay) cardCvvDisplay.textContent = 'â€¢â€¢â€¢';
             if (cardBrandLogo) cardBrandLogo.textContent = 'VISA';
 
             // Clear receipt customer details
@@ -1612,19 +1795,19 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================================== */
     const testimonials = [
         {
-            text: "De W4 Pro oordopjes veranderden mijn vakantie in Pattaya volledig. In plaats van staren naar mijn telefoon kon ik visboeren recht in de ogen kijken en lachen terwijl we onderhandelden. Het open-oor ontwerp zit heerlijk en voelt super fris en schoon aan!",
+            text: "The W4 Pro earbuds completely transformed my holiday in Pattaya. Instead of staring at my phone, I could look local merchants right in the eye and smile while communicating. The open-ear design is incredibly comfortable and feels super clean and fresh!",
             author: "Mark de Graaf",
-            role: "Toerist uit Utrecht, Nederland"
+            role: "Tourist from Utrecht, Netherlands"
         },
         {
-            text: "Als expat die in Jomtien woont, dacht ik dat ik Pattaya wel kende, maar deze service gaf me toegang tot gesprekken die ik nooit eerder kon voeren. De W4 Pro vertaalt verbazingwekkend snel en de hygiëneverzegeling gaf me direct vertrouwen.",
+            text: "As an expat living in Jomtien, I thought I knew Pattaya, but this service opened up conversations I could never have before. The W4 Pro translates amazingly fast and the hygienic sealing gave me instant confidence.",
             author: "Sarah Jenkins",
-            role: "Expat uit het Verenigd Koninkrijk"
+            role: "Expat from the United Kingdom"
         },
         {
-            text: "Perfecte service! Ik had de oordopjes gehuurd met gratis hotelbezorging in Pattaya. Ze lagen keurig op me te wachten bij de receptie in een luchtdichte verpakking. De meegeleverde 5G simkaart werkte direct. Absolute aanrader voor iedere reiziger!",
+            text: "Perfect service! I rented the earbuds with free hotel delivery in Pattaya. They were waiting for me at the reception in airtight packaging. The included 5G SIM card worked immediately. Highly recommended for every traveler!",
             author: "Dieter Meyer",
-            role: "Zakenreiziger uit Duitsland"
+            role: "Business traveler from Germany"
         }
     ];
 
@@ -1665,24 +1848,24 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================================== */
     const faqs = [
         {
-            q: "Hoe werkt de huurservice in de praktijk?",
-            a: "Het is heel eenvoudig! U reserveert de oordopjes vooraf via ons platform. U kunt de sets ophalen op ons hoofdkantoor aan Beach Road in Pattaya, of u kiest voor <strong>gratis bezorging direct bij uw hotel of resort in Pattaya</strong>. Bij het inleveren kiest u simpelweg weer de locatie die u het beste uitkomt."
+            q: "How does the rental service work in practice?",
+            a: "It's very simple! You reserve the earbuds in advance via our platform. You can pick up the sets at our main office on Beach Road in Pattaya, or choose <strong>free delivery directly to your hotel or resort in Pattaya</strong>. For return, simply choose the location that suits you best."
         },
         {
-            q: "Zijn de gehuurde oordopjes wel echt hygiënisch en schoon?",
-            a: "Absoluut! Hygiëne is onze hoogste prioriteit. Onze True Time Thai W4 Pro oordopjes hebben een modern <strong>open-oor ontwerp</strong> dat op de oorschelp rust en het gehoorkanaal niet binnendringt. Na elk gebruik ondergaan de oordopjes een intensieve reinigingscyclus: reiniging met alcoholvrije medische desinfectiedoekjes, <strong>sterilisatie in UV-C kamers</strong>, batterijcontrole en luchtdichte verzegeling. U verbreekt zelf de hygiëneverzegeling."
+            q: "Are the rented earbuds really hygienic and clean?",
+            a: "Absolutely! Hygiene is our highest priority. Our True Time Thai W4 Pro earbuds feature a modern <strong>open-ear design</strong> that rests on the outer ear and does not enter the ear canal. After each use, the earbuds undergo an intensive cleaning cycle: cleaning with alcohol-free medical disinfectant wipes, <strong>sterilization in UV-C chambers</strong>, battery checks, and airtight sealing. You break the hygienic seal yourself."
         },
         {
-            q: "Welke talen worden ondersteund door de True Time Thai W4 Pro / Wifi Pro?",
-            a: "De oordopjes ondersteunen real-time, bidirectionele AI-vertaling in <strong>102 talen en 14 verschillende Engelse accenten</strong> (inclusief Brits, Amerikaans, Australisch, Indiaas en tevens Thai English / Tinglish). Hierdoor kunt u spreken in uw eigen taal (zoals Nederlands, Duits of Engels) en hoort uw Thaise gesprekspartner direct Thais, en omgekeerd!"
+            q: "Which languages are supported by the True Time Thai W4 Pro / Wifi Pro?",
+            a: "The earbuds support real-time, bidirectional AI translation in <strong>102 languages and 14 different English accents</strong> (including British, American, Australian, Indian, and also Thai English / Tinglish). This allows you to speak in your own language (such as Dutch, German, or English) and your Thai conversation partner will hear Thai immediately, and vice versa!"
         },
         {
-            q: "Heb ik internet nodig voor de vertalingen in Pattaya?",
-            a: "Ja, voor de meest nauwkeurige, geavanceerde AI-vertalingen is een internetverbinding vereist. We raden sterk aan om bij het boeken onze <strong>5G lokale SIM-kaart optie</strong> te selecteren (slechts ฿350 / €10flat). Hiermee heeft u onbeperkt high-speed data op uw smartphone waarmee de Timekettle-app vlekkeloos en overal in Pattaya offline en online functioneert."
+            q: "Do I need internet for the translations in Pattaya?",
+            a: "Yes, for the most accurate, advanced AI translations, an internet connection is required. We highly recommend selecting our <strong>5G local SIM card option</strong> when booking (only à¸¿350 / â‚¬10 flat). This gives you unlimited high-speed data on your smartphone, enabling the Timekettle app to function flawlessly anywhere in Pattaya, both online and offline."
         },
         {
-            q: "Wat gebeurt er als ik de oordopjes beschadig of verlies?",
-            a: "We begrijpen dat er tijdens het reizen ongelukjes kunnen gebeuren. Bij het ophalen verifiëren we uw creditcard. We bieden een optionele schadeverzekering voor ฿50 per dag aan waarmee u volledig bent gedekt tegen onopzettelijke schade of diefstal (met politierapport). Zonder verzekering zijn de kosten bij verlies of onherstelbare schade maximaal ฿4.500 per oordopje."
+            q: "What happens if I damage or lose the earbuds?",
+            a: "We understand that accidents can happen while traveling. Upon pickup, we verify your credit card. We offer an optional damage coverage for à¸¿50 per day, which fully covers you against accidental physical damage, water damage, or theft (with police report). Without insurance, the fee for loss or irreparable damage is a maximum of à¸¿4,500 per earbud."
         }
     ];
 
@@ -1753,7 +1936,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const formData = {
-                _subject: `✉️ Nieuw Contactbericht van ${name} - True Time Thai`,
+                _subject: `âœ‰ï¸ Nieuw Contactbericht van ${name} - True Time Thai`,
                 _replyto: email,
                 Naam: name,
                 E_mailadres: email,
@@ -1770,7 +1953,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Netwerkfout bij verzenden van contactbericht");
+                    throw new Error("Network error while sending contact message");
                 }
                 return response.json();
             })
@@ -1785,8 +1968,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                console.error("Contact verzendfout:", error);
-                alert("Er is helaas iets misgegaan bij het verzenden van uw bericht. Controleer uw internetverbinding of probeer het later opnieuw.");
+                console.error("Contact sending error:", error);
+                alert("Unfortunately, something went wrong while sending your message. Please check your internet connection or try again later.");
             })
             .finally(() => {
                 if (submitBtn) {
@@ -1903,24 +2086,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // Highly persuasive & promotional text content for each category
         const hygieneContent = {
             "1": {
-                title: "100% Vrijheid & Natuurlijk Geluid",
-                text: "Ervaar de ultieme revolutie in audiogemak onder de Thaise zon. Omdat onze oordopjes <em>boven</em> uw gehoorkanaal zweven in plaats van erin, geniet u van uw favoriete muziek of real-time vertalingen zonder zweetophoping of druk. Ideaal voor actieve stranddagen in Jomtien en wandelingen door Pattaya!"
+                title: "100% Freedom & Natural Sound",
+                text: "Experience the ultimate revolution in audio convenience under the Thai sun. Because our earbuds float <em>above</em> your ear canal instead of inside it, you can enjoy your favorite music or real-time translations without sweat buildup or pressure. Ideal for active beach days in Jomtien and walks through Pattaya!"
             },
             "2": {
-                title: "Handmatige Precisie-reiniging",
-                text: "Naast onze machinale sterilisatie ondergaan alle W4 Pro's een uitgebreide handmatige reinigingsbeurt. Onze getrainde specialisten desinfecteren elk hoekje, gleufje en contactpunt met biologisch afbreekbare, alcoholvrije medische doekjes die speciaal zijn gecertificeerd voor audio-apparatuur. Gegarandeerd pluis- en bacterievrij!"
+                title: "Precise Manual Cleaning",
+                text: "In addition to our machine sterilization, all W4 Pros undergo an extensive manual cleaning process. Our trained specialists disinfect every corner, crevice, and contact point with biodegradable, alcohol-free medical wipes certified specifically for audio equipment. Guaranteed lint- and bacteria-free!"
             },
             "3": {
-                title: "Medische UV-C Lichtdesinfectie",
-                text: "Veiligheid is onze absolute prioriteit bij True Time Thai. Elk oordopjesset en oplaadcase ondergaat een intensieve sterilisatiecyclus in onze industriële UV-C lichtkamers. Binnen enkele minuten wordt 99.9% van alle bacteriën, virussen en micro-organismen volledig geëlimineerd. Zo bent u verzekerd van een klinisch schone start!"
+                title: "Medical UV-C Light Disinfection",
+                text: "Safety is our absolute priority at True Time Thai. Every earbud set and charging case undergoes an intensive sterilization cycle in our industrial UV-C light chambers. Within minutes, 99.9% of all bacteria, viruses, and microorganisms are completely eliminated. This ensures you a clinically clean start!"
             },
             "4": {
-                title: "Ergonomie Die Aanvoelt Als Lucht",
-                text: "Dankzij de flexibele, vederlichte oorhaakvorm passen de W4 Pro oordopjes zich onmiddellijk en natuurlijk aan de anatomie van uw oor aan. U vergeet al snel dat u ze draagt! Bovendien hoort u door het open-oor design nog steeds de geluiden om u heen, wat zorgt voor maximale veiligheid in het drukke Pattayaanse verkeer."
+                title: "Ergonomics That Feel Like Air",
+                text: "Thanks to the flexible, lightweight earhook shape, the W4 Pro earbuds adapt immediately and naturally to the anatomy of your ear. You'll quickly forget you're wearing them! Moreover, the open-ear design still allows you to hear the ambient sounds around you, ensuring maximum safety in Pattaya's busy traffic."
             },
             "5": {
-                title: "Hermetisch Verzegeld Voor U",
-                text: "Nadat de oordopjes onze strenge 5-punts kwaliteitscontrole hebben doorlopen, worden ze direct vacuüm verzegeld in een biologisch afbreekbare hygiëneverpakking. U bent de allereerste die de zegel verbreekt bij ontvangst in uw resort. 100% gegarandeerd stofvrij, bacterievrij en verser dan vers!"
+                title: "Hermetically Sealed for You",
+                text: "After the earbuds pass our strict 5-point quality control, they are immediately vacuum-sealed in a biodegradable hygiene packaging. You are the very first to break the seal upon receipt at your resort. 100% guaranteed dust-free, bacteria-free, and fresher than fresh!"
             }
         };
 
@@ -2078,46 +2261,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const termsData = {
             pickup: {
-                title: "1. Ophalen & Inleveren van de Apparatuur",
+                title: "1. Pickup & Return of Equipment",
                 content: `
-                    <p>Bij het boeken selecteert u uw gewenste ophaal- en inleverlocatie. Wij bieden momenteel twee handige opties aan in Pattaya:</p>
+                    <p>When booking, you select your desired pickup and return location. We currently offer two convenient options in Pattaya:</p>
                     <ul>
-                        <li><strong>Pattaya Beach Road Office:</strong> Geopend van 08:00 tot 22:00 uur. Ons kantoor ligt centraal en is eenvoudig te bereiken.</li>
-                        <li><strong>Gratis Hotelbezorging & Inlevering:</strong> Wij bezorgen de verzegelde sets gratis bij de receptie van uw hotel of resort in Pattaya (inclusief Jomtien en Naklua). U kunt de set bij vertrek simpelweg weer achterlaten bij de receptie.</li>
+                        <li><strong>Pattaya Beach Road Office:</strong> Open from 08:00 AM to 10:00 PM. Our office is centrally located and easy to reach.</li>
+                        <li><strong>Free Hotel Delivery & Return:</strong> We deliver the sealed sets for free to the reception of your hotel or resort in Pattaya (including Jomtien and Naklua). You can simply leave the set at reception upon departure.</li>
                     </ul>
-                    <p><em>Let op:</em> De huurperiode gaat in op de afgesproken startdatum vanaf 08:00 uur en eindigt op de einddatum uiterlijk om 22:00 uur. Te laat inleveren zonder overleg brengt een toeslag van ฿250 per dag met zich mee.</p>
+                    <p><em>Please note:</em> The rental period starts on the agreed start date from 08:00 AM and ends on the end date by 10:00 PM at the latest. Late returns without consultation will incur a surcharge of à¸¿250 per day.</p>
                 `
             },
             deposit: {
-                title: "2. Borg, Betaling & Legitimatie",
+                title: "2. Deposit, Payment & Identification",
                 content: `
-                    <p>Wij houden van heldere en eenvoudige afspraken zonder onnodige rompslomp:</p>
+                    <p>We prefer clear and simple agreements without unnecessary hassle:</p>
                     <ul>
-                        <li><strong>Geen Contante Borg:</strong> Bij verificatie van een geldige creditcard (Visa of Mastercard) bij ophalen of online boeken is <strong>geen contante borg</strong> vereist.</li>
-                        <li><strong>Alternatieve Borg:</strong> Beschikt u niet over een creditcard? Geen probleem! U kunt er ook voor kiezen om een contante borg van ฿3.000 (€80) per set te deponeren, of een kopie van uw paspoort achter te laten. Contante borg krijgt u bij inlevering direct en volledig terug.</li>
-                        <li><strong>Betalingswijzen:</strong> Wij accepteren online betalingen met Creditcard, PromptPay en contante betaling in THB of EUR bij overdracht.</li>
+                        <li><strong>No Cash Deposit:</strong> With verification of a valid credit card (Visa or Mastercard) upon pickup or online booking, <strong>no cash deposit</strong> is required.</li>
+                        <li><strong>Alternative Deposit:</strong> Don't have a credit card? No problem! You can also choose to leave a cash deposit of à¸¿3.000 (â‚¬80) per set, or leave a copy of your passport. Cash deposits are returned directly and in full upon return.</li>
+                        <li><strong>Payment Methods:</strong> We accept online payments by Credit Card, PromptPay, and cash payments in THB or EUR upon delivery.</li>
                     </ul>
                 `
             },
             insurance: {
-                title: "3. Schade, Diefstal & Verzekering",
+                title: "3. Damage, Theft & Insurance",
                 content: `
-                    <p>Tijdens het reizen kan er natuurlijk altijd iets onverwachts gebeuren. Wij bieden volledige transparantie over schade en verlies:</p>
+                    <p>Of course, something unexpected can always happen while traveling. We offer full transparency regarding damage and loss:</p>
                     <ul>
-                        <li><strong>Optionele Schadedekking (+฿50 / €1.35 per dag):</strong> Hiermee bent u volledig (100%) gedekt tegen onopzettelijke fysieke schade, waterschade of diefstal (met politierapport). Geen eigen risico!</li>
-                        <li><strong>Zonder Verzekering:</strong> Bij verlies, diefstal of onherstelbare schade aan de oordopjes bent u aansprakelijk voor de vervangingswaarde. Deze bedraagt maximaal ฿4.500 per oordopje of laadcase.</li>
-                        <li><strong>Normale Slijtage:</strong> Kleine krasjes of normale gebruikssporen vallen uiteraard onder onze service en hier worden nooit kosten voor in rekening gebracht.</li>
+                        <li><strong>Optional Damage Coverage (+à¸¿50 / â‚¬1.35 per day):</strong> This fully covers you (100%) against accidental physical damage, water damage, or theft (with police report). No deductible!</li>
+                        <li><strong>Without Insurance:</strong> In case of loss, theft, or irreparable damage to the earbuds, you are liable for the replacement value. This is a maximum of à¸¿4,500 per earbud or charging case.</li>
+                        <li><strong>Normal Wear and Tear:</strong> Small scratches or normal signs of use are covered under our service and will never be charged.</li>
                     </ul>
                 `
             },
             cancellation: {
-                title: "4. Annuleren, Wijzigen & Verlengen",
+                title: "4. Cancellation, Modification & Extension",
                 content: `
-                    <p>Plannen veranderen, zeker tijdens een reis. Wij zijn de meest flexibele partner in Pattaya:</p>
+                    <p>Plans change, especially while traveling. We are the most flexible partner in Pattaya:</p>
                     <ul>
-                        <li><strong>Gratis Annuleren:</strong> U kunt uw reservering tot 24 uur voor de startdatum volledig gratis annuleren. U ontvangt uw eventuele aanbetaling binnen 3 werkdagen terug.</li>
-                        <li><strong>Tussentijds Wijzigen:</strong> Wilt u de startdatum verschuiven of de ophaallocatie aanpassen? Laat het ons weten via WhatsApp en we passen het kosteloos voor u aan.</li>
-                        <li><strong>Verlengen:</strong> Bevalt de vertaalservice zo goed dat u de oordopjes langer wilt houden? Stuur ons simpelweg een WhatsApp-bericht. Indien de sets beschikbaar zijn, verlengen we uw contract direct tegen hetzelfde voordelige dagtarief.</li>
+                        <li><strong>Free Cancellation:</strong> You can cancel your reservation completely free of charge up to 24 hours before the start date. You will receive your deposit back within 3 business days.</li>
+                        <li><strong>Modifications:</strong> Want to shift your start date or adjust the pickup location? Just let us know via WhatsApp and we will adjust it for you free of charge.</li>
+                        <li><strong>Extension:</strong> Enjoying the translation service so much that you want to keep the earbuds longer? Simply send us a WhatsApp message. If the sets are available, we will extend your contract immediately at the same low daily rate.</li>
                     </ul>
                 `
             }
@@ -2255,3 +2438,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initTermsTabs();
     initContactCarousel();
 });
+
