@@ -251,6 +251,64 @@ CREATE POLICY "Allow admin all settings" ON settings FOR ALL TO authenticated US
         </div>
     </footer>
 
+    <!-- Hidden Printable Invoice Container -->
+    <div id="admin-printable-invoice" class="receipt-card" style="display: none; width: 100%; max-width: 480px; margin: 0 auto; background: #fff; color: #000; border: 1px solid #000; padding: 20px; box-sizing: border-box; position: relative;">
+        <div class="receipt-header" style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
+            <span class="receipt-title" style="display: block; font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">HUURINVOICE</span>
+            <span class="receipt-brand" style="display: block; font-size: 0.9rem; color: #666; font-family: 'Architects Daughter', sans-serif;">TRUE TIME THAI</span>
+        </div>
+        <div class="receipt-body" style="font-size: 0.85rem; line-height: 1.6;">
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Boeking ID:</span>
+                <strong id="print-invoice-id">-</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Huurperiode:</span>
+                <span id="print-invoice-period">-</span>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Klant Naam:</span>
+                <strong id="print-cust-name">-</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>E-mailadres:</span>
+                <span id="print-cust-email">-</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Ophaallocatie:</span>
+                <span id="print-pickup-loc">-</span>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-items" id="print-invoice-items">
+                <!-- Dynamically populated -->
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-row total-row" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.1rem; font-weight: bold;">
+                <span>Totaal Bedrag:</span>
+                <span id="print-total-thb">฿0</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Betaalmethode:</span>
+                <span id="print-pay-method">-</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Betalingsstatus:</span>
+                <strong id="print-pay-status" style="color: #28a745;">BETAALD</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Transactie-ID:</span>
+                <span id="print-txn-id" style="font-family: monospace;">-</span>
+            </div>
+        </div>
+        <div class="receipt-footer" style="text-align: center; margin-top: 30px; font-size: 0.75rem; border-top: 1px solid #000; padding-top: 15px;">
+            <p style="margin: 4px 0;">Bedankt voor uw boeking bij True Time Thai Pattaya!</p>
+            <p style="margin: 4px 0; font-weight: bold;">🧼 UV-C Gedesinfecteerde Oordopjes Verhuur</p>
+        </div>
+        <!-- Simulated green PAID stamp -->
+        <div class="paid-stamp" style="position: absolute; top: 120px; right: 20px; border: 4px solid #28a745; color: #28a745; padding: 5px 15px; font-size: 1.6rem; font-weight: bold; border-radius: 6px; transform: rotate(-15deg); opacity: 0.8; font-family: monospace;">BETAALD / PAID</div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
