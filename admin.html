@@ -178,6 +178,8 @@
                                 <th>Periode</th>
                                 <th>Sets</th>
                                 <th>Bedrag</th>
+                                <th>Borg</th>
+                                <th>Huurcontract</th>
                                 <th>Locatie</th>
                                 <th>Betaling</th>
                                 <th>Status</th>
@@ -186,7 +188,7 @@
                         </thead>
                         <tbody id="bookings-table-body">
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Boekingen worden geladen...</td>
+                                <td colspan="10" class="text-center text-muted">Boekingen worden geladen...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -417,6 +419,131 @@
         </div>
         <!-- Simulated green PAID stamp -->
         <div class="paid-stamp" style="position: absolute; top: 120px; right: 20px; border: 4px solid #28a745; color: #28a745; padding: 5px 15px; font-size: 1.6rem; font-weight: bold; border-radius: 6px; transform: rotate(-15deg); opacity: 0.8; font-family: monospace;">BETAALD / PAID</div>
+    </div>
+
+    <!-- MODAL 1: Signature / Contract Signing -->
+    <div id="modal-signature" class="admin-modal-overlay">
+        <div class="admin-modal-card glass">
+            <div class="admin-modal-header">
+                <h3>Huurcontract Ondertekenen</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-signature')">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="contract-terms-box">
+                    <h5 style="margin-top: 0; color: var(--thai-blue);">HUURVOORWAARDEN & AANSPRAKELIJKHEID</h5>
+                    <p>Hierbij verklaart de huurder akkoord te gaan met de huur van de True Time Thai W4 Pro AI-vertaaloordopjes. De oordopjes worden in schone en goed werkende staat overhandigd.</p>
+                    <p><strong>Aansprakelijkheid & Tarieven bij Schade/Verlies:</strong></p>
+                    <ul>
+                        <li>Verlies of totale vernieling van een W4 Pro AI-headset set: <strong>฿5.000 THB</strong></li>
+                        <li>Verlies of vernieling van de Powerbank: <strong>฿500 THB</strong></li>
+                        <li>Verlies of beschadiging van de 5G SIM-kaart: <strong>฿350 THB</strong></li>
+                        <li>Niet tijdig inleveren (per dag te laat): <strong>฿500 THB</strong></li>
+                    </ul>
+                    <p>De huurder is verantwoordelijk voor het correct en hygiënisch retourneren van de apparatuur na afloop van de overeengekomen huurtermijn.</p>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 12px; font-size: 0.85rem;">
+                    <div><strong>Klant:</strong> <span id="sign-customer-name">-</span> (<span id="sign-customer-email">-</span>)</div>
+                    <div><strong>Boeking ID:</strong> <span id="sign-booking-id">-</span></div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>Plaats hieronder uw handtekening / Sign below:</label>
+                    <div class="signature-canvas-container" id="signature-pad-container">
+                        <canvas id="signature-canvas"></canvas>
+                        <div class="signature-line-guide" id="canvas-guide-text">Handtekening hier / Sign here</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <button type="button" class="btn btn-sm btn-outline" id="btn-clear-signature">Wis handtekening</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-signature')">Annuleer</button>
+                        <button type="button" class="btn btn-sm btn-neon" id="btn-save-signature">Ondertekenen & Opslaan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: View Signed Contract -->
+    <div id="modal-view-contract" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 650px;">
+            <div class="admin-modal-header">
+                <h3>Getekend Huurcontract</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-view-contract')">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="contract-print-area">
+                <div style="text-align: center; border-bottom: 2px solid var(--thai-blue); padding-bottom: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0; font-family: 'Architects Daughter', sans-serif; font-size: 1.6rem; color: var(--thai-blue);">TRUE TIME THAI</h4>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); letter-spacing: 1px; font-weight: bold;">VERTAALOORDOPJES HUUROVEREENKOMST</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 0.85rem;">
+                    <div>
+                        <strong>Boekingsgegevens:</strong><br>
+                        Huurder: <span id="contract-cust-name">-</span><br>
+                        E-mailadres: <span id="contract-cust-email">-</span><br>
+                        Boeking ID: <span id="contract-booking-id" style="font-family: monospace;">-</span>
+                    </div>
+                    <div>
+                        <strong>Huurdetails:</strong><br>
+                        Periode: <span id="contract-period">-</span><br>
+                        Aantal sets: <span id="contract-sets">-</span><br>
+                        Borgtype: <span id="contract-deposit-type">-</span>
+                    </div>
+                </div>
+
+                <div class="contract-terms-box" style="max-height: 200px; font-size: 0.75rem; background: #fafafa;">
+                    <h5 style="margin-top: 0; color: #000; font-size: 0.8rem; border-bottom: 1px solid #ddd; padding-bottom: 4px;">ALGEMENE VOORWAARDEN & AANSPRAKELIJKHEID</h5>
+                    <p>De huurder verklaart akkoord te gaan met de huur van de True Time Thai W4 Pro AI-vertaaloordopjes sets. De apparatuur is in uitstekende en werkende staat overhandigd.</p>
+                    <p>Bij verlies, diefstal of onherstelbare schade gelden de volgende vervangingstarieven:</p>
+                    <ul>
+                        <li>Timekettle W4 Pro AI-headset set: ฿5.000 THB</li>
+                        <li>Huur-Powerbank: ฿500 THB</li>
+                        <li>5G SIM-kaart: ฿350 THB</li>
+                        <li>Te laat inleveren: ฿500 THB per dag</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 24px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 16px; background: #fff; text-align: center;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Digitale Handtekening Huurder:</span>
+                    <img id="contract-signature-img" src="" alt="Handtekening" style="max-height: 100px; max-width: 100%; border-bottom: 1px solid #aaa;">
+                    <span style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 6px;">Ondertekend op / Signed on: <span id="contract-signed-date">-</span></span>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;" class="no-print">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-view-contract')">Sluiten</button>
+                    <button type="button" class="btn btn-sm btn-neon" onclick="window.print()">Print Contract (A4)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Notification Preview -->
+    <div id="modal-notification-preview" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3>Klantbericht Preview</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-notification-preview')">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div style="background: #1e293b; border-radius: 8px; padding: 12px 16px; color: #f8fafc; margin-bottom: 16px; font-size: 0.8rem; display: flex; flex-direction: column; gap: 4px;">
+                    <div><strong>Aan:</strong> <span id="notif-to" style="color: var(--neon-cyan);">-</span></div>
+                    <div><strong>Kanalen:</strong> <span id="notif-channels" style="color: var(--thai-gold);">-</span></div>
+                    <div><strong>Onderwerp:</strong> <span id="notif-subject">-</span></div>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 20px; font-size: 0.85rem; line-height: 1.5; color: #334155; white-space: pre-line; max-height: 250px; overflow-y: auto;" id="notif-body">
+                    <!-- Message content -->
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-notification-preview')">Annuleren</button>
+                    <button type="button" class="btn btn-sm btn-neon" id="btn-confirm-send-notif">✓ Nu Verzenden</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Supabase Client Library CDN -->
