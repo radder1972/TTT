@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.6.2">
+    <link rel="stylesheet" href="styles.css?v=2.7.0">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -86,9 +86,11 @@
 
 
             <!-- Dashboard Navigation Tabs -->
-            <div class="dashboard-tabs">
+            <div class="dashboard-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
                 <button type="button" class="dashboard-tab-btn active" id="btn-tab-bookings">Bookings & Reservations</button>
-                <button type="button" class="dashboard-tab-btn" id="btn-tab-inventory">Individual Inventory Management</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-inventory">Inventory (Headsets)</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-products">Products & Categories</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-customers">Customers</button>
             </div>
 
             <div id="view-bookings">
@@ -339,6 +341,175 @@
                 </div>
             </div> <!-- End view-inventory -->
 
+            <!-- SECTION: VIEW PRODUCTS (Initially Hidden) -->
+            <div id="view-products" style="display: none;">
+                <div class="dashboard-layout">
+                    <!-- Left: Products Table -->
+                    <div class="dashboard-content-card glass">
+                        <div class="card-header-actions">
+                            <h3>Product Catalog</h3>
+                            <div class="search-filter-row">
+                                <input type="text" id="product-search" placeholder="Search products...">
+                            </div>
+                        </div>
+
+                        <div class="table-scroll-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Base Rate (Daily)</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Loading products...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product & Category Forms -->
+                    <div class="dashboard-sidebar">
+                        <!-- Product Form Card -->
+                        <div class="sidebar-card glass">
+                            <h4 id="product-form-title">Add New Product</h4>
+                            <p class="text-muted" id="product-form-desc">Add a rental item to the catalog.</p>
+                            
+                            <form id="add-product-form" style="margin-top: 16px;">
+                                <input type="hidden" id="input-product-id" value="">
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-product-name">Product Name</label>
+                                    <input type="text" id="input-product-name" required placeholder="e.g. 5G SIM Card" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="select-product-category">Category</label>
+                                    <select id="select-product-category" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255,255,255,0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none;">
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-product-rate">Base Rate (THB / Day)</label>
+                                    <input type="number" id="input-product-rate" required placeholder="e.g. 150" step="0.01" min="0" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="select-product-type">Type</label>
+                                    <select id="select-product-type" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255,255,255,0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none;">
+                                        <option value="bulk">Bulk Item (No Serial Required)</option>
+                                        <option value="serialized">Serialized (Needs Serial Number)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label for="input-product-description">Description</label>
+                                    <textarea id="input-product-description" placeholder="Description of the rental item..." style="width: 100%; min-height: 60px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255,255,255,0.65);"></textarea>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button type="button" class="btn btn-sm btn-outline" id="btn-cancel-product-edit" style="display: none; flex: 1; height: 36px;">Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-product" style="flex: 2; height: 36px; margin: 0;">Save Product</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Category Form Card -->
+                        <div class="sidebar-card glass">
+                            <h4>Manage Categories</h4>
+                            <p class="text-muted">Create a product category.</p>
+                            
+                            <form id="add-category-form" style="margin-top: 16px; margin-bottom: 16px;">
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-category-name">Category Name</label>
+                                    <input type="text" id="input-category-name" required placeholder="e.g. Wearables" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-neon btn-block" style="height: 36px;">Add Category</button>
+                            </form>
+
+                            <div style="border-top: 1px solid var(--border-glass); padding-top: 12px;">
+                                <span style="font-size: 0.8rem; font-weight: bold; color: var(--thai-blue); display: block; margin-bottom: 8px;">Current Categories:</span>
+                                <ul id="categories-list" style="margin-top: 8px; font-size: 0.85rem; color: var(--text-muted); padding-left: 16px; display: flex; flex-direction: column; gap: 6px;">
+                                    <!-- Populated via JS -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: VIEW CUSTOMERS (Initially Hidden) -->
+            <div id="view-customers" style="display: none;">
+                <div class="dashboard-layout">
+                    <!-- Left: Customers Table -->
+                    <div class="dashboard-content-card glass">
+                        <div class="card-header-actions">
+                            <h3>Customer Registry</h3>
+                            <div class="search-filter-row">
+                                <input type="text" id="customer-search" placeholder="Search by name, email, or city...">
+                            </div>
+                        </div>
+
+                        <div class="table-scroll-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>City</th>
+                                        <th>Address</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Loading customers...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Customer Form -->
+                    <div class="dashboard-sidebar">
+                        <div class="sidebar-card glass">
+                            <h4 id="customer-form-title">Add New Customer</h4>
+                            <p class="text-muted" id="customer-form-desc">Register or edit a customer profile.</p>
+                            
+                            <form id="add-customer-form" style="margin-top: 16px;">
+                                <input type="hidden" id="input-customer-id" value="">
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-customer-name">Full Name</label>
+                                    <input type="text" id="input-customer-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-customer-email">Email Address</label>
+                                    <input type="email" id="input-customer-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-customer-phone">Phone Number</label>
+                                    <input type="text" id="input-customer-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="input-customer-city">City / Province</label>
+                                    <input type="text" id="input-customer-city" placeholder="e.g. Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label for="input-customer-address">Address / Hotel Room</label>
+                                    <textarea id="input-customer-address" placeholder="Hotel Name, Street Address, Room..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button type="button" class="btn btn-sm btn-outline" id="btn-cancel-customer-edit" style="display: none; flex: 1; height: 36px;">Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-customer" style="flex: 2; height: 36px; margin: 0;">Save Customer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Systeem Status -->
             <div class="sidebar-card glass" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; margin-top: 28px; margin-bottom: 12px; gap: 16px; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 16px;">
@@ -571,6 +742,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=2.6.2"></script>
+    <script src="admin.js?v=2.7.0"></script>
 </body>
 </html>
