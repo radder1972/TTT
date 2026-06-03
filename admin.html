@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.4.1">
+    <link rel="stylesheet" href="styles.css?v=2.4.2">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -296,16 +296,31 @@
 
                     <!-- Right: Inventory & Headset Controls -->
                     <div class="dashboard-sidebar">
-                        <!-- Inventory Management Card -->
+                        <!-- Inventory Overview Card -->
                         <div class="sidebar-card glass">
-                            <h4>Voorraadinstellingen</h4>
-                            <p class="text-muted">Pas het totaal aantal beschikbare W4 Pro sets in Pattaya aan.</p>
+                            <h4>Voorraadoverzicht</h4>
+                            <p class="text-muted">Statusoverzicht van alle geregistreerde headsets in Pattaya.</p>
                             
-                            <div class="form-group" style="margin-top: 16px;">
-                                <label for="input-total-stock">Totale Voorraad Sets</label>
-                                <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
-                                    <input type="number" id="input-total-stock" min="1" max="200" value="30" style="margin: 0; width: 100px; height: 36px;">
-                                    <button type="button" class="btn btn-xs btn-neon" id="btn-save-stock" style="white-space: nowrap; height: 36px; line-height: 1;">Opslaan</button>
+                            <div class="sidebar-stats-list" style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                                    <span style="font-weight: bold; color: var(--text-light);"><span style="margin-right: 8px;">🎧</span>Totaal Geregistreerd:</span>
+                                    <strong id="sb-total-devices" style="font-size: 1.1rem; color: var(--neon-cyan);">0</strong>
+                                </div>
+                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: var(--text-muted);"><span class="pulse-dot green" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle;"></span>Vrij / Beschikbaar:</span>
+                                    <strong id="sb-available-devices" style="color: var(--success);">0</strong>
+                                </div>
+                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-blue); box-shadow: 0 0 8px var(--thai-blue);"></span>In Actieve Verhuur:</span>
+                                    <strong id="sb-rented-devices" style="color: var(--neon-cyan);">0</strong>
+                                </div>
+                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-gold); box-shadow: 0 0 8px var(--thai-gold);"></span>In Reiniging (UV-C):</span>
+                                    <strong id="sb-cleaning-devices" style="color: var(--thai-gold);">0</strong>
+                                </div>
+                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-red); box-shadow: 0 0 8px var(--thai-red);"></span>In Onderhoud:</span>
+                                    <strong id="sb-maintenance-devices" style="color: var(--thai-red);">0</strong>
                                 </div>
                             </div>
                         </div>
@@ -359,7 +374,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.4.1</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.4.2</span></p>
         </div>
     </footer>
 
@@ -549,6 +564,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=2.4.1"></script>
+    <script src="admin.js?v=2.4.2"></script>
 </body>
 </html>
