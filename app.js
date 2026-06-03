@@ -1254,6 +1254,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (successEmailSpan) successEmailSpan.textContent = bookingData.E_mailadres;
                 if (successTxnSpan) successTxnSpan.textContent = txnId;
 
+                // Populate receipt customer details
+                const recClientName = document.getElementById('rec-client-name');
+                const recClientEmail = document.getElementById('rec-client-email');
+                const recClientTxid = document.getElementById('rec-client-txid');
+                const recClientInfo = document.getElementById('receipt-client-info');
+
+                if (recClientName) recClientName.textContent = bookingData.Naam;
+                if (recClientEmail) recClientEmail.textContent = bookingData.E_mailadres;
+                if (recClientTxid) recClientTxid.textContent = txnId;
+                if (recClientInfo) recClientInfo.style.display = 'block';
+
                 // Stamp Receipt
                 if (receiptPaidStamp) receiptPaidStamp.classList.add('visible');
 
@@ -1547,12 +1558,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cardCvvDisplay) cardCvvDisplay.textContent = '•••';
             if (cardBrandLogo) cardBrandLogo.textContent = 'VISA';
 
+            // Clear receipt customer details
+            const recClientName = document.getElementById('rec-client-name');
+            const recClientEmail = document.getElementById('rec-client-email');
+            const recClientTxid = document.getElementById('rec-client-txid');
+            const recClientInfo = document.getElementById('receipt-client-info');
+            
+            if (recClientName) recClientName.textContent = '-';
+            if (recClientEmail) recClientEmail.textContent = '-';
+            if (recClientTxid) recClientTxid.textContent = '-';
+            if (recClientInfo) recClientInfo.style.display = 'none';
+
             // Recalculate
             if (startDateInput) startDateInput.value = formattedToday;
             if (endDateInput) endDateInput.value = formattedTomorrow;
             if (earbudCountInput) earbudCountInput.value = '1';
             
             updatePricing();
+        });
+    }
+
+    // Print Invoice Button Listener
+    const btnPrintInvoice = document.getElementById('btn-print-invoice');
+    if (btnPrintInvoice) {
+        btnPrintInvoice.addEventListener('click', () => {
+            window.print();
         });
     }
 
