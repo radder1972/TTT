@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=2.4.2">
+    <link rel="stylesheet" href="styles.css?v=2.5.0">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -175,20 +175,16 @@
                         <thead>
                             <tr>
                                 <th>Klant</th>
-                                <th>Periode</th>
+                                <th>Huurperiode</th>
                                 <th>Sets</th>
                                 <th>Bedrag</th>
-                                <th>Borg</th>
-                                <th>Huurcontract</th>
-                                <th>Locatie</th>
-                                <th>Betaling</th>
                                 <th>Status</th>
                                 <th>Actie</th>
                             </tr>
                         </thead>
                         <tbody id="bookings-table-body">
                             <tr>
-                                <td colspan="10" class="text-center text-muted">Boekingen worden geladen...</td>
+                                <td colspan="6" class="text-center text-muted">Boekingen worden geladen...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -374,7 +370,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.4.2</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Beheer Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v2.5.0</span></p>
         </div>
     </footer>
 
@@ -561,9 +557,23 @@
         </div>
     </div>
 
+    <!-- MODAL 4: Booking Details Overview -->
+    <div id="modal-booking-details" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 800px;">
+            <div class="admin-modal-header">
+                <h3>Boeking Details</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-booking-details')">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="booking-details-body">
+                <!-- Dynamically populated via JS -->
+                <div class="text-center text-muted">Boekingdetails worden geladen...</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=2.4.2"></script>
+    <script src="admin.js?v=2.5.0"></script>
 </body>
 </html>
