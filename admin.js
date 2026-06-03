@@ -424,7 +424,7 @@ function renderBookingsTable() {
         }
 
         // Add Print Invoice button to actions
-        const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline" onclick="printBookingInvoice('${b.id}')" style="margin-left: 5px; padding: 2px 8px;">🖨️ Printen</button>`;
+        const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline btn-print-admin" onclick="printBookingInvoice('${b.id}')">🖨️ Printen</button>`;
         if (actionsHtml === `<span class="text-muted">-</span>`) {
             actionsHtml = printBtnHtml;
         } else {
