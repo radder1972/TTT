@@ -376,6 +376,7 @@ async function handleLogout() {
 // 5. Data Loading & Operations
 let activeBookings = [];
 let totalStock = 30;
+let currentDetailBookingId = null;
 
 async function loadDashboardData() {
     // 1. Fetch total stock config
@@ -525,7 +526,7 @@ function renderBookingsTable() {
     if (filtered.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="8" class="text-center text-muted">Geen boekingen gevonden die voldoen aan de criteria.</td>
+                <td colspan="6" class="text-center text-muted">Geen boekingen gevonden die voldoen aan de criteria.</td>
             </tr>
         `;
         return;
@@ -554,72 +555,13 @@ function renderBookingsTable() {
             statusLabel = 'Geannuleerd';
         }
 
-        // Actions selector
-        let actionsHtml = '';
-        if (b.status === 'CONFIRMED') {
-            actionsHtml = `<button type="button" class="btn btn-xs btn-neon" onclick="updateBookingStatus('${b.id}', 'PICKED_UP')">In gebruik geven</button>`;
-        } else if (b.status === 'PICKED_UP') {
-            actionsHtml = `<button type="button" class="btn btn-xs btn-outline" onclick="updateBookingStatus('${b.id}', 'RETURNED')">Terugontvangen</button>`;
-        } else if (b.status !== 'CANCELLED' && b.status !== 'RETURNED') {
-            actionsHtml = `<button type="button" class="btn btn-xs btn-outline" onclick="updateBookingStatus('${b.id}', 'CANCELLED')">Annuleren</button>`;
-        } else {
-            actionsHtml = `<span class="text-muted">-</span>`;
-        }
-
-        // Add Print Invoice button & Notification buttons to actions
-        const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="printBookingInvoice('${b.id}')" title="Print Factuur">
-            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/>
-            </svg>
-        </button>
-        <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="sendPickupNotification('${b.id}')" title="Verzend Ophaalherinnering (E-mail/SMS)">
-            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-            </svg>
-        </button>
-        <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="sendReturnNotification('${b.id}')" title="Verzend Inleverherinnering (E-mail/SMS)">
-            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-        </button>`;
-        if (actionsHtml === `<span class="text-muted">-</span>`) {
-            actionsHtml = printBtnHtml;
-        } else {
-            actionsHtml += printBtnHtml;
-        }
-
         // Format accessories
         const extras = [];
         if (b.extra_sim === true || b.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("SIM");
         if (b.extra_powerbank === true || b.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
         const extrasText = extras.length > 0 ? ` (+ ${extras.join(' & ')})` : '';
 
-        // Device assignment formatting
-        const assignedDevices = activeDevices.filter(d => d.assigned_booking_id === b.id);
-        let deviceAssignedText = '';
-        if (assignedDevices.length > 0) {
-            deviceAssignedText = `<div class="assigned-devices-box" style="margin-top: 6px; font-size: 0.8rem; color: var(--neon-cyan); font-weight: 600;">
-                🎧 ${assignedDevices.map(d => d.serial_number).join(', ')}
-                ${b.status !== 'RETURNED' && b.status !== 'CANCELLED' ? `<span class="text-red" style="margin-left: 6px; cursor: pointer; font-size: 0.75rem;" onclick="unassignDeviceFromBooking('${b.id}')" title="Koppeling verbreken">✕</span>` : ''}
-            </div>`;
-        } else if (b.status === 'CONFIRMED' || b.status === 'PICKED_UP') {
-            const availableDevices = activeDevices.filter(d => d.status === 'AVAILABLE');
-            let selectOptions = `<option value="">Koppel set...</option>`;
-            availableDevices.forEach(d => {
-                selectOptions += `<option value="${d.id}">${d.serial_number}</option>`;
-            });
-            deviceAssignedText = `
-                <div style="margin-top: 6px;">
-                    <select class="device-status-select" onchange="assignDeviceToBooking('${b.id}', this.value)" style="padding: 2px 4px; font-size: 0.75rem; width: 100px; height: 24px; font-weight: 500;">
-                        ${selectOptions}
-                    </select>
-                </div>
-            `;
-        }
-
-        // Table Row HTML
+        // Table Row HTML - simplified to 6 columns
         rowsHtml += `
             <tr>
                 <td>
@@ -631,63 +573,274 @@ function renderBookingsTable() {
                 </td>
                 <td>
                     <strong>${b.earbud_count}x W4 Pro</strong><br>
-                    <span class="text-muted small">${extrasText || 'Geen extras'}</span>
-                    ${deviceAssignedText}
+                    <span class="text-muted small">${extrasText || 'Geen extra\'s'}</span>
                 </td>
                 <td>
-                    <strong>฿${b.total_price_thb}</strong><br>
-                    <span class="text-muted small">${b.payment_method}</span>
-                </td>
-                <td>
-                    <div class="deposit-cell-container">
-                        <div class="deposit-checkbox-row">
-                            <input type="checkbox" id="dep-rec-${b.id}" ${b.deposit_received ? 'checked' : ''} onchange="updateBookingDeposit('${b.id}', 'deposit_received', this.checked)">
-                            <label for="dep-rec-${b.id}">Ontvangen</label>
-                        </div>
-                        <div class="deposit-checkbox-row">
-                            <input type="checkbox" id="dep-ret-${b.id}" ${b.deposit_returned ? 'checked' : ''} ${b.deposit_received ? '' : 'disabled'} onchange="updateBookingDeposit('${b.id}', 'deposit_returned', this.checked)">
-                            <label for="dep-ret-${b.id}">Retour</label>
-                        </div>
-                        <select class="deposit-type-select" onchange="updateBookingDeposit('${b.id}', 'deposit_type', this.value)">
-                            <option value="Cash THB" ${b.deposit_type === 'Cash THB' || !b.deposit_type ? 'selected' : ''}>Cash THB</option>
-                            <option value="Cash EUR/USD" ${b.deposit_type === 'Cash EUR/USD' ? 'selected' : ''}>Cash EUR/USD</option>
-                            <option value="Paspoort" ${b.deposit_type === 'Paspoort' ? 'selected' : ''}>Paspoort Kopie</option>
-                            <option value="Creditcard" ${b.deposit_type === 'Creditcard' ? 'selected' : ''}>Creditcard Hold</option>
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    ${b.signature_data ? `
-                        <div class="contract-badge signed">✓ Getekend</div>
-                        <button type="button" class="btn btn-xs btn-outline" style="margin-top: 6px; width: 100%; padding: 2px 4px; font-size: 0.75rem;" onclick="viewSignedContract('${b.id}')">📄 Contract</button>
-                    ` : `
-                        <div class="contract-badge unsigned">Niet getekend</div>
-                        ${b.status === 'CONFIRMED' || b.status === 'PICKED_UP' ? `
-                            <button type="button" class="btn btn-xs btn-neon" style="margin-top: 6px; width: 100%; padding: 2px 4px; font-size: 0.75rem;" onclick="openSignaturePad('${b.id}')">🖊️ Tekenen</button>
-                        ` : '-'}
-                    `}
-                </td>
-                <td>
-                    <span class="small">${formatLocationText(b.pickup_location)}</span>
-                </td>
-                <td>
-                    <span class="text-green small">✓ ${b.payment_status}</span><br>
-                    <span class="text-muted small">${b.transaction_id}</span>
+                    <strong>฿${parseInt(b.total_price_thb).toLocaleString()}</strong>
                 </td>
                 <td>
                     <span class="admin-status-pill ${statusClass}">${statusLabel}</span>
                 </td>
                 <td>
-                    <div style="display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;">
-                        ${actionsHtml}
-                    </div>
+                    <button type="button" class="btn btn-xs btn-neon" onclick="openBookingDetails('${b.id}')" style="display: inline-flex; align-items: center; gap: 4px;">Details 🔍</button>
                 </td>
             </tr>
         `;
     });
 
     tableBody.innerHTML = rowsHtml;
+    
+    // Auto-refresh details modal if it is currently open
+    refreshBookingDetailsIfOpen();
 }
+
+function refreshBookingDetailsIfOpen() {
+    const modal = document.getElementById('modal-booking-details');
+    if (modal && modal.classList.contains('active') && currentDetailBookingId) {
+        renderBookingDetails(currentDetailBookingId);
+    }
+}
+
+window.openBookingDetails = function(bookingId) {
+    currentDetailBookingId = bookingId;
+    renderBookingDetails(bookingId);
+    openAdminModal('modal-booking-details');
+};
+
+window.renderBookingDetails = function(bookingId) {
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) {
+        closeAdminModal('modal-booking-details');
+        return;
+    }
+
+    const modalBody = document.getElementById('booking-details-body');
+    if (!modalBody) return;
+
+    // Date formatting
+    const periodText = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+
+    // Extras formatting
+    const extras = [];
+    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("5G SIM-kaart");
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
+    const extrasText = extras.length > 0 ? extras.join(' & ') : 'Geen extra\'s';
+
+    // Status pill & label
+    let statusClass = 'badge-pending';
+    let statusLabel = 'Gereserveerd / Betaald';
+    if (booking.status === 'CONFIRMED') {
+        statusClass = 'badge-confirmed';
+        statusLabel = 'Betaald';
+    } else if (booking.status === 'PICKED_UP') {
+        statusClass = 'badge-active';
+        statusLabel = 'Actief';
+    } else if (booking.status === 'RETURNED') {
+        statusClass = 'badge-completed';
+        statusLabel = 'Ingeleverd';
+    } else if (booking.status === 'CANCELLED') {
+        statusClass = 'badge-cancelled';
+        statusLabel = 'Geannuleerd';
+    }
+
+    // Devices assigned logic
+    const assignedDevices = activeDevices.filter(d => d.assigned_booking_id === booking.id);
+    let devicesHtml = '';
+    if (assignedDevices.length > 0) {
+        devicesHtml = `
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    ${assignedDevices.map(d => `<span class="tag-device">🎧 ${d.serial_number}</span>`).join('')}
+                </div>
+                ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
+                    <button type="button" class="btn btn-xs btn-outline" onclick="unassignDeviceFromBooking('${booking.id}')" style="margin-top: 4px; max-width: 140px; color: var(--thai-red); border-color: var(--thai-red); padding: 4px 8px; font-size: 0.75rem;">✕ Ontkoppelen</button>
+                ` : ''}
+            </div>
+        `;
+    } else if (booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP') {
+        const availableDevices = activeDevices.filter(d => d.status === 'AVAILABLE');
+        let selectOptions = `<option value="">Koppel een headset...</option>`;
+        availableDevices.forEach(d => {
+            selectOptions += `<option value="${d.id}">${d.serial_number}</option>`;
+        });
+        devicesHtml = `
+            <div>
+                <select class="device-status-select" onchange="assignDeviceToBooking('${booking.id}', this.value)" style="width: 100%; max-width: 220px; height: 36px; padding: 6px 12px; font-size: 0.85rem;">
+                    ${selectOptions}
+                </select>
+                <p class="text-muted small" style="margin-top: 4px; font-size: 0.75rem;">Koppel een headset om de boeking actief te maken.</p>
+            </div>
+        `;
+    } else {
+        devicesHtml = `<span class="text-muted">Geen headsets gekoppeld</span>`;
+    }
+
+    // Contract Status
+    let contractHtml = '';
+    if (booking.signature_data) {
+        contractHtml = `
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">✓ Getekend</div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-xs btn-outline" style="padding: 6px 12px;" onclick="viewSignedContract('${booking.id}')">📄 Contract Openen</button>
+                </div>
+            </div>
+        `;
+    } else {
+        contractHtml = `
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="contract-badge unsigned" style="display: inline-block; align-self: flex-start;">Niet getekend</div>
+                ${booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP' ? `
+                    <button type="button" class="btn btn-xs btn-neon" style="padding: 6px 12px; font-weight: bold;" onclick="openSignaturePad('${booking.id}')">🖊️ Tekenen</button>
+                ` : '<span class="text-muted">-</span>'}
+            </div>
+        `;
+    }
+
+    // Actions button selector for standard update actions (In gebruik geven, Terugontvangen, etc.)
+    let statusActionBtnHtml = '';
+    if (booking.status === 'CONFIRMED') {
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-neon btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'PICKED_UP')">In gebruik geven</button>`;
+    } else if (booking.status === 'PICKED_UP') {
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'RETURNED')">Terugontvangen</button>`;
+    } else if (booking.status !== 'CANCELLED' && booking.status !== 'RETURNED') {
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px; color: var(--thai-red); border-color: var(--thai-red);" onclick="updateBookingStatus('${booking.id}', 'CANCELLED')">Annuleren</button>`;
+    } else {
+        statusActionBtnHtml = `<span class="text-muted text-center block">Geen statusacties beschikbaar</span>`;
+    }
+
+    // Modal Layout HTML
+    modalBody.innerHTML = `
+        <div class="booking-details-grid">
+            <!-- Left Side: Booking & Client Info -->
+            <div class="booking-details-col">
+                <div class="details-section">
+                    <h5>Klantgegevens</h5>
+                    <table class="details-table">
+                        <tr>
+                            <th>Naam:</th>
+                            <td><strong>${booking.customer_name}</strong></td>
+                        </tr>
+                        <tr>
+                            <th>E-mail:</th>
+                            <td><a href="mailto:${booking.customer_email}" style="color: var(--neon-cyan); text-decoration: none;">${booking.customer_email}</a></td>
+                        </tr>
+                        <tr>
+                            <th>Ophaallocatie:</th>
+                            <td><span style="font-size: 0.9rem;">${formatLocationText(booking.pickup_location)}</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="details-section">
+                    <h5>Huurdetails</h5>
+                    <table class="details-table">
+                        <tr>
+                            <th>Periode:</th>
+                            <td><span style="font-weight: 600;">${periodText}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Sets:</th>
+                            <td><strong>${booking.earbud_count}x</strong> Timekettle W4 Pro</td>
+                        </tr>
+                        <tr>
+                            <th>Extra's:</th>
+                            <td><span class="text-muted">${extrasText}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Gekoppelde Sets:</th>
+                            <td>${devicesHtml}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="details-section">
+                    <h5>Betaling</h5>
+                    <table class="details-table">
+                        <tr>
+                            <th>Totaal:</th>
+                            <td><strong style="color: var(--success); font-size: 1.15rem;">฿${parseInt(booking.total_price_thb).toLocaleString()}</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Methode:</th>
+                            <td>${booking.payment_method}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td><span class="text-green" style="font-weight: bold;">✓ ${booking.payment_status}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Transactie-ID:</th>
+                            <td><code style="font-family: monospace; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; word-break: break-all;">${booking.transaction_id}</code></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Side: Status, Deposit & Actions -->
+            <div class="booking-details-col">
+                <div class="details-section">
+                    <h5>Status & Borg</h5>
+                    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
+                        <div class="form-group">
+                            <label style="font-size: 0.85rem; color: var(--text-muted);">Snel Status Bijwerken:</label>
+                            <div style="margin-top: 8px;">
+                                ${statusActionBtnHtml}
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+                            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Borgbeheer:</label>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Borg Type:</span>
+                                    <select class="deposit-type-select" onchange="updateBookingDeposit('${booking.id}', 'deposit_type', this.value)" style="height: 30px; font-size: 0.85rem; padding: 2px 8px; width: 140px; margin: 0;">
+                                        <option value="Cash THB" ${booking.deposit_type === 'Cash THB' || !booking.deposit_type ? 'selected' : ''}>Cash THB</option>
+                                        <option value="Cash EUR/USD" ${booking.deposit_type === 'Cash EUR/USD' ? 'selected' : ''}>Cash EUR/USD</option>
+                                        <option value="Paspoort" ${booking.deposit_type === 'Paspoort' ? 'selected' : ''}>Paspoort Kopie</option>
+                                        <option value="Creditcard" ${booking.deposit_type === 'Creditcard' ? 'selected' : ''}>Creditcard Hold</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 16px; align-items: center; margin-top: 4px;">
+                                    <div class="deposit-checkbox-row" style="margin: 0; display: flex; align-items: center; gap: 6px;">
+                                        <input type="checkbox" id="det-dep-rec-${booking.id}" ${booking.deposit_received ? 'checked' : ''} onchange="updateBookingDeposit('${booking.id}', 'deposit_received', this.checked)">
+                                        <label for="det-dep-rec-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Ontvangen</label>
+                                    </div>
+                                    <div class="deposit-checkbox-row" style="margin: 0; display: flex; align-items: center; gap: 6px;">
+                                        <input type="checkbox" id="det-dep-ret-${booking.id}" ${booking.deposit_returned ? 'checked' : ''} ${booking.deposit_received ? '' : 'disabled'} onchange="updateBookingDeposit('${booking.id}', 'deposit_returned', this.checked)">
+                                        <label for="det-dep-ret-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Retour</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h5>Huurcontract</h5>
+                    <div style="margin-top: 8px;">
+                        ${contractHtml}
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h5>Operaties & Notificaties</h5>
+                    <div class="details-actions-panel" style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendPickupNotification('${booking.id}')">
+                            ✉️ Ophaalbericht
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendReturnNotification('${booking.id}')">
+                            ⏰ Inleverbericht
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline" style="grid-column: span 2; height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="printBookingInvoice('${booking.id}')">
+                            🖨️ Factuur printen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
 
 // 7. Status Actions
 window.updateBookingStatus = async function(id, newStatus) {
