@@ -1,4 +1,4 @@
-﻿// ==========================================================================
+// ==========================================================================
 // True Time Thai - Admin Dashboard Logic
 // Supports both simulated LocalStorage database and live Supabase client.
 // ==========================================================================
@@ -10,6 +10,9 @@ let supabaseClient = null;
 let isSimulated = true;
 let activeDevices = [];
 let currentView = 'bookings';
+let categoriesList = [];
+let productsList = [];
+let customersList = [];
 
 // Signature Pad & Notification Variables
 let canvas = null;
@@ -122,6 +125,32 @@ function initDummyBookings() {
     if (!localStorage.getItem('ttt_total_stock')) {
         localStorage.setItem('ttt_total_stock', '30');
     }
+    initDummyRelationalData();
+}
+
+function initDummyRelationalData() {
+    if (!localStorage.getItem('ttt_categories')) {
+        const categories = [
+            { id: 'c1111111-1111-1111-1111-111111111111', name: 'Translation Equipment' },
+            { id: 'c2222222-2222-2222-2222-222222222222', name: 'Accessories' }
+        ];
+        localStorage.setItem('ttt_categories', JSON.stringify(categories));
+    }
+    if (!localStorage.getItem('ttt_products')) {
+        const products = [
+            { id: 'e1111111-1111-1111-1111-111111111111', category_id: 'c1111111-1111-1111-1111-111111111111', name: 'Timekettle W4 Pro AI Translation Earbuds', description: 'Premium AI translation earbuds with open-ear comfort and active noise cancellation.', base_rate: 250.00, type: 'serialized' },
+            { id: 'e2222222-2222-2222-2222-222222222222', category_id: 'c2222222-2222-2222-2222-222222222222', name: '5G Local SIM Card', description: 'Local SIM card with unlimited 5G data.', base_rate: 350.00, type: 'bulk' },
+            { id: 'e3333333-3333-3333-3333-333333333333', category_id: 'c2222222-2222-2222-2222-222222222222', name: 'Premium Power Bank', description: 'High-capacity power bank for charging on the go.', base_rate: 175.00, type: 'bulk' }
+        ];
+        localStorage.setItem('ttt_products', JSON.stringify(products));
+    }
+    if (!localStorage.getItem('ttt_customers')) {
+        const customers = [
+            { id: 'cust-1', name: 'John Doe', email: 'john.doe@example.com', phone: '+66 81 111 2222', city: 'Pattaya', address: 'Hilton Pattaya, Room 1402' },
+            { id: 'cust-2', name: 'Sophie Dubois', email: 'sophie.dubois@example.com', phone: '+66 82 222 3333', city: 'Pattaya', address: 'Mövenpick Siam Hotel, Room 804' }
+        ];
+        localStorage.setItem('ttt_customers', JSON.stringify(customers));
+    }
 }
 
 function initDummyDevices() {
@@ -178,10 +207,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tab Navigation switching handlers
     const btnTabBookings = document.getElementById('btn-tab-bookings');
     const btnTabInventory = document.getElementById('btn-tab-inventory');
-    if (btnTabBookings && btnTabInventory) {
-        btnTabBookings.addEventListener('click', () => showView('bookings'));
-        btnTabInventory.addEventListener('click', () => showView('inventory'));
-    }
+    const btnTabProducts = document.getElementById('btn-tab-products');
+    const btnTabCustomers = document.getElementById('btn-tab-customers');
+    if (btnTabBookings) btnTabBookings.addEventListener('click', () => showView('bookings'));
+    if (btnTabInventory) btnTabInventory.addEventListener('click', () => showView('inventory'));
+    if (btnTabProducts) btnTabProducts.addEventListener('click', () => showView('products'));
+    if (btnTabCustomers) btnTabCustomers.addEventListener('click', () => showView('customers'));
+
+    // Products & Categories filters/submits
+    const productSearch = document.getElementById('product-search');
+    if (productSearch) productSearch.addEventListener('input', renderProductsTable);
+
+    const addCategoryForm = document.getElementById('add-category-form');
+    if (addCategoryForm) addCategoryForm.addEventListener('submit', handleAddCategory);
+
+    const addProductForm = document.getElementById('add-product-form');
+    if (addProductForm) addProductForm.addEventListener('submit', handleAddProduct);
+
+    const btnCancelProductEdit = document.getElementById('btn-cancel-product-edit');
+    if (btnCancelProductEdit) btnCancelProductEdit.addEventListener('click', cancelProductEdit);
+
+    // Customers filters/submits
+    const customerSearch = document.getElementById('customer-search');
+    if (customerSearch) customerSearch.addEventListener('input', renderCustomersTable);
+
+    const addCustomerForm = document.getElementById('add-customer-form');
+    if (addCustomerForm) addCustomerForm.addEventListener('submit', handleAddCustomer);
+
+    const btnCancelCustomerEdit = document.getElementById('btn-cancel-customer-edit');
+    if (btnCancelCustomerEdit) btnCancelCustomerEdit.addEventListener('click', cancelCustomerEdit);
 
     // Device search & filters
     const deviceSearch = document.getElementById('device-search');
@@ -1091,21 +1145,42 @@ window.showView = function(viewName) {
     currentView = viewName;
     const btnBookings = document.getElementById('btn-tab-bookings');
     const btnInventory = document.getElementById('btn-tab-inventory');
+    const btnProducts = document.getElementById('btn-tab-products');
+    const btnCustomers = document.getElementById('btn-tab-customers');
+
     const viewBookings = document.getElementById('view-bookings');
     const viewInventory = document.getElementById('view-inventory');
+    const viewProducts = document.getElementById('view-products');
+    const viewCustomers = document.getElementById('view-customers');
+
+    // Reset active tabs
+    if (btnBookings) btnBookings.classList.remove('active');
+    if (btnInventory) btnInventory.classList.remove('active');
+    if (btnProducts) btnProducts.classList.remove('active');
+    if (btnCustomers) btnCustomers.classList.remove('active');
+
+    // Hide all views
+    if (viewBookings) viewBookings.style.display = 'none';
+    if (viewInventory) viewInventory.style.display = 'none';
+    if (viewProducts) viewProducts.style.display = 'none';
+    if (viewCustomers) viewCustomers.style.display = 'none';
 
     if (viewName === 'bookings') {
         if (btnBookings) btnBookings.classList.add('active');
-        if (btnInventory) btnInventory.classList.remove('active');
         if (viewBookings) viewBookings.style.display = 'block';
-        if (viewInventory) viewInventory.style.display = 'none';
         loadDashboardData();
     } else if (viewName === 'inventory') {
-        if (btnBookings) btnBookings.classList.remove('active');
         if (btnInventory) btnInventory.classList.add('active');
-        if (viewBookings) viewBookings.style.display = 'none';
         if (viewInventory) viewInventory.style.display = 'block';
         loadDevices();
+    } else if (viewName === 'products') {
+        if (btnProducts) btnProducts.classList.add('active');
+        if (viewProducts) viewProducts.style.display = 'block';
+        loadProductsAndCategories();
+    } else if (viewName === 'customers') {
+        if (btnCustomers) btnCustomers.classList.add('active');
+        if (viewCustomers) viewCustomers.style.display = 'block';
+        loadCustomersData();
     }
 };
 
@@ -1889,5 +1964,610 @@ The True Time Thai Team`;
 window.confirmSendNotification = function() {
     closeAdminModal('modal-notification-preview');
     alert("Message successfully sent via simulated email & SMS gateway!");
+};
+
+// ==========================================================================
+// 11. PRODUCTS, CATEGORIES, AND CUSTOMERS MANAGEMENT
+// ==========================================================================
+async function loadProductsAndCategories() {
+    await loadCategories();
+    await loadProducts();
+}
+
+async function loadCategories() {
+    if (isSimulated) {
+        initDummyRelationalData();
+        const catsStr = localStorage.getItem('ttt_categories') || '[]';
+        categoriesList = JSON.parse(catsStr);
+        renderCategoriesDropdown();
+        renderCategoriesList();
+    } else {
+        try {
+            const { data, error } = await supabaseClient
+                .from('categories')
+                .select('*')
+                .order('name', { ascending: true });
+            if (error) {
+                console.error("Error loading categories:", error.message);
+            } else {
+                categoriesList = data || [];
+                renderCategoriesDropdown();
+                renderCategoriesList();
+            }
+        } catch (e) {
+            console.error("Exception loading categories live:", e);
+        }
+    }
+}
+
+async function loadProducts() {
+    if (isSimulated) {
+        initDummyRelationalData();
+        const prodsStr = localStorage.getItem('ttt_products') || '[]';
+        productsList = JSON.parse(prodsStr);
+        renderProductsTable();
+    } else {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select(`
+                    id, category_id, name, description, base_rate, type,
+                    categories (name)
+                `)
+                .order('name', { ascending: true });
+            if (error) {
+                console.error("Error loading products:", error.message);
+            } else {
+                productsList = data || [];
+                renderProductsTable();
+            }
+        } catch (e) {
+            console.error("Exception loading products live:", e);
+        }
+    }
+}
+
+async function loadCustomersData() {
+    if (isSimulated) {
+        initDummyRelationalData();
+        const custsStr = localStorage.getItem('ttt_customers') || '[]';
+        customersList = JSON.parse(custsStr);
+        renderCustomersTable();
+    } else {
+        try {
+            const { data, error } = await supabaseClient
+                .from('customers')
+                .select('*')
+                .order('name', { ascending: true });
+            if (error) {
+                console.error("Error loading customers:", error.message);
+            } else {
+                customersList = data || [];
+                renderCustomersTable();
+            }
+        } catch (e) {
+            console.error("Exception loading customers live:", e);
+        }
+    }
+}
+
+function renderCategoriesDropdown() {
+    const select = document.getElementById('select-product-category');
+    if (!select) return;
+    
+    if (categoriesList.length === 0) {
+        select.innerHTML = '<option value="">No categories available...</option>';
+        return;
+    }
+    
+    select.innerHTML = categoriesList.map(c => `
+        <option value="${c.id}">${c.name}</option>
+    `).join('');
+}
+
+function renderCategoriesList() {
+    const list = document.getElementById('categories-list');
+    if (!list) return;
+    
+    if (categoriesList.length === 0) {
+        list.innerHTML = '<li>No categories defined yet.</li>';
+        return;
+    }
+    
+    list.innerHTML = categoriesList.map(c => `
+        <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.03);">
+            <span>${c.name}</span>
+            <span onclick="deleteCategory('${c.id}')" style="cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold; margin-left: 10px;" title="Delete category">✕</span>
+        </li>
+    `).join('');
+}
+
+function renderProductsTable() {
+    const tableBody = document.getElementById('products-table-body');
+    if (!tableBody) return;
+    
+    const searchVal = document.getElementById('product-search') ? document.getElementById('product-search').value.toLowerCase().trim() : '';
+    
+    const filtered = productsList.filter(p => {
+        const nameMatch = p.name.toLowerCase().includes(searchVal);
+        const descMatch = (p.description || '').toLowerCase().includes(searchVal);
+        const catName = p.categories ? p.categories.name : '';
+        const catMatch = catName.toLowerCase().includes(searchVal);
+        return nameMatch || descMatch || catMatch;
+    });
+    
+    if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding: 16px;">No products found.</td></tr>`;
+        return;
+    }
+    
+    tableBody.innerHTML = filtered.map(p => {
+        let catName = '-';
+        if (p.categories) {
+            catName = p.categories.name;
+        } else if (p.category_id) {
+            const cat = categoriesList.find(c => c.id === p.category_id);
+            if (cat) catName = cat.name;
+        }
+        
+        return `
+            <tr>
+                <td style="font-weight: bold; color: var(--thai-blue);">${p.name}</td>
+                <td><span class="badge-status status-confirmed" style="background: rgba(18, 44, 84, 0.05); color: var(--thai-blue); border-color: rgba(18, 44, 84, 0.15);">${catName}</span></td>
+                <td>฿${parseFloat(p.base_rate).toFixed(2)}</td>
+                <td><span class="badge-status" style="font-size: 0.75rem; padding: 2px 6px;">${p.type}</span></td>
+                <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.description || ''}">${p.description || '-'}</td>
+                <td>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-outline" onclick="editProduct('${p.id}')">Edit</button>
+                        <button type="button" class="btn btn-xs btn-outline" style="color: var(--thai-red); border-color: rgba(208, 42, 42, 0.2);" onclick="deleteProduct('${p.id}')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderCustomersTable() {
+    const tableBody = document.getElementById('customers-table-body');
+    if (!tableBody) return;
+    
+    const searchVal = document.getElementById('customer-search') ? document.getElementById('customer-search').value.toLowerCase().trim() : '';
+    
+    const filtered = customersList.filter(c => {
+        const nameMatch = c.name.toLowerCase().includes(searchVal);
+        const emailMatch = c.email.toLowerCase().includes(searchVal);
+        const cityMatch = (c.city || '').toLowerCase().includes(searchVal);
+        const phoneMatch = (c.phone || '').toLowerCase().includes(searchVal);
+        return nameMatch || emailMatch || cityMatch || phoneMatch;
+    });
+    
+    if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding: 16px;">No customers found.</td></tr>`;
+        return;
+    }
+    
+    tableBody.innerHTML = filtered.map(c => `
+        <tr>
+            <td style="font-weight: bold; color: var(--thai-blue);">${c.name}</td>
+            <td style="font-size: 0.8rem;">${c.email}</td>
+            <td>${c.phone || '-'}</td>
+            <td>${c.city || '-'}</td>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${c.address || ''}">${c.address || '-'}</td>
+            <td>
+                <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn btn-xs btn-outline" onclick="editCustomer('${c.id}')">Edit</button>
+                    <button type="button" class="btn btn-xs btn-outline" style="color: var(--thai-red); border-color: rgba(208, 42, 42, 0.2);" onclick="deleteCustomer('${c.id}')">Delete</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Category Submission
+window.handleAddCategory = async function(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById('input-category-name');
+    if (!nameInput) return;
+    
+    const name = nameInput.value.trim();
+    if (!name) return;
+    
+    // Check duplicates
+    const exists = categoriesList.some(c => c.name.toLowerCase() === name.toLowerCase());
+    if (exists) {
+        alert(`Category "${name}" already exists!`);
+        return;
+    }
+    
+    const newCat = {
+        name: name
+    };
+    
+    if (isSimulated) {
+        newCat.id = `cat-${Date.now()}`;
+        const cats = JSON.parse(localStorage.getItem('ttt_categories') || '[]');
+        cats.push(newCat);
+        localStorage.setItem('ttt_categories', JSON.stringify(cats));
+        alert("Category successfully created in simulation!");
+        nameInput.value = '';
+        await loadCategories();
+    } else {
+        try {
+            const { data, error } = await supabaseClient
+                .from('categories')
+                .insert([newCat])
+                .select();
+            if (error) {
+                alert("Error adding category: " + error.message);
+            } else {
+                alert("Category successfully created live!");
+                nameInput.value = '';
+                await loadCategories();
+            }
+        } catch (err) {
+            alert("Exception adding category: " + err.message);
+        }
+    }
+};
+
+window.deleteCategory = async function(id) {
+    if (id === 'c1111111-1111-1111-1111-111111111111' || id === 'c2222222-2222-2222-2222-222222222222') {
+        alert("Cannot delete standard system categories!");
+        return;
+    }
+    
+    if (!confirm("Are you sure you want to delete this category? Products in this category may be unlinked.")) return;
+    
+    if (isSimulated) {
+        let cats = JSON.parse(localStorage.getItem('ttt_categories') || '[]');
+        cats = cats.filter(c => c.id !== id);
+        localStorage.setItem('ttt_categories', JSON.stringify(cats));
+        
+        // Unlink categories in products
+        let prods = JSON.parse(localStorage.getItem('ttt_products') || '[]');
+        prods = prods.map(p => p.category_id === id ? { ...p, category_id: null } : p);
+        localStorage.setItem('ttt_products', JSON.stringify(prods));
+        
+        alert("Category deleted successfully in simulation!");
+        await loadProductsAndCategories();
+    } else {
+        try {
+            const { error } = await supabaseClient
+                .from('categories')
+                .delete()
+                .eq('id', id);
+            if (error) {
+                alert("Error deleting category: " + error.message);
+            } else {
+                alert("Category deleted successfully live!");
+                await loadProductsAndCategories();
+            }
+        } catch (err) {
+            alert("Exception deleting category: " + err.message);
+        }
+    }
+};
+
+// Product Submission (Add or Edit)
+window.handleAddProduct = async function(e) {
+    e.preventDefault();
+    const idInput = document.getElementById('input-product-id');
+    const nameInput = document.getElementById('input-product-name');
+    const catSelect = document.getElementById('select-product-category');
+    const rateInput = document.getElementById('input-product-rate');
+    const typeSelect = document.getElementById('select-product-type');
+    const descInput = document.getElementById('input-product-description');
+    
+    if (!nameInput || !catSelect || !rateInput || !typeSelect || !descInput) return;
+    
+    const id = idInput.value;
+    const name = nameInput.value.trim();
+    const category_id = catSelect.value;
+    const base_rate = parseFloat(rateInput.value);
+    const type = typeSelect.value;
+    const description = descInput.value.trim();
+    
+    if (!name || !category_id || isNaN(base_rate)) {
+        alert("Please fill in all required fields!");
+        return;
+    }
+    
+    const productData = {
+        name,
+        category_id,
+        base_rate,
+        type,
+        description
+    };
+    
+    if (id) {
+        // Editing existing product
+        if (isSimulated) {
+            const prods = JSON.parse(localStorage.getItem('ttt_products') || '[]');
+            const idx = prods.findIndex(p => p.id === id);
+            if (idx !== -1) {
+                prods[idx] = { ...prods[idx], ...productData };
+                localStorage.setItem('ttt_products', JSON.stringify(prods));
+                alert("Product updated successfully in simulation!");
+                cancelProductEdit();
+                await loadProducts();
+            }
+        } else {
+            try {
+                const { error } = await supabaseClient
+                    .from('products')
+                    .update(productData)
+                    .eq('id', id);
+                if (error) {
+                    alert("Error updating product: " + error.message);
+                } else {
+                    alert("Product updated successfully live!");
+                    cancelProductEdit();
+                    await loadProducts();
+                }
+            } catch (err) {
+                alert("Exception updating product: " + err.message);
+            }
+        }
+    } else {
+        // Adding new product
+        // Duplicate check
+        const exists = productsList.some(p => p.name.toLowerCase() === name.toLowerCase());
+        if (exists) {
+            alert(`Product name "${name}" is already registered!`);
+            return;
+        }
+        
+        if (isSimulated) {
+            productData.id = `prod-${Date.now()}`;
+            const prods = JSON.parse(localStorage.getItem('ttt_products') || '[]');
+            prods.push(productData);
+            localStorage.setItem('ttt_products', JSON.stringify(prods));
+            alert("Product created successfully in simulation!");
+            nameInput.value = '';
+            rateInput.value = '';
+            descInput.value = '';
+            await loadProducts();
+        } else {
+            try {
+                const { error } = await supabaseClient
+                    .from('products')
+                    .insert([productData]);
+                if (error) {
+                    alert("Error adding product: " + error.message);
+                } else {
+                    alert("Product created successfully live!");
+                    nameInput.value = '';
+                    rateInput.value = '';
+                    descInput.value = '';
+                    await loadProducts();
+                }
+            } catch (err) {
+                alert("Exception adding product: " + err.message);
+            }
+        }
+    }
+};
+
+window.editProduct = function(id) {
+    const product = productsList.find(p => p.id === id);
+    if (!product) return;
+    
+    document.getElementById('input-product-id').value = product.id;
+    document.getElementById('input-product-name').value = product.name;
+    document.getElementById('select-product-category').value = product.category_id || '';
+    document.getElementById('input-product-rate').value = product.base_rate;
+    document.getElementById('select-product-type').value = product.type;
+    document.getElementById('input-product-description').value = product.description || '';
+    
+    document.getElementById('product-form-title').textContent = "Edit Product";
+    document.getElementById('product-form-desc').textContent = "Update this product details.";
+    document.getElementById('btn-cancel-product-edit').style.display = 'block';
+};
+
+window.cancelProductEdit = function() {
+    document.getElementById('input-product-id').value = '';
+    document.getElementById('input-product-name').value = '';
+    document.getElementById('input-product-rate').value = '';
+    document.getElementById('input-product-description').value = '';
+    
+    document.getElementById('product-form-title').textContent = "Add New Product";
+    document.getElementById('product-form-desc').textContent = "Add a rental item to the catalog.";
+    document.getElementById('btn-cancel-product-edit').style.display = 'none';
+};
+
+window.deleteProduct = async function(id) {
+    if (id === 'e1111111-1111-1111-1111-111111111111') {
+        alert("Cannot delete primary W4 Pro Earbuds system product!");
+        return;
+    }
+    
+    if (!confirm("Are you sure you want to delete this product?")) return;
+    
+    if (isSimulated) {
+        let prods = JSON.parse(localStorage.getItem('ttt_products') || '[]');
+        prods = prods.filter(p => p.id !== id);
+        localStorage.setItem('ttt_products', JSON.stringify(prods));
+        alert("Product deleted in simulation!");
+        await loadProducts();
+    } else {
+        try {
+            const { error } = await supabaseClient
+                .from('products')
+                .delete()
+                .eq('id', id);
+            if (error) {
+                alert("Error deleting product: " + error.message);
+            } else {
+                alert("Product deleted live!");
+                await loadProducts();
+            }
+        } catch (err) {
+            alert("Exception deleting product: " + err.message);
+        }
+    }
+};
+
+// Customer Submission (Add or Edit)
+window.handleAddCustomer = async function(e) {
+    e.preventDefault();
+    const idInput = document.getElementById('input-customer-id');
+    const nameInput = document.getElementById('input-customer-name');
+    const emailInput = document.getElementById('input-customer-email');
+    const phoneInput = document.getElementById('input-customer-phone');
+    const cityInput = document.getElementById('input-customer-city');
+    const addressInput = document.getElementById('input-customer-address');
+    
+    if (!nameInput || !emailInput || !phoneInput || !cityInput || !addressInput) return;
+    
+    const id = idInput.value;
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const city = cityInput.value.trim();
+    const address = addressInput.value.trim();
+    
+    if (!name || !email) {
+        alert("Please fill in required fields (Name & Email)!");
+        return;
+    }
+    
+    const customerData = {
+        name,
+        email,
+        phone,
+        city,
+        address
+    };
+    
+    if (id) {
+        // Editing customer
+        if (isSimulated) {
+            const custs = JSON.parse(localStorage.getItem('ttt_customers') || '[]');
+            const idx = custs.findIndex(c => c.id === id);
+            if (idx !== -1) {
+                custs[idx] = { ...custs[idx], ...customerData };
+                localStorage.setItem('ttt_customers', JSON.stringify(custs));
+                alert("Customer updated in simulation!");
+                cancelCustomerEdit();
+                await loadCustomersData();
+            }
+        } else {
+            try {
+                const { error } = await supabaseClient
+                    .from('customers')
+                    .update(customerData)
+                    .eq('id', id);
+                if (error) {
+                    alert("Error updating customer: " + error.message);
+                } else {
+                    alert("Customer updated live!");
+                    cancelCustomerEdit();
+                    await loadCustomersData();
+                }
+            } catch (err) {
+                alert("Exception updating customer: " + err.message);
+            }
+        }
+    } else {
+        // Adding customer
+        // Duplicate check on email
+        const exists = customersList.some(c => c.email.toLowerCase() === email.toLowerCase());
+        if (exists) {
+            alert(`Customer email "${email}" already registered!`);
+            return;
+        }
+        
+        if (isSimulated) {
+            customerData.id = `cust-${Date.now()}`;
+            customerData.created_at = new Date().toISOString();
+            const custs = JSON.parse(localStorage.getItem('ttt_customers') || '[]');
+            custs.push(customerData);
+            localStorage.setItem('ttt_customers', JSON.stringify(custs));
+            alert("Customer registered in simulation!");
+            nameInput.value = '';
+            emailInput.value = '';
+            phoneInput.value = '';
+            cityInput.value = '';
+            addressInput.value = '';
+            await loadCustomersData();
+        } else {
+            try {
+                const { error } = await supabaseClient
+                    .from('customers')
+                    .insert([customerData]);
+                if (error) {
+                    alert("Error adding customer: " + error.message);
+                } else {
+                    alert("Customer registered live!");
+                    nameInput.value = '';
+                    emailInput.value = '';
+                    phoneInput.value = '';
+                    cityInput.value = '';
+                    addressInput.value = '';
+                    await loadCustomersData();
+                }
+            } catch (err) {
+                alert("Exception adding customer: " + err.message);
+            }
+        }
+    }
+};
+
+window.editCustomer = function(id) {
+    const customer = customersList.find(c => c.id === id);
+    if (!customer) return;
+    
+    document.getElementById('input-customer-id').value = customer.id;
+    document.getElementById('input-customer-name').value = customer.name;
+    document.getElementById('input-customer-email').value = customer.email;
+    document.getElementById('input-customer-phone').value = customer.phone || '';
+    document.getElementById('input-customer-city').value = customer.city || '';
+    document.getElementById('input-customer-address').value = customer.address || '';
+    
+    document.getElementById('customer-form-title').textContent = "Edit Customer";
+    document.getElementById('customer-form-desc').textContent = "Update this customer details.";
+    document.getElementById('btn-cancel-customer-edit').style.display = 'block';
+};
+
+window.cancelCustomerEdit = function() {
+    document.getElementById('input-customer-id').value = '';
+    document.getElementById('input-customer-name').value = '';
+    document.getElementById('input-customer-email').value = '';
+    document.getElementById('input-customer-phone').value = '';
+    document.getElementById('input-customer-city').value = '';
+    document.getElementById('input-customer-address').value = '';
+    
+    document.getElementById('customer-form-title').textContent = "Add New Customer";
+    document.getElementById('customer-form-desc').textContent = "Register or edit a customer profile.";
+    document.getElementById('btn-cancel-customer-edit').style.display = 'none';
+};
+
+window.deleteCustomer = async function(id) {
+    if (!confirm("Are you sure you want to delete this customer record?")) return;
+    
+    if (isSimulated) {
+        let custs = JSON.parse(localStorage.getItem('ttt_customers') || '[]');
+        custs = custs.filter(c => c.id !== id);
+        localStorage.setItem('ttt_customers', JSON.stringify(custs));
+        alert("Customer deleted in simulation!");
+        await loadCustomersData();
+    } else {
+        try {
+            const { error } = await supabaseClient
+                .from('customers')
+                .delete()
+                .eq('id', id);
+            if (error) {
+                alert("Error deleting customer: " + error.message + " (It may be referenced by existing bookings)");
+            } else {
+                alert("Customer deleted live!");
+                await loadCustomersData();
+            }
+        } catch (err) {
+            alert("Exception deleting customer: " + err.message);
+        }
+    }
 };
 
