@@ -2353,28 +2353,27 @@ window.handleAddProduct = async function(e) {
 window.editProduct = function(id) {
     const product = productsList.find(p => p.id === id);
     if (!product) return;
-    
-    document.getElementById('input-product-id').value = product.id;
-    document.getElementById('input-product-name').value = product.name;
-    document.getElementById('select-product-category').value = product.category_id || '';
-    document.getElementById('input-product-rate').value = product.base_rate;
-    document.getElementById('select-product-type').value = product.type;
-    document.getElementById('input-product-description').value = product.description || '';
-    
-    document.getElementById('product-form-title').textContent = "Edit Product";
-    document.getElementById('product-form-desc').textContent = "Update this product details.";
-    document.getElementById('btn-cancel-product-edit').style.display = 'block';
+    window.location.href = `add-product.html?id=${product.id}`;
 };
 
 window.cancelProductEdit = function() {
-    document.getElementById('input-product-id').value = '';
-    document.getElementById('input-product-name').value = '';
-    document.getElementById('input-product-rate').value = '';
-    document.getElementById('input-product-description').value = '';
+    const idInput = document.getElementById('input-product-id');
+    const nameInput = document.getElementById('input-product-name');
+    const rateInput = document.getElementById('input-product-rate');
+    const descInput = document.getElementById('input-product-description');
     
-    document.getElementById('product-form-title').textContent = "Add New Product";
-    document.getElementById('product-form-desc').textContent = "Add a rental item to the catalog.";
-    document.getElementById('btn-cancel-product-edit').style.display = 'none';
+    if (idInput) idInput.value = '';
+    if (nameInput) nameInput.value = '';
+    if (rateInput) rateInput.value = '';
+    if (descInput) descInput.value = '';
+    
+    const formTitle = document.getElementById('product-form-title');
+    const formDesc = document.getElementById('product-form-desc');
+    const cancelBtn = document.getElementById('btn-cancel-product-edit');
+    
+    if (formTitle) formTitle.textContent = "Add New Product";
+    if (formDesc) formDesc.textContent = "Add a rental item to the catalog.";
+    if (cancelBtn) cancelBtn.style.display = 'none';
 };
 
 window.deleteProduct = async function(id) {
