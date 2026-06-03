@@ -4330,3 +4330,87 @@ hr {
     }
 }
 
+/* Booking Details Modal styles */
+.booking-details-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 24px;
+    margin-top: 10px;
+}
+
+.booking-details-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.details-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+}
+
+.details-section h5 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    color: var(--thai-blue);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.details-table th, .details-table td {
+    padding: 6px 0;
+    font-size: 0.9rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.details-table th {
+    width: 130px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.details-table td {
+    color: var(--text-light);
+}
+
+.tag-device {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 102, 204, 0.08);
+    border: 1px solid rgba(0, 102, 204, 0.2);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--neon-cyan);
+    font-weight: 600;
+}
+
+.details-actions-panel button {
+    width: 100%;
+}
+
+/* Make booking details modal scrollable if screen height is small */
+#modal-booking-details .admin-modal-card {
+    max-height: 90vh;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 800px; /* Wider modal for details grid */
+}
+
+/* Responsiveness for details grid */
+@media (max-width: 768px) {
+    .booking-details-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
