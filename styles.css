@@ -1330,10 +1330,10 @@ input, select, textarea {
    10. SECTION: BOOKING WIZARD
    -------------------------------------------------------------------------- */
 .booking-layout {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 32px;
-    align-items: start;
 }
 
 .booking-form {
@@ -1341,6 +1341,9 @@ input, select, textarea {
     border-radius: var(--radius-lg);
     background: #FFFFFF;
     border: 1px solid var(--border-glass);
+    width: 100%;
+    max-width: 680px;
+    box-sizing: border-box;
 }
 
 .booking-form h3 {
@@ -1495,8 +1498,9 @@ input, select, textarea {
 
 /* Booking Receipt Sidebar */
 .booking-receipt-sidebar {
-    position: sticky;
-    top: 110px;
+    width: 100%;
+    max-width: 680px;
+    box-sizing: border-box;
 }
 
 .receipt-card {
@@ -1617,6 +1621,10 @@ hr {
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-glass);
     animation: successFade 0.5s ease forwards;
+    width: 100%;
+    max-width: 680px;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .success-icon {
