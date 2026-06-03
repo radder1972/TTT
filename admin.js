@@ -11,6 +11,16 @@ let isSimulated = true;
 let activeDevices = [];
 let currentView = 'bookings';
 
+// Signature Pad & Notification Variables
+let canvas = null;
+let ctx = null;
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let activeSignBookingId = null;
+let activeNotifBookingId = null;
+let activeNotifType = null;
+
 // 1. Initialize Database Connection
 function initDatabase() {
     const statusDot = document.getElementById('db-status-dot');
@@ -187,6 +197,90 @@ document.addEventListener('DOMContentLoaded', () => {
     const addDeviceForm = document.getElementById('add-device-form');
     if (addDeviceForm) {
         addDeviceForm.addEventListener('submit', handleAddDevice);
+    }
+
+    // Signature Pad Initialization
+    canvas = document.getElementById('signature-canvas');
+    if (canvas) {
+        ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#0f172a'; // slate 900
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Clear Signature button
+        const btnClear = document.getElementById('btn-clear-signature');
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const guide = document.getElementById('canvas-guide-text');
+                if (guide) guide.style.display = 'block';
+            });
+        }
+
+        // Save Signature button
+        const btnSaveSig = document.getElementById('btn-save-signature');
+        if (btnSaveSig) {
+            btnSaveSig.addEventListener('click', saveSignature);
+        }
+
+        // Drawing logic
+        const startDrawing = (x, y) => {
+            isDrawing = true;
+            [lastX, lastY] = [x, y];
+            const guide = document.getElementById('canvas-guide-text');
+            if (guide) guide.style.display = 'none';
+        };
+
+        const draw = (x, y) => {
+            if (!isDrawing) return;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        };
+
+        const stopDrawing = () => {
+            isDrawing = false;
+        };
+
+        // Mouse Events
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            startDrawing(e.clientX - rect.left, e.clientY - rect.top);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            draw(e.clientX - rect.left, e.clientY - rect.top);
+        });
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch Events for Mobile
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                startDrawing(touch.clientX - rect.left, touch.clientY - rect.top);
+                e.preventDefault();
+            }
+        }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                draw(touch.clientX - rect.left, touch.clientY - rect.top);
+                e.preventDefault();
+            }
+        }, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+    }
+
+    // Confirm Send Notification Event
+    const btnConfirmSendNotif = document.getElementById('btn-confirm-send-notif');
+    if (btnConfirmSendNotif) {
+        btnConfirmSendNotif.addEventListener('click', confirmSendNotification);
     }
 });
 
@@ -472,10 +566,22 @@ function renderBookingsTable() {
             actionsHtml = `<span class="text-muted">-</span>`;
         }
 
-        // Add Print Invoice button to actions
+        // Add Print Invoice button & Notification buttons to actions
         const printBtnHtml = `<button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="printBookingInvoice('${b.id}')" title="Print Factuur">
             <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/>
+            </svg>
+        </button>
+        <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="sendPickupNotification('${b.id}')" title="Verzend Ophaalherinnering (E-mail/SMS)">
+            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+        </button>
+        <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="sendReturnNotification('${b.id}')" title="Verzend Inleverherinnering (E-mail/SMS)">
+            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
             </svg>
         </button>`;
         if (actionsHtml === `<span class="text-muted">-</span>`) {
@@ -531,6 +637,35 @@ function renderBookingsTable() {
                 <td>
                     <strong>฿${b.total_price_thb}</strong><br>
                     <span class="text-muted small">${b.payment_method}</span>
+                </td>
+                <td>
+                    <div class="deposit-cell-container">
+                        <div class="deposit-checkbox-row">
+                            <input type="checkbox" id="dep-rec-${b.id}" ${b.deposit_received ? 'checked' : ''} onchange="updateBookingDeposit('${b.id}', 'deposit_received', this.checked)">
+                            <label for="dep-rec-${b.id}">Ontvangen</label>
+                        </div>
+                        <div class="deposit-checkbox-row">
+                            <input type="checkbox" id="dep-ret-${b.id}" ${b.deposit_returned ? 'checked' : ''} ${b.deposit_received ? '' : 'disabled'} onchange="updateBookingDeposit('${b.id}', 'deposit_returned', this.checked)">
+                            <label for="dep-ret-${b.id}">Retour</label>
+                        </div>
+                        <select class="deposit-type-select" onchange="updateBookingDeposit('${b.id}', 'deposit_type', this.value)">
+                            <option value="Cash THB" ${b.deposit_type === 'Cash THB' || !b.deposit_type ? 'selected' : ''}>Cash THB</option>
+                            <option value="Cash EUR/USD" ${b.deposit_type === 'Cash EUR/USD' ? 'selected' : ''}>Cash EUR/USD</option>
+                            <option value="Paspoort" ${b.deposit_type === 'Paspoort' ? 'selected' : ''}>Paspoort Kopie</option>
+                            <option value="Creditcard" ${b.deposit_type === 'Creditcard' ? 'selected' : ''}>Creditcard Hold</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    ${b.signature_data ? `
+                        <div class="contract-badge signed">✓ Getekend</div>
+                        <button type="button" class="btn btn-xs btn-outline" style="margin-top: 6px; width: 100%; padding: 2px 4px; font-size: 0.75rem;" onclick="viewSignedContract('${b.id}')">📄 Contract</button>
+                    ` : `
+                        <div class="contract-badge unsigned">Niet getekend</div>
+                        ${b.status === 'CONFIRMED' || b.status === 'PICKED_UP' ? `
+                            <button type="button" class="btn btn-xs btn-neon" style="margin-top: 6px; width: 100%; padding: 2px 4px; font-size: 0.75rem;" onclick="openSignaturePad('${b.id}')">🖊️ Tekenen</button>
+                        ` : '-'}
+                    `}
                 </td>
                 <td>
                     <span class="small">${formatLocationText(b.pickup_location)}</span>
@@ -1149,3 +1284,280 @@ async function handleBookingReturnDevices(bookingId) {
         }
     }
 }
+
+// ==========================================================================
+// 6. Modal Popup Controls
+// ==========================================================================
+window.openAdminModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+    }
+};
+
+window.closeAdminModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+    }
+};
+
+// ==========================================================================
+// 7. Signature Canvas Pad Drawing & Saving Logic
+// ==========================================================================
+window.openSignaturePad = function(bookingId) {
+    activeSignBookingId = bookingId;
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    document.getElementById('sign-customer-name').textContent = booking.customer_name;
+    document.getElementById('sign-customer-email').textContent = booking.customer_email;
+    document.getElementById('sign-booking-id').textContent = booking.id;
+
+    openAdminModal('modal-signature');
+    
+    // Setup canvas bounds
+    setTimeout(() => {
+        if (canvas) {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            // Re-initialize context styles on resize/clear
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const guide = document.getElementById('canvas-guide-text');
+            if (guide) guide.style.display = 'block';
+        }
+    }, 200);
+};
+
+window.saveSignature = async function() {
+    if (!activeSignBookingId) return;
+    
+    const signatureDataUrl = canvas.toDataURL();
+    const booking = activeBookings.find(b => b.id === activeSignBookingId);
+    if (!booking) return;
+
+    const saveBtn = document.getElementById('btn-save-signature');
+    if (saveBtn) saveBtn.disabled = true;
+
+    if (isSimulated) {
+        booking.signature_data = signatureDataUrl;
+        booking.signature_date = new Date().toISOString();
+        if (booking.status === 'CONFIRMED') {
+            booking.status = 'PICKED_UP';
+            
+            // Auto update devices status to RENTED
+            const assignedDevices = activeDevices.filter(d => d.assigned_booking_id === booking.id);
+            assignedDevices.forEach(d => {
+                d.status = 'RENTED';
+            });
+            localStorage.setItem('ttt_devices', JSON.stringify(activeDevices));
+        }
+        
+        const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
+        let bookings = JSON.parse(bookingsStr);
+        const idx = bookings.findIndex(b => b.id === activeSignBookingId);
+        if (idx !== -1) {
+            bookings[idx].signature_data = signatureDataUrl;
+            bookings[idx].signature_date = booking.signature_date;
+            bookings[idx].status = booking.status;
+        }
+        localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
+        
+        alert("Huurcontract succesvol ondertekend en status gewijzigd naar Actief!");
+        closeAdminModal('modal-signature');
+        await loadDashboardData();
+    } else {
+        try {
+            let updatePayload = {
+                signature_data: signatureDataUrl,
+                signature_date: new Date().toISOString()
+            };
+            if (booking.status === 'CONFIRMED') {
+                updatePayload.status = 'PICKED_UP';
+            }
+
+            const { error } = await supabaseClient
+                .from('bookings')
+                .update(updatePayload)
+                .eq('id', activeSignBookingId);
+
+            if (error) {
+                if (error.message.includes("column") || error.code === "P0002" || error.code === "42703") {
+                    alert("Database-fout: De kolommen voor de handtekening ontbreken in de 'bookings' tabel. Schakelt tijdelijk over naar browseropslag. Run de SQL editor query!");
+                    isSimulated = true;
+                    await saveSignature();
+                    return;
+                } else {
+                    alert("Fout bij opslaan handtekening: " + error.message);
+                }
+            } else {
+                // Live assigned devices update to RENTED if confirmed
+                if (booking.status === 'CONFIRMED') {
+                    await supabaseClient
+                        .from('devices')
+                        .update({ status: 'RENTED' })
+                        .eq('assigned_booking_id', activeSignBookingId);
+                }
+                alert("Huurcontract succesvol live ondertekend!");
+                closeAdminModal('modal-signature');
+                await loadDashboardData();
+            }
+        } catch (err) {
+            console.error("Exception saving signature:", err);
+            alert("Uitzondering bij opslaan handtekening.");
+        }
+    }
+    if (saveBtn) saveBtn.disabled = false;
+};
+
+// ==========================================================================
+// 8. View Contract & Print Layouts
+// ==========================================================================
+window.viewSignedContract = function(bookingId) {
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    document.getElementById('contract-cust-name').textContent = booking.customer_name;
+    document.getElementById('contract-cust-email').textContent = booking.customer_email;
+    document.getElementById('contract-booking-id').textContent = booking.id;
+    document.getElementById('contract-period').textContent = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+    document.getElementById('contract-sets').textContent = `${booking.earbud_count}x W4 Pro`;
+    document.getElementById('contract-deposit-type').textContent = booking.deposit_type || 'Cash THB';
+    document.getElementById('contract-signature-img').src = booking.signature_data || '';
+    document.getElementById('contract-signed-date').textContent = booking.signature_date ? new Date(booking.signature_date).toLocaleString('nl-NL') : '-';
+
+    openAdminModal('modal-view-contract');
+};
+
+// ==========================================================================
+// 9. Deposit Update Handlers
+// ==========================================================================
+window.updateBookingDeposit = async function(bookingId, field, value) {
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    booking[field] = value;
+
+    // Reset return if received is unchecked
+    if (field === 'deposit_received' && value === false) {
+        booking.deposit_returned = false;
+        const checkRet = document.getElementById(`dep-ret-${bookingId}`);
+        if (checkRet) {
+            checkRet.checked = false;
+            checkRet.disabled = true;
+        }
+    } else if (field === 'deposit_received' && value === true) {
+        const checkRet = document.getElementById(`dep-ret-${bookingId}`);
+        if (checkRet) {
+            checkRet.disabled = false;
+        }
+    }
+
+    if (isSimulated) {
+        const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
+        let bookings = JSON.parse(bookingsStr);
+        const idx = bookings.findIndex(b => b.id === bookingId);
+        if (idx !== -1) {
+            bookings[idx][field] = value;
+            if (field === 'deposit_received' && value === false) {
+                bookings[idx].deposit_returned = false;
+            }
+        }
+        localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
+        calculateDashboardStats();
+    } else {
+        try {
+            let payload = { [field]: value };
+            if (field === 'deposit_received' && value === false) {
+                payload.deposit_returned = false;
+            }
+            
+            const { error } = await supabaseClient
+                .from('bookings')
+                .update(payload)
+                .eq('id', bookingId);
+            
+            if (error) {
+                console.error("Fout bij bijwerken borggegevens in live database:", error.message);
+                isSimulated = true;
+                await updateBookingDeposit(bookingId, field, value);
+            } else {
+                calculateDashboardStats();
+            }
+        } catch (err) {
+            console.error("Exception updating deposit:", err);
+        }
+    }
+};
+
+// ==========================================================================
+// 10. Client Notification Gateways (Simulation)
+// ==========================================================================
+window.sendPickupNotification = function(bookingId) {
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    activeNotifBookingId = bookingId;
+    activeNotifType = 'PICKUP';
+
+    document.getElementById('notif-to').textContent = `${booking.customer_name} (${booking.customer_email})`;
+    document.getElementById('notif-channels').textContent = "E-mail & SMS (Simulated)";
+    document.getElementById('notif-subject').textContent = "Je True Time Thai W4 Pro AI-vertaaloordopjes liggen klaar!";
+    
+    const message = `Beste ${booking.customer_name},
+
+Je boeking voor de True Time Thai W4 Pro AI-vertaaloordopjes gaat binnenkort van start!
+
+📍 Ophaallocatie: ${formatLocationText(booking.pickup_location)}
+📅 Startdatum: ${formatDateString(booking.start_date)}
+🎧 Aantal sets: ${booking.earbud_count}
+
+We kijken ernaar uit om je te verwelkomen en je te helpen met een zorgeloze vertaalervaring in Pattaya! Vergeet niet om een borg van 1000 THB (of paspoortkopie) mee te nemen.
+
+Met vriendelijke groet,
+Het True Time Thai Team`;
+
+    document.getElementById('notif-body').textContent = message;
+    openAdminModal('modal-notification-preview');
+};
+
+window.sendReturnNotification = function(bookingId) {
+    const booking = activeBookings.find(b => b.id === bookingId);
+    if (!booking) return;
+
+    activeNotifBookingId = bookingId;
+    activeNotifType = 'RETURN';
+
+    document.getElementById('notif-to').textContent = `${booking.customer_name} (${booking.customer_email})`;
+    document.getElementById('notif-channels').textContent = "E-mail & SMS (Simulated)";
+    document.getElementById('notif-subject').textContent = "Belangrijke herinnering: inleveren oordopjes";
+    
+    const message = `Beste ${booking.customer_name},
+
+We hopen dat je een fantastische tijd hebt gehad met de True Time Thai vertaaloordopjes!
+
+Dit is een herinnering dat je huurperiode eindigt op ${formatDateString(booking.end_date)}. We verzoeken je vriendelijk om de apparatuur (oordopjes, powerbank en oplaadkabels) tijdig te retourneren om extra kosten te voorkomen.
+
+📍 Inleverlocatie: ${formatLocationText(booking.pickup_location)}
+📅 Einddatum: ${formatDateString(booking.end_date)}
+
+Tot snel voor de inname!
+
+Met vriendelijke groet,
+Het True Time Thai Team`;
+
+    document.getElementById('notif-body').textContent = message;
+    openAdminModal('modal-notification-preview');
+};
+
+window.confirmSendNotification = function() {
+    closeAdminModal('modal-notification-preview');
+    alert("Bericht succesvol verzonden via gesimuleerde e-mail- en SMS-gateway!");
+};
