@@ -240,6 +240,12 @@ input, select, textarea {
     font-size: 0.85rem;
 }
 
+.btn-xs {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 .btn-lg {
     padding: 16px 36px;
     font-size: 1.05rem;
@@ -1651,8 +1657,8 @@ hr {
 .success-actions #btn-print-invoice {
     width: auto;
     padding: 12px 28px;
-    margin-top: 20px;
-    margin-bottom: 16px;
+    margin-top: 24px;
+    margin-bottom: 24px;
     margin-left: auto;
     margin-right: 0;
 }
@@ -3743,6 +3749,29 @@ hr {
 .sidebar-card p {
     font-size: 0.8rem;
     line-height: 1.4;
+}
+
+/* Sidebar inputs & button spacing */
+#input-total-stock {
+    padding: 8px 12px;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    outline: none;
+    font-size: 0.85rem;
+    width: 220px;
+    height: 34px; /* Matches height of the search box exactly */
+    box-sizing: border-box;
+    transition: var(--transition-smooth);
+}
+
+#input-total-stock:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 6px rgba(0, 102, 204, 0.1);
+}
+
+.btn-print-admin {
+    margin-left: 10px !important;
+    padding: 4px 10px !important;
 }
 
 .status-indicator-box {
