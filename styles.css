@@ -3502,6 +3502,34 @@ hr {
     text-align: center;
 }
 
+.admin-login-card input {
+    width: 100%;
+    height: 46px;
+    box-sizing: border-box;
+    padding: 10px 16px;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    outline: none;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    background: #FFFFFF;
+    transition: var(--transition-smooth);
+}
+
+.admin-login-card input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.15);
+}
+
+.admin-login-card button#btn-login {
+    height: 46px !important;
+    box-sizing: border-box !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+}
+
 .login-header {
     margin-bottom: 28px;
 }
@@ -3658,6 +3686,8 @@ hr {
 }
 
 .search-filter-row input {
+    height: 36px;
+    box-sizing: border-box;
     padding: 8px 12px;
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-sm);
@@ -3668,6 +3698,8 @@ hr {
 }
 
 .search-filter-row select {
+    height: 36px;
+    box-sizing: border-box;
     padding: 8px 12px;
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-sm);
@@ -3759,9 +3791,17 @@ hr {
     outline: none;
     font-size: 0.85rem;
     width: 220px;
-    height: 34px; /* Matches height of the search box exactly */
+    height: 36px; /* Matches height of the search box exactly */
     box-sizing: border-box;
     transition: var(--transition-smooth);
+}
+
+#btn-save-stock {
+    height: 36px !important;
+    box-sizing: border-box !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #input-total-stock:focus {
