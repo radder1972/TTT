@@ -582,7 +582,13 @@ function renderBookingsTable() {
                     <span class="admin-status-pill ${statusClass}">${statusLabel}</span>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-xs btn-neon" onclick="openBookingDetails('${b.id}')" style="display: inline-flex; align-items: center; gap: 4px;">Details 🔍</button>
+                    <button type="button" class="btn btn-xs btn-neon" onclick="openBookingDetails('${b.id}')" style="display: inline-flex; align-items: center; gap: 6px;">
+                        Details
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
                 </td>
             </tr>
         `;
@@ -653,8 +659,9 @@ window.renderBookingDetails = function(bookingId) {
         assignedListHtml = `
             <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
                 ${assignedDevices.map(d => `
-                    <span class="tag-device" style="position: relative; padding-right: 22px;">
-                        🎧 ${d.serial_number}
+                    <span class="tag-device" style="position: relative; padding-right: 22px; display: inline-flex; align-items: center;">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 4px; width: 12px; height: 12px;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                        ${d.serial_number}
                         ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
                             <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Koppeling verbreken">✕</span>
                         ` : ''}
@@ -700,7 +707,10 @@ window.renderBookingDetails = function(bookingId) {
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">✓ Getekend</div>
                 <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn btn-xs btn-outline" style="padding: 6px 12px;" onclick="viewSignedContract('${booking.id}')">📄 Contract Openen</button>
+                    <button type="button" class="btn btn-xs btn-outline" style="padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" onclick="viewSignedContract('${booking.id}')">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Contract Openen
+                    </button>
                 </div>
             </div>
         `;
@@ -709,7 +719,10 @@ window.renderBookingDetails = function(bookingId) {
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <div class="contract-badge unsigned" style="display: inline-block; align-self: flex-start;">Niet getekend</div>
                 ${booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP' ? `
-                    <button type="button" class="btn btn-xs btn-neon" style="padding: 6px 12px; font-weight: bold;" onclick="openSignaturePad('${booking.id}')">🖊️ Tekenen</button>
+                    <button type="button" class="btn btn-xs btn-neon" style="padding: 6px 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;" onclick="openSignaturePad('${booking.id}')">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        Tekenen
+                    </button>
                 ` : '<span class="text-muted">-</span>'}
             </div>
         `;
@@ -733,7 +746,10 @@ window.renderBookingDetails = function(bookingId) {
             <!-- Left Side: Booking & Client Info -->
             <div class="booking-details-col">
                 <div class="details-section">
-                    <h5>Klantgegevens</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        Klantgegevens
+                    </h5>
                     <table class="details-table">
                         <tr>
                             <th>Naam:</th>
@@ -751,7 +767,10 @@ window.renderBookingDetails = function(bookingId) {
                 </div>
 
                 <div class="details-section">
-                    <h5>Huurdetails</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+                        Huurdetails
+                    </h5>
                     <table class="details-table">
                         <tr>
                             <th>Periode:</th>
@@ -773,7 +792,10 @@ window.renderBookingDetails = function(bookingId) {
                 </div>
 
                 <div class="details-section">
-                    <h5>Betaling</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                        Betaling
+                    </h5>
                     <table class="details-table">
                         <tr>
                             <th>Totaal:</th>
@@ -798,7 +820,10 @@ window.renderBookingDetails = function(bookingId) {
             <!-- Right Side: Status, Deposit & Actions -->
             <div class="booking-details-col">
                 <div class="details-section">
-                    <h5>Status & Borg</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        Status & Borg
+                    </h5>
                     <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
                         <div class="form-group">
                             <label style="font-size: 0.85rem; color: var(--text-muted);">Snel Status Bijwerken:</label>
@@ -835,23 +860,32 @@ window.renderBookingDetails = function(bookingId) {
                 </div>
 
                 <div class="details-section">
-                    <h5>Huurcontract</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Huurcontract
+                    </h5>
                     <div style="margin-top: 8px;">
                         ${contractHtml}
                     </div>
                 </div>
 
                 <div class="details-section">
-                    <h5>Operaties & Notificaties</h5>
+                    <h5>
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Operaties & Notificaties
+                    </h5>
                     <div class="details-actions-panel" style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendPickupNotification('${booking.id}')">
-                            ✉️ Ophaalbericht
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            Ophaalbericht
                         </button>
                         <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendReturnNotification('${booking.id}')">
-                            ⏰ Inleverbericht
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            Inleverbericht
                         </button>
                         <button type="button" class="btn btn-xs btn-outline" style="grid-column: span 2; height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="printBookingInvoice('${booking.id}')">
-                            🖨️ Factuur printen
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                            Factuur printen
                         </button>
                     </div>
                 </div>
