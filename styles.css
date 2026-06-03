@@ -3968,6 +3968,86 @@ hr {
     color: var(--neon-cyan);
 }
 
+/* Dashboard Tab Navigation */
+.dashboard-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 1px;
+}
+
+.dashboard-tab-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-smooth);
+    border-bottom: 3px solid transparent;
+}
+
+.dashboard-tab-btn:hover {
+    color: var(--thai-blue);
+}
+
+.dashboard-tab-btn.active {
+    color: var(--neon-cyan);
+    border-bottom-color: var(--neon-cyan);
+}
+
+/* Headset Status Pills */
+.badge-available { background: rgba(16, 185, 129, 0.08); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.15); }
+.badge-rented { background: rgba(0, 102, 204, 0.08); color: var(--neon-cyan); border: 1px solid rgba(0, 102, 204, 0.15); }
+.badge-cleaning { background: rgba(191, 159, 63, 0.08); color: var(--thai-gold); border: 1px solid rgba(191, 159, 63, 0.15); }
+.badge-maintenance { background: rgba(208, 42, 42, 0.08); color: var(--thai-red); border: 1px solid rgba(208, 42, 42, 0.15); }
+
+/* Quick select style for device status dropdown in tables */
+.device-status-select {
+    padding: 4px 8px;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    background: #FFFFFF;
+    outline: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.device-status-select.status-AVAILABLE { color: var(--success); }
+.device-status-select.status-RENTED { color: var(--neon-cyan); }
+.device-status-select.status-CLEANING { color: var(--thai-gold); }
+.device-status-select.status-MAINTENANCE { color: var(--thai-red); }
+
+/* Input field for device notes in table */
+.device-notes-input {
+    width: 100%;
+    min-width: 160px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    outline: none;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-smooth);
+}
+
+.device-notes-input:hover {
+    border-color: var(--border-glass);
+    background: #F8FAFC;
+}
+
+.device-notes-input:focus {
+    border-color: var(--neon-cyan);
+    background: #FFFFFF;
+    box-shadow: 0 0 4px rgba(0, 102, 204, 0.1);
+}
+
 /* Print Invoice Styling */
 @media print {
     /* Hide everything on the page */
