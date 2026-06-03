@@ -470,7 +470,9 @@ function renderBookingsTable() {
                     <span class="admin-status-pill ${statusClass}">${statusLabel}</span>
                 </td>
                 <td>
-                    ${actionsHtml}
+                    <div style="display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;">
+                        ${actionsHtml}
+                    </div>
                 </td>
             </tr>
         `;
