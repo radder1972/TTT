@@ -36,11 +36,11 @@ function initDatabase() {
                 statusDot.className = "pulse-dot green";
             }
             if (statusText) {
-                statusText.textContent = "Supabase Live Verbonden";
+                statusText.textContent = "Supabase Live Connected";
             }
             console.log("Supabase Client initialized successfully.");
         } catch (error) {
-            console.error("Fout bij laden van Supabase client, fallback naar simulatie:", error);
+            console.error("Error loading Supabase client, fallback to simulation:", error);
             isSimulated = true;
         }
     } else {
@@ -50,9 +50,9 @@ function initDatabase() {
             statusDot.className = "pulse-dot orange";
         }
         if (statusText) {
-            statusText.textContent = "Simulatiemodus (LocalStorage)";
+            statusText.textContent = "Simulation Mode (LocalStorage)";
         }
-        console.log("Supabase Anon Key is leeg. Systeem draait in Simulatiemodus.");
+        console.log("Supabase Anon Key is empty. System is running in Simulation Mode.");
         
         // Initialize dummy bookings inside LocalStorage if empty
         initDummyBookings();
@@ -65,8 +65,8 @@ const DUMMY_BOOKINGS = [
     {
         id: "b1",
         created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        customer_name: "Jan de Vries",
-        customer_email: "jan@voorbeeld.nl",
+        customer_name: "John Doe",
+        customer_email: "john.doe@example.com",
         start_date: "2026-06-03",
         end_date: "2026-06-06",
         earbud_count: 2,
@@ -74,8 +74,8 @@ const DUMMY_BOOKINGS = [
         extra_sim: true,
         extra_powerbank: false,
         total_price_thb: 2200,
-        payment_method: "Creditcard (Simulated)",
-        payment_status: "BETAALD",
+        payment_method: "Credit Card (Simulated)",
+        payment_status: "PAID",
         transaction_id: "TXN_A8F9K4L2P",
         status: "CONFIRMED"
     },
@@ -83,16 +83,16 @@ const DUMMY_BOOKINGS = [
         id: "b2",
         created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
         customer_name: "Sophie Dubois",
-        customer_email: "sophie@example.com",
+        customer_email: "sophie.dubois@example.com",
         start_date: "2026-06-01",
         end_date: "2026-06-07",
         earbud_count: 1,
-        pickup_location: "Hotel Bezorging in Pattaya (Gratis) - Hilton Pattaya",
+        pickup_location: "Free Hotel Delivery in Pattaya - Hilton Pattaya",
         extra_sim: false,
         extra_powerbank: true,
         total_price_thb: 1675,
         payment_method: "PromptPay (Simulated)",
-        payment_status: "BETAALD",
+        payment_status: "PAID",
         transaction_id: "TXN_Q3W9E8R7T",
         status: "PICKED_UP"
     },
@@ -108,8 +108,8 @@ const DUMMY_BOOKINGS = [
         extra_sim: true,
         extra_powerbank: true,
         total_price_thb: 5325,
-        payment_method: "Creditcard (Simulated)",
-        payment_status: "BETAALD",
+        payment_method: "Credit Card (Simulated)",
+        payment_status: "PAID",
         transaction_id: "TXN_Z1X2C3V4B",
         status: "RETURNED"
     }
@@ -133,7 +133,7 @@ function initDummyDevices() {
                 id: `dev-${i}`,
                 serial_number: `W4-${numStr}`,
                 status: i === 5 ? 'RENTED' : (i === 12 ? 'CLEANING' : (i === 18 ? 'MAINTENANCE' : 'AVAILABLE')),
-                notes: `Set W4-${numStr} - Standaard actieve set.`,
+                notes: `Set W4-${numStr} - Standard active set.`,
                 assigned_booking_id: i === 5 ? 'b2' : null,
                 last_checked: new Date().toISOString()
             });
@@ -337,10 +337,10 @@ async function handleLogin(e) {
         // Simulated Authentication
         if (email === "info@truetimethai.com" && password === "R@dd3r1972?12345") {
             localStorage.setItem('ttt_admin_auth', 'true');
-            alert("Inloggen succesvol!");
+            alert("Login successful!");
             checkAuthSession();
         } else {
-            alert("Foutief e-mailadres of wachtwoord! Probeer info@truetimethai.com / R@dd3r1972?12345");
+            alert("Incorrect email address or password! Try info@truetimethai.com / R@dd3r1972?12345");
         }
         if (loginBtn) loginBtn.disabled = false;
     } else {
@@ -351,9 +351,9 @@ async function handleLogin(e) {
         });
 
         if (error) {
-            alert("Inloggen mislukt: " + error.message);
+            alert("Login failed: " + error.message);
         } else {
-            alert("Inloggen succesvol!");
+            alert("Login successful!");
             checkAuthSession();
         }
         if (loginBtn) loginBtn.disabled = false;
@@ -367,7 +367,7 @@ async function handleLogout() {
     } else {
         const { error } = await supabaseClient.auth.signOut();
         if (error) {
-            alert("Fout bij uitloggen: " + error.message);
+            alert("Error logging out: " + error.message);
         }
         checkAuthSession();
     }
@@ -412,7 +412,7 @@ async function loadTotalStock() {
                 totalStock = 30; // fallback default
             }
         } catch (error) {
-            console.error("Fout bij ophalen voorraad uit Supabase:", error);
+            console.error("Error fetching stock from Supabase:", error);
             totalStock = 30;
         }
     }
@@ -425,7 +425,7 @@ async function saveTotalStock() {
     
     const newVal = parseInt(stockInput.value);
     if (isNaN(newVal) || newVal < 1) {
-        alert("Voer een geldig getal in groter dan 0.");
+        alert("Please enter a valid number greater than 0.");
         return;
     }
 
@@ -435,7 +435,7 @@ async function saveTotalStock() {
     if (isSimulated) {
         localStorage.setItem('ttt_total_stock', newVal.toString());
         totalStock = newVal;
-        alert("Totale voorraad succesvol bijgewerkt in simulatie!");
+        alert("Total stock successfully updated in simulation!");
         loadDashboardData();
     } else {
         const { error } = await supabaseClient
@@ -443,10 +443,10 @@ async function saveTotalStock() {
             .upsert({ key: 'total_stock', value: newVal.toString() });
 
         if (error) {
-            alert("Fout bij opslaan van voorraad: " + error.message);
+            alert("Error saving stock: " + error.message);
         } else {
             totalStock = newVal;
-            alert("Totale voorraad succesvol live opgeslagen!");
+            alert("Total stock successfully saved live!");
             loadDashboardData();
         }
     }
@@ -458,17 +458,52 @@ async function loadBookings() {
         const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
         activeBookings = JSON.parse(bookingsStr);
     } else {
-        // Supabase Live select
-        const { data, error } = await supabaseClient
-            .from('bookings')
-            .select('*')
-            .order('start_date', { ascending: false });
+        // Supabase Live relational select
+        try {
+            const { data, error } = await supabaseClient
+                .from('rental_orders')
+                .select('*, customers(name, email, phone), rental_order_lines(quantity, product_id)')
+                .order('created_at', { ascending: false });
 
-        if (error) {
-            console.error("Fout bij ophalen boekingen:", error.message);
+            if (error) {
+                console.error("Error fetching bookings:", error.message);
+                activeBookings = [];
+            } else {
+                activeBookings = (data || []).map(order => {
+                    const customer = order.customers || {};
+                    const headsetLine = (order.rental_order_lines || []).find(l => l.product_id === 'p1111111-1111-1111-1111-111111111111');
+                    const simLine = (order.rental_order_lines || []).find(l => l.product_id === 'p2222222-2222-2222-2222-222222222222');
+                    const powerbankLine = (order.rental_order_lines || []).find(l => l.product_id === 'p3333333-3333-3333-3333-333333333333');
+                    
+                    return {
+                        id: order.id,
+                        customer_name: customer.name || 'Unknown',
+                        customer_email: customer.email || '',
+                        customer_phone: customer.phone || '',
+                        start_date: order.start_date,
+                        end_date: order.end_date,
+                        pickup_location: order.pickup_location,
+                        status: order.status,
+                        total_price_thb: order.total_price,
+                        payment_method: order.payment_method,
+                        payment_status: order.payment_status,
+                        transaction_id: order.transaction_id,
+                        deposit_type: order.deposit_type,
+                        deposit_received: order.deposit_received,
+                        deposit_returned: order.deposit_returned,
+                        signature_data: order.signature_data,
+                        signature_date: order.signed_date,
+                        notes: order.notes,
+                        earbud_count: headsetLine ? parseInt(headsetLine.quantity) : 1,
+                        extra_sim: simLine ? true : false,
+                        extra_powerbank: powerbankLine ? true : false,
+                        created_at: order.created_at
+                    };
+                });
+            }
+        } catch (e) {
+            console.error("Exception fetching live orders:", e);
             activeBookings = [];
-        } else {
-            activeBookings = data || [];
         }
     }
     
@@ -526,7 +561,7 @@ function renderBookingsTable() {
     if (filtered.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="text-center text-muted">Geen boekingen gevonden die voldoen aan de criteria.</td>
+                <td colspan="6" class="text-center text-muted">No bookings found matching the criteria.</td>
             </tr>
         `;
         return;
@@ -535,30 +570,30 @@ function renderBookingsTable() {
     let rowsHtml = '';
     filtered.forEach(b => {
         // Date Formatting helper
-        const periodText = `${formatDateString(b.start_date)} t/m ${formatDateString(b.end_date)}`;
+        const periodText = `${formatDateString(b.start_date)} to ${formatDateString(b.end_date)}`;
         
         // Status pill classes
         let statusClass = 'badge-pending';
-        let statusLabel = 'Gereserveerd';
+        let statusLabel = 'Reserved';
         
         if (b.status === 'CONFIRMED') {
             statusClass = 'badge-confirmed';
-            statusLabel = 'Betaald';
+            statusLabel = 'Paid';
         } else if (b.status === 'PICKED_UP') {
             statusClass = 'badge-active';
-            statusLabel = 'Actief';
+            statusLabel = 'Active';
         } else if (b.status === 'RETURNED') {
             statusClass = 'badge-completed';
-            statusLabel = 'Ingeleverd';
+            statusLabel = 'Returned';
         } else if (b.status === 'CANCELLED') {
             statusClass = 'badge-cancelled';
-            statusLabel = 'Geannuleerd';
+            statusLabel = 'Cancelled';
         }
 
         // Format accessories
         const extras = [];
-        if (b.extra_sim === true || b.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("SIM");
-        if (b.extra_powerbank === true || b.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
+        if (b.extra_sim === true || b.extra_sim === "Yes (+ ฿350 each)" || b.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("SIM");
+        if (b.extra_powerbank === true || b.extra_powerbank === "Yes (+ ฿175 each)" || b.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
         const extrasText = extras.length > 0 ? ` (+ ${extras.join(' & ')})` : '';
 
         // Table Row HTML - simplified to 6 columns
@@ -573,7 +608,7 @@ function renderBookingsTable() {
                 </td>
                 <td>
                     <strong>${b.earbud_count}x W4 Pro</strong><br>
-                    <span class="text-muted small">${extrasText || 'Geen extra\'s'}</span>
+                    <span class="text-muted small">${extrasText || 'No extras'}</span>
                 </td>
                 <td>
                     <strong>฿${parseInt(b.total_price_thb).toLocaleString()}</strong>
@@ -624,29 +659,29 @@ window.renderBookingDetails = function(bookingId) {
     if (!modalBody) return;
 
     // Date formatting
-    const periodText = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+    const periodText = `${formatDateString(booking.start_date)} to ${formatDateString(booking.end_date)}`;
 
     // Extras formatting
     const extras = [];
-    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)") extras.push("5G SIM-kaart");
-    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)") extras.push("Powerbank");
-    const extrasText = extras.length > 0 ? extras.join(' & ') : 'Geen extra\'s';
+    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)" || booking.extra_sim === "Yes (+ ฿350 each)") extras.push("5G SIM Card");
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)" || booking.extra_powerbank === "Yes (+ ฿175 each)") extras.push("Power Bank");
+    const extrasText = extras.length > 0 ? extras.join(' & ') : 'No extras';
 
     // Status pill & label
     let statusClass = 'badge-pending';
-    let statusLabel = 'Gereserveerd / Betaald';
+    let statusLabel = 'Reserved / Paid';
     if (booking.status === 'CONFIRMED') {
         statusClass = 'badge-confirmed';
-        statusLabel = 'Betaald';
+        statusLabel = 'Paid';
     } else if (booking.status === 'PICKED_UP') {
         statusClass = 'badge-active';
-        statusLabel = 'Actief';
+        statusLabel = 'Active';
     } else if (booking.status === 'RETURNED') {
         statusClass = 'badge-completed';
-        statusLabel = 'Ingeleverd';
+        statusLabel = 'Returned';
     } else if (booking.status === 'CANCELLED') {
         statusClass = 'badge-cancelled';
-        statusLabel = 'Geannuleerd';
+        statusLabel = 'Cancelled';
     }
 
     // Devices assigned logic
@@ -663,21 +698,21 @@ window.renderBookingDetails = function(bookingId) {
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 4px; width: 12px; height: 12px;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
                         ${d.serial_number}
                         ${booking.status !== 'RETURNED' && booking.status !== 'CANCELLED' ? `
-                            <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Koppeling verbreken">✕</span>
+                            <span onclick="unassignSingleDevice('${d.id}')" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--thai-red); font-size: 0.75rem; font-weight: bold;" title="Unlink headset">✕</span>
                         ` : ''}
                     </span>
                 `).join('')}
             </div>
         `;
     } else {
-        assignedListHtml = `<p class="text-muted small" style="margin-bottom: 8px;">Geen headsets gekoppeld</p>`;
+        assignedListHtml = `<p class="text-muted small" style="margin-bottom: 8px;">No headsets linked</p>`;
     }
 
     // 2. Build dropdown selector if more headsets can be assigned
     let selectDropdownHtml = '';
     if ((booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP') && assignedDevices.length < booking.earbud_count) {
         const availableDevices = activeDevices.filter(d => d.status === 'AVAILABLE');
-        let selectOptions = `<option value="">Koppel een headset...</option>`;
+        let selectOptions = `<option value="">Link a headset...</option>`;
         availableDevices.forEach(d => {
             selectOptions += `<option value="${d.id}">${d.serial_number}</option>`;
         });
@@ -686,11 +721,11 @@ window.renderBookingDetails = function(bookingId) {
                 <select class="device-status-select" onchange="assignDeviceToBooking('${booking.id}', this.value)" style="width: 100%; max-width: 220px; height: 36px; padding: 6px 12px; font-size: 0.85rem;">
                     ${selectOptions}
                 </select>
-                <p class="text-muted small" style="margin-top: 4px; font-size: 0.75rem;">Koppel headset ${assignedDevices.length + 1} van ${booking.earbud_count}</p>
+                <p class="text-muted small" style="margin-top: 4px; font-size: 0.75rem;">Link headset ${assignedDevices.length + 1} of ${booking.earbud_count}</p>
             </div>
         `;
     } else if (assignedDevices.length >= booking.earbud_count) {
-        selectDropdownHtml = `<p class="text-green small" style="margin-top: 4px; font-weight: bold;">✓ Alle ${booking.earbud_count} headsets gekoppeld</p>`;
+        selectDropdownHtml = `<p class="text-green small" style="margin-top: 4px; font-weight: bold;">✓ All ${booking.earbud_count} headsets linked</p>`;
     }
 
     devicesHtml = `
@@ -705,11 +740,11 @@ window.renderBookingDetails = function(bookingId) {
     if (booking.signature_data) {
         contractHtml = `
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">✓ Getekend</div>
+                <div class="contract-badge signed" style="display: inline-block; align-self: flex-start;">✓ Signed</div>
                 <div style="display: flex; gap: 8px;">
                     <button type="button" class="btn btn-xs btn-outline" style="padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" onclick="viewSignedContract('${booking.id}')">
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        Contract Openen
+                        Open Contract
                     </button>
                 </div>
             </div>
@@ -717,11 +752,11 @@ window.renderBookingDetails = function(bookingId) {
     } else {
         contractHtml = `
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div class="contract-badge unsigned" style="display: inline-block; align-self: flex-start;">Niet getekend</div>
+                <div class="contract-badge unsigned" style="display: inline-block; align-self: flex-start;">Not signed</div>
                 ${booking.status === 'CONFIRMED' || booking.status === 'PICKED_UP' ? `
                     <button type="button" class="btn btn-xs btn-neon" style="padding: 6px 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;" onclick="openSignaturePad('${booking.id}')">
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                        Tekenen
+                        Sign
                     </button>
                 ` : '<span class="text-muted">-</span>'}
             </div>
@@ -731,13 +766,13 @@ window.renderBookingDetails = function(bookingId) {
     // Actions button selector for standard update actions (In gebruik geven, Terugontvangen, etc.)
     let statusActionBtnHtml = '';
     if (booking.status === 'CONFIRMED') {
-        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-neon btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'PICKED_UP')">In gebruik geven</button>`;
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-neon btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'PICKED_UP')">Hand over (Active)</button>`;
     } else if (booking.status === 'PICKED_UP') {
-        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'RETURNED')">Terugontvangen</button>`;
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px;" onclick="updateBookingStatus('${booking.id}', 'RETURNED')">Receive back</button>`;
     } else if (booking.status !== 'CANCELLED' && booking.status !== 'RETURNED') {
-        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px; color: var(--thai-red); border-color: var(--thai-red);" onclick="updateBookingStatus('${booking.id}', 'CANCELLED')">Annuleren</button>`;
+        statusActionBtnHtml = `<button type="button" class="btn btn-sm btn-outline btn-block" style="height: 36px; color: var(--thai-red); border-color: var(--thai-red);" onclick="updateBookingStatus('${booking.id}', 'CANCELLED')">Cancel</button>`;
     } else {
-        statusActionBtnHtml = `<span class="text-muted text-center block">Geen statusacties beschikbaar</span>`;
+        statusActionBtnHtml = `<span class="text-muted text-center block">No status actions available</span>`;
     }
 
     // Modal Layout HTML
@@ -748,19 +783,19 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        Klantgegevens
+                        Customer Details
                     </h5>
                     <table class="details-table">
                         <tr>
-                            <th>Naam:</th>
+                            <th>Name:</th>
                             <td><strong>${booking.customer_name}</strong></td>
                         </tr>
                         <tr>
-                            <th>E-mail:</th>
+                            <th>Email:</th>
                             <td><a href="mailto:${booking.customer_email}" style="color: var(--neon-cyan); text-decoration: none;">${booking.customer_email}</a></td>
                         </tr>
                         <tr>
-                            <th>Ophaallocatie:</th>
+                            <th>Pickup Location:</th>
                             <td><span style="font-size: 0.9rem;">${formatLocationText(booking.pickup_location)}</span></td>
                         </tr>
                     </table>
@@ -769,11 +804,11 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-                        Huurdetails
+                        Rental Details
                     </h5>
                     <table class="details-table">
                         <tr>
-                            <th>Periode:</th>
+                            <th>Period:</th>
                             <td><span style="font-weight: 600;">${periodText}</span></td>
                         </tr>
                         <tr>
@@ -781,11 +816,11 @@ window.renderBookingDetails = function(bookingId) {
                             <td><strong>${booking.earbud_count}x</strong> Timekettle W4 Pro</td>
                         </tr>
                         <tr>
-                            <th>Extra's:</th>
+                            <th>Extras:</th>
                             <td><span class="text-muted">${extrasText}</span></td>
                         </tr>
                         <tr>
-                            <th>Gekoppelde Sets:</th>
+                            <th>Linked Sets:</th>
                             <td>${devicesHtml}</td>
                         </tr>
                     </table>
@@ -794,15 +829,15 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                        Betaling
+                        Payment
                     </h5>
                     <table class="details-table">
                         <tr>
-                            <th>Totaal:</th>
+                            <th>Total:</th>
                             <td><strong style="color: var(--success); font-size: 1.15rem;">฿${parseInt(booking.total_price_thb).toLocaleString()}</strong></td>
                         </tr>
                         <tr>
-                            <th>Methode:</th>
+                            <th>Method:</th>
                             <td>${booking.payment_method}</td>
                         </tr>
                         <tr>
@@ -810,7 +845,7 @@ window.renderBookingDetails = function(bookingId) {
                             <td><span class="text-green" style="font-weight: bold;">✓ ${booking.payment_status}</span></td>
                         </tr>
                         <tr>
-                            <th>Transactie-ID:</th>
+                            <th>Transaction ID:</th>
                             <td><code style="font-family: monospace; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; word-break: break-all;">${booking.transaction_id}</code></td>
                         </tr>
                     </table>
@@ -822,36 +857,36 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                        Status & Borg
+                        Status & Deposit
                     </h5>
                     <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
                         <div class="form-group">
-                            <label style="font-size: 0.85rem; color: var(--text-muted);">Snel Status Bijwerken:</label>
+                            <label style="font-size: 0.85rem; color: var(--text-muted);">Quick Status Update:</label>
                             <div style="margin-top: 8px;">
                                 ${statusActionBtnHtml}
                             </div>
                         </div>
 
                         <div class="form-group" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
-                            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Borgbeheer:</label>
+                            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Deposit Management:</label>
                             <div style="display: flex; flex-direction: column; gap: 12px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Borg Type:</span>
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">Deposit Type:</span>
                                     <select class="deposit-type-select" onchange="updateBookingDeposit('${booking.id}', 'deposit_type', this.value)" style="height: 30px; font-size: 0.85rem; padding: 2px 8px; width: 140px; margin: 0;">
                                         <option value="Cash THB" ${booking.deposit_type === 'Cash THB' || !booking.deposit_type ? 'selected' : ''}>Cash THB</option>
                                         <option value="Cash EUR/USD" ${booking.deposit_type === 'Cash EUR/USD' ? 'selected' : ''}>Cash EUR/USD</option>
-                                        <option value="Paspoort" ${booking.deposit_type === 'Paspoort' ? 'selected' : ''}>Paspoort Kopie</option>
+                                        <option value="Paspoort" ${booking.deposit_type === 'Paspoort' ? 'selected' : ''}>Passport Copy</option>
                                         <option value="Creditcard" ${booking.deposit_type === 'Creditcard' ? 'selected' : ''}>Creditcard Hold</option>
                                     </select>
                                 </div>
                                 <div style="display: flex; gap: 16px; align-items: center; margin-top: 4px;">
                                     <div class="deposit-checkbox-row" style="margin: 0; display: flex; align-items: center; gap: 6px;">
                                         <input type="checkbox" id="det-dep-rec-${booking.id}" ${booking.deposit_received ? 'checked' : ''} onchange="updateBookingDeposit('${booking.id}', 'deposit_received', this.checked)">
-                                        <label for="det-dep-rec-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Ontvangen</label>
+                                        <label for="det-dep-rec-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Received</label>
                                     </div>
                                     <div class="deposit-checkbox-row" style="margin: 0; display: flex; align-items: center; gap: 6px;">
                                         <input type="checkbox" id="det-dep-ret-${booking.id}" ${booking.deposit_returned ? 'checked' : ''} ${booking.deposit_received ? '' : 'disabled'} onchange="updateBookingDeposit('${booking.id}', 'deposit_returned', this.checked)">
-                                        <label for="det-dep-ret-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Retour</label>
+                                        <label for="det-dep-ret-${booking.id}" style="font-size: 0.85rem; font-weight: 500;">Returned</label>
                                     </div>
                                 </div>
                             </div>
@@ -862,7 +897,7 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        Huurcontract
+                        Rental Agreement
                     </h5>
                     <div style="margin-top: 8px;">
                         ${contractHtml}
@@ -872,20 +907,20 @@ window.renderBookingDetails = function(bookingId) {
                 <div class="details-section">
                     <h5>
                         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        Operaties & Notificaties
+                        Operations & Notifications
                     </h5>
                     <div class="details-actions-panel" style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendPickupNotification('${booking.id}')">
                             <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            Ophaalbericht
+                        Pickup Message
                         </button>
                         <button type="button" class="btn btn-xs btn-outline" style="height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="sendReturnNotification('${booking.id}')">
                             <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            Inleverbericht
+                        Return Message
                         </button>
                         <button type="button" class="btn btn-xs btn-outline" style="grid-column: span 2; height: 36px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="printBookingInvoice('${booking.id}')">
                             <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 0;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                            Factuur printen
+                        Print Invoice
                         </button>
                     </div>
                 </div>
@@ -896,7 +931,7 @@ window.renderBookingDetails = function(bookingId) {
 
 // 7. Status Actions
 window.updateBookingStatus = async function(id, newStatus) {
-    if (!confirm(`Weet u zeker dat u de status van boeking ${id} wilt wijzigen?`)) {
+    if (!confirm(`Are you sure you want to change the status of booking ${id}?`)) {
         return;
     }
 
@@ -909,26 +944,36 @@ window.updateBookingStatus = async function(id, newStatus) {
         if (bIndex !== -1) {
             bookings[bIndex].status = newStatus;
             localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
+            
+            // Also update simulated rental_orders table
+            const ordersStr = localStorage.getItem('ttt_rental_orders') || '[]';
+            const orders = JSON.parse(ordersStr);
+            const oIdx = orders.findIndex(o => o.id === id);
+            if (oIdx !== -1) {
+                orders[oIdx].status = newStatus;
+                localStorage.setItem('ttt_rental_orders', JSON.stringify(orders));
+            }
+
             if (newStatus === 'RETURNED') {
                 await handleBookingReturnDevices(id);
             }
-            alert("Status succesvol bijgewerkt!");
+            alert("Status successfully updated!");
             loadDashboardData();
         }
     } else {
         // Update Supabase Database row
         const { error } = await supabaseClient
-            .from('bookings')
+            .from('rental_orders')
             .update({ status: newStatus })
             .eq('id', id);
 
         if (error) {
-            alert("Fout bij bijwerken status: " + error.message);
+            alert("Error updating status: " + error.message);
         } else {
             if (newStatus === 'RETURNED') {
                 await handleBookingReturnDevices(id);
             }
-            alert("Status succesvol live bijgewerkt!");
+            alert("Status successfully updated live!");
             loadDashboardData();
         }
     }
@@ -950,8 +995,8 @@ function formatDateString(dateStr) {
 
 function formatLocationText(locText) {
     if (!locText) return '';
-    if (locText.includes("Office")) return "Kantoor Beach Road";
-    if (locText.includes("Bezorging") || locText.includes("delivery")) return "Hotel Bezorging";
+    if (locText.includes("Office")) return "Beach Road Office";
+    if (locText.includes("Bezorging") || locText.includes("delivery") || locText.includes("Delivery")) return "Hotel Delivery";
     return locText;
 }
 
@@ -959,13 +1004,13 @@ function formatLocationText(locText) {
 window.printBookingInvoice = function(id) {
     const booking = activeBookings.find(b => b.id === id);
     if (!booking) {
-        alert("Boeking niet gevonden!");
+        alert("Booking not found!");
         return;
     }
     
     // Populate printable fields
     document.getElementById('print-invoice-id').textContent = booking.id;
-    document.getElementById('print-invoice-period').textContent = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+    document.getElementById('print-invoice-period').textContent = `${formatDateString(booking.start_date)} to ${formatDateString(booking.end_date)}`;
     document.getElementById('print-cust-name').textContent = booking.customer_name;
     document.getElementById('print-cust-email').textContent = booking.customer_email;
     document.getElementById('print-pickup-loc').textContent = formatLocationText(booking.pickup_location);
@@ -976,16 +1021,16 @@ window.printBookingInvoice = function(id) {
     // Status styling and text
     const statusEl = document.getElementById('print-pay-status');
     if (booking.status === 'CANCELLED') {
-        statusEl.textContent = 'GEANNULEERD';
+        statusEl.textContent = 'CANCELLED';
         statusEl.style.color = '#dc3545';
     } else if (booking.status === 'RETURNED') {
-        statusEl.textContent = 'INGELEVERD / COMPLEET';
+        statusEl.textContent = 'RETURNED / COMPLETED';
         statusEl.style.color = '#007bff';
     } else if (booking.status === 'PICKED_UP') {
-        statusEl.textContent = 'IN GEBRUIK (ACTIEF)';
+        statusEl.textContent = 'IN USE (ACTIVE)';
         statusEl.style.color = '#ffc107';
     } else {
-        statusEl.textContent = 'BETAALD / RESERVERING';
+        statusEl.textContent = 'PAID / RESERVATION';
         statusEl.style.color = '#28a745';
     }
     
@@ -995,24 +1040,24 @@ window.printBookingInvoice = function(id) {
     
     let itemsHtml = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-            <span>Huur W4 Pro AI oordopjes (${booking.earbud_count}x set, ${days}d):</span>
+            <span>W4 Pro AI Translation Earbuds Rental (${booking.earbud_count}x set, ${days}d):</span>
             <span>฿${(booking.earbud_count * 250 * days).toLocaleString()}</span>
         </div>
     `;
     
-    if (booking.extra_sim === true || booking.extra_sim === "Ja (+ ฿350 per stuk)" || booking.extra_sim === "Ja (+ ?350 per stuk)") {
+    if (booking.extra_sim === true || booking.extra_sim === "Yes (+ ฿350 each)" || booking.extra_sim === "Ja (+ ฿350 per stuk)") {
         itemsHtml += `
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span>5G Lokale SIM-kaart (${booking.earbud_count}x flat):</span>
+                <span>5G Local SIM Card (${booking.earbud_count}x flat):</span>
                 <span>฿${(booking.earbud_count * 350).toLocaleString()}</span>
             </div>
         `;
     }
     
-    if (booking.extra_powerbank === true || booking.extra_powerbank === "Ja (+ ฿175 per stuk)" || booking.extra_powerbank === "Ja (+ ?175 per stuk)") {
+    if (booking.extra_powerbank === true || booking.extra_powerbank === "Yes (+ ฿175 each)" || booking.extra_powerbank === "Ja (+ ฿175 per stuk)") {
         itemsHtml += `
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span>Premium Powerbank (${booking.earbud_count}x flat):</span>
+                <span>Premium Power Bank (${booking.earbud_count}x flat):</span>
                 <span>฿${(booking.earbud_count * 175).toLocaleString()}</span>
             </div>
         `;
@@ -1082,7 +1127,7 @@ async function syncTotalStockWithDevices() {
                 .from('settings')
                 .upsert({ key: 'total_stock', value: count.toString() });
         } catch (e) {
-            console.error("Fout bij syncen van live totale voorraad:", e);
+            console.error("Error syncing live total stock:", e);
         }
     }
 }
@@ -1101,12 +1146,12 @@ window.loadDevices = async function() {
     } else {
         try {
             const { data, error } = await supabaseClient
-                .from('devices')
+                .from('inventory')
                 .select('*')
                 .order('serial_number', { ascending: true });
             
             if (error) {
-                console.error("Fout bij ophalen live devices uit Supabase, falling back to LocalStorage:", error.message);
+                console.error("Error fetching live devices from Supabase, falling back to LocalStorage:", error.message);
                 const devicesStr = localStorage.getItem('ttt_devices') || '[]';
                 activeDevices = JSON.parse(devicesStr);
                 if (activeDevices.length === 0) {
@@ -1116,13 +1161,16 @@ window.loadDevices = async function() {
                     activeDevices = JSON.parse(freshDevicesStr);
                 }
             } else {
-                activeDevices = data || [];
+                activeDevices = (data || []).map(d => ({
+                    ...d,
+                    assigned_booking_id: d.assigned_order_id
+                }));
                 if (activeDevices.length === 0) {
                     await seedLiveDevices();
                 }
             }
         } catch (error) {
-            console.error("Uitzondering bij ophalen devices:", error);
+            console.error("Exception fetching devices:", error);
             const devicesStr = localStorage.getItem('ttt_devices') || '[]';
             activeDevices = JSON.parse(devicesStr);
         }
@@ -1138,21 +1186,25 @@ async function seedLiveDevices() {
         for (let i = 1; i <= 30; i++) {
             const numStr = String(i).padStart(3, '0');
             dummyDevices.push({
+                product_id: 'p1111111-1111-1111-1111-111111111111',
                 serial_number: `W4-${numStr}`,
                 status: 'AVAILABLE',
-                notes: `Set W4-${numStr} - Standaard actieve set.`,
+                notes: `Set W4-${numStr} - Standard active set.`,
                 last_checked: new Date().toISOString()
             });
         }
         const { data, error } = await supabaseClient
-            .from('devices')
+            .from('inventory')
             .insert(dummyDevices)
             .select();
         if (!error && data) {
-            activeDevices = data;
+            activeDevices = (data || []).map(d => ({
+                ...d,
+                assigned_booking_id: d.assigned_order_id
+            }));
         }
     } catch (e) {
-        console.error("Fout bij seeden live apparaten:", e);
+        console.error("Error seeding live devices:", e);
     }
 }
 
@@ -1175,7 +1227,7 @@ window.renderDevicesTable = function() {
     if (filtered.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center text-muted">Geen headsets gevonden die voldoen aan de criteria.</td>
+                <td colspan="7" class="text-center text-muted">No headsets found matching the criteria.</td>
             </tr>
         `;
         return;
@@ -1189,11 +1241,11 @@ window.renderDevicesTable = function() {
             if (booking) {
                 bookingText = `<strong>${booking.customer_name}</strong><br><span class="text-muted small">${booking.customer_email}</span>`;
             } else {
-                bookingText = `<span class="text-muted">Gekoppeld (ID: ${d.assigned_booking_id})</span>`;
+                bookingText = `<span class="text-muted">Assigned (ID: ${d.assigned_booking_id})</span>`;
             }
         }
 
-        const lastCheckedFormatted = d.last_checked ? new Date(d.last_checked).toLocaleString('nl-NL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '-';
+        const lastCheckedFormatted = d.last_checked ? new Date(d.last_checked).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '-';
 
         rowsHtml += `
             <tr id="dev-row-${d.id}">
@@ -1201,19 +1253,19 @@ window.renderDevicesTable = function() {
                 <td><span class="small">Timekettle W4 Pro</span></td>
                 <td>
                     <select class="device-status-select status-${d.status}" onchange="updateDeviceStatus('${d.id}', this.value)">
-                        <option value="AVAILABLE" ${d.status === 'AVAILABLE' ? 'selected' : ''}>Beschikbaar</option>
-                        <option value="RENTED" ${d.status === 'RENTED' ? 'selected' : ''}>In Verhuur</option>
-                        <option value="CLEANING" ${d.status === 'CLEANING' ? 'selected' : ''}>In Reiniging (UV-C)</option>
-                        <option value="MAINTENANCE" ${d.status === 'MAINTENANCE' ? 'selected' : ''}>Onderhoud</option>
+                        <option value="AVAILABLE" ${d.status === 'AVAILABLE' ? 'selected' : ''}>Available</option>
+                        <option value="RENTED" ${d.status === 'RENTED' ? 'selected' : ''}>Rented</option>
+                        <option value="CLEANING" ${d.status === 'CLEANING' ? 'selected' : ''}>In Cleaning (UV-C)</option>
+                        <option value="MAINTENANCE" ${d.status === 'MAINTENANCE' ? 'selected' : ''}>Maintenance</option>
                     </select>
                 </td>
                 <td>${bookingText}</td>
                 <td>
-                    <input type="text" class="device-notes-input" value="${d.notes || ''}" onblur="updateDeviceNotes('${d.id}', this.value)" placeholder="Voeg opmerking toe...">
+                    <input type="text" class="device-notes-input" value="${d.notes || ''}" onblur="updateDeviceNotes('${d.id}', this.value)" placeholder="Add a note...">
                 </td>
                 <td><span class="small">${lastCheckedFormatted}</span></td>
                 <td>
-                    <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="deleteDevice('${d.id}')" title="Headset Verwijderen" style="width: 28px; height: 28px; border-radius: 50%; color: var(--thai-red);">
+                    <button type="button" class="btn btn-xs btn-outline btn-print-admin-icon" onclick="deleteDevice('${d.id}')" title="Remove Headset" style="width: 28px; height: 28px; border-radius: 50%; color: var(--thai-red);">
                         <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -1271,20 +1323,21 @@ window.handleAddDevice = async function(e) {
     const notes = notesInput ? notesInput.value.trim() : '';
 
     if (!serial) {
-        alert("Voer een geldig serienummer in.");
+        alert("Please enter a valid serial number.");
         return;
     }
 
     const exists = activeDevices.some(d => d.serial_number === serial);
     if (exists) {
-        alert(`Serienummer ${serial} is al geregistreerd!`);
+        alert(`Serial number ${serial} is already registered!`);
         return;
     }
 
     const newDevice = {
+        product_id: 'p1111111-1111-1111-1111-111111111111',
         serial_number: serial,
         status: 'AVAILABLE',
-        notes: notes || `Set ${serial} - Handmatig geregistreerd.`,
+        notes: notes || `Set ${serial} - Manually registered.`,
         last_checked: new Date().toISOString()
     };
 
@@ -1294,19 +1347,19 @@ window.handleAddDevice = async function(e) {
         newDevice.id = `dev-${Date.now()}`;
         devices.push(newDevice);
         localStorage.setItem('ttt_devices', JSON.stringify(devices));
-        alert("Headset succesvol toegevoegd in simulatie!");
+        alert("Headset successfully added in simulation!");
         serialInput.value = '';
         if (notesInput) notesInput.value = '';
         await loadDevices();
     } else {
         const { error } = await supabaseClient
-            .from('devices')
+            .from('inventory')
             .insert([newDevice]);
 
         if (error) {
-            alert("Fout bij registreren headset: " + error.message);
+            alert("Error registering headset: " + error.message);
         } else {
-            alert("Headset succesvol live geregistreerd!");
+            alert("Headset successfully registered live!");
             serialInput.value = '';
             if (notesInput) notesInput.value = '';
             await loadDevices();
@@ -1334,15 +1387,15 @@ window.updateDeviceStatus = async function(deviceId, newStatus) {
     } else {
         const updateObj = { status: newStatus, last_checked: timestamp };
         if (newStatus !== 'RENTED') {
-            updateObj.assigned_booking_id = null;
+            updateObj.assigned_order_id = null;
         }
         const { error } = await supabaseClient
-            .from('devices')
+            .from('inventory')
             .update(updateObj)
             .eq('id', deviceId);
 
         if (error) {
-            alert("Fout bij bijwerken headsetstatus: " + error.message);
+            alert("Error updating headset status: " + error.message);
         } else {
             await loadDevices();
             renderBookingsTable();
@@ -1365,12 +1418,12 @@ window.updateDeviceNotes = async function(deviceId, newNotes) {
         }
     } else {
         const { error } = await supabaseClient
-            .from('devices')
+            .from('inventory')
             .update({ notes: newNotes, last_checked: new Date().toISOString() })
             .eq('id', deviceId);
 
         if (error) {
-            console.error("Fout bij bijwerken opmerking in database:", error.message);
+            console.error("Error updating note in database:", error.message);
         } else {
             const dIndex = activeDevices.findIndex(d => d.id === deviceId);
             if (dIndex !== -1) {
@@ -1384,7 +1437,7 @@ window.updateDeviceNotes = async function(deviceId, newNotes) {
 window.deleteDevice = async function(deviceId) {
     const device = activeDevices.find(d => d.id === deviceId);
     if (!device) return;
-    if (!confirm(`Weet u zeker dat u headset ${device.serial_number} wilt verwijderen?`)) {
+    if (!confirm(`Are you sure you want to remove headset ${device.serial_number}?`)) {
         return;
     }
 
@@ -1393,19 +1446,19 @@ window.deleteDevice = async function(deviceId) {
         let devices = JSON.parse(devicesStr);
         devices = devices.filter(d => d.id !== deviceId);
         localStorage.setItem('ttt_devices', JSON.stringify(devices));
-        alert("Headset verwijderd!");
+        alert("Headset removed!");
         await loadDevices();
         renderBookingsTable();
     } else {
         const { error } = await supabaseClient
-            .from('devices')
+            .from('inventory')
             .delete()
             .eq('id', deviceId);
 
         if (error) {
-            alert("Fout bij verwijderen headset: " + error.message);
+            alert("Error removing headset: " + error.message);
         } else {
-            alert("Headset succesvol verwijderd!");
+            alert("Headset successfully removed!");
             await loadDevices();
             renderBookingsTable();
         }
@@ -1435,26 +1488,26 @@ window.assignDeviceToBooking = async function(bookingId, deviceId) {
                 localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
             }
             
-            alert("Headset succesvol gekoppeld en status gewijzigd naar Actief!");
+            alert("Headset successfully linked and status changed to Active!");
             await loadDashboardData();
         }
     } else {
         const { error } = await supabaseClient
-            .from('devices')
-            .update({ assigned_booking_id: bookingId, status: 'RENTED', last_checked: timestamp })
+            .from('inventory')
+            .update({ assigned_order_id: bookingId, status: 'RENTED', last_checked: timestamp })
             .eq('id', deviceId);
 
         if (error) {
-            alert("Fout bij toewijzen headset: " + error.message);
+            alert("Error assigning headset: " + error.message);
         } else {
             const booking = activeBookings.find(b => b.id === bookingId);
             if (booking && booking.status === 'CONFIRMED') {
                 await supabaseClient
-                    .from('bookings')
+                    .from('rental_orders')
                     .update({ status: 'PICKED_UP' })
                     .eq('id', bookingId);
             }
-            alert("Headset succesvol live gekoppeld!");
+            alert("Headset successfully linked live!");
             await loadDashboardData();
         }
     }
@@ -1462,7 +1515,7 @@ window.assignDeviceToBooking = async function(bookingId, deviceId) {
 
 // Unassign device link
 window.unassignDeviceFromBooking = async function(bookingId) {
-    if (!confirm("Weet u zeker dat u de headset-koppeling met deze boeking wilt verbreken?")) return;
+    if (!confirm("Are you sure you want to unlink the headset from this booking?")) return;
     const timestamp = new Date().toISOString();
 
     if (isSimulated) {
@@ -1479,19 +1532,19 @@ window.unassignDeviceFromBooking = async function(bookingId) {
         });
         if (updated) {
             localStorage.setItem('ttt_devices', JSON.stringify(devices));
-            alert("Koppeling verbroken. Headset is weer beschikbaar.");
+            alert("Connection unlinked. Headset is available again.");
             await loadDashboardData();
         }
     } else {
         const { error } = await supabaseClient
-            .from('devices')
-            .update({ assigned_booking_id: null, status: 'AVAILABLE', last_checked: timestamp })
-            .eq('assigned_booking_id', bookingId);
+            .from('inventory')
+            .update({ assigned_order_id: null, status: 'AVAILABLE', last_checked: timestamp })
+            .eq('assigned_order_id', bookingId);
 
         if (error) {
-            alert("Fout bij ontkoppelen headset: " + error.message);
+            alert("Error unlinking headset: " + error.message);
         } else {
-            alert("Koppeling succesvol live verbroken.");
+            alert("Connection successfully unlinked live.");
             await loadDashboardData();
         }
     }
@@ -1499,7 +1552,7 @@ window.unassignDeviceFromBooking = async function(bookingId) {
 
 // Unassign a single device by its deviceId
 window.unassignSingleDevice = async function(deviceId) {
-    if (!confirm("Weet u zeker dat u deze headset-koppeling wilt verbreken?")) return;
+    if (!confirm("Are you sure you want to unlink this headset?")) return;
     const timestamp = new Date().toISOString();
 
     if (isSimulated) {
@@ -1511,19 +1564,19 @@ window.unassignSingleDevice = async function(deviceId) {
             devices[dIndex].status = 'AVAILABLE';
             devices[dIndex].last_checked = timestamp;
             localStorage.setItem('ttt_devices', JSON.stringify(devices));
-            alert("Koppeling verbroken. Headset is weer beschikbaar.");
+            alert("Connection unlinked. Headset is available again.");
             await loadDashboardData();
         }
     } else {
         const { error } = await supabaseClient
-            .from('devices')
-            .update({ assigned_booking_id: null, status: 'AVAILABLE', last_checked: timestamp })
+            .from('inventory')
+            .update({ assigned_order_id: null, status: 'AVAILABLE', last_checked: timestamp })
             .eq('id', deviceId);
 
         if (error) {
-            alert("Fout bij ontkoppelen headset: " + error.message);
+            alert("Error unlinking headset: " + error.message);
         } else {
-            alert("Koppeling succesvol live verbroken.");
+            alert("Connection successfully unlinked live.");
             await loadDashboardData();
         }
     }
@@ -1549,14 +1602,14 @@ async function handleBookingReturnDevices(bookingId) {
     } else {
         try {
             const { error } = await supabaseClient
-                .from('devices')
-                .update({ status: 'CLEANING', assigned_booking_id: null, last_checked: new Date().toISOString() })
-                .eq('assigned_booking_id', bookingId);
+                .from('inventory')
+                .update({ status: 'CLEANING', assigned_order_id: null, last_checked: new Date().toISOString() })
+                .eq('assigned_order_id', bookingId);
             if (error) {
-                console.error("Fout bij automatisch bijwerken apparaatstatus in Supabase:", error.message);
+                console.error("Error updating device status automatically in Supabase:", error.message);
             }
         } catch (e) {
-            console.error("Uitzondering bij live bijwerken apparaatstatus:", e);
+            console.error("Exception updating device status live:", e);
         }
     }
 }
@@ -1646,48 +1699,48 @@ window.saveSignature = async function() {
         }
         localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
         
-        alert("Huurcontract succesvol ondertekend en status gewijzigd naar Actief!");
+        alert("Rental contract signed successfully and status changed to Active!");
         closeAdminModal('modal-signature');
         await loadDashboardData();
     } else {
         try {
             let updatePayload = {
                 signature_data: signatureDataUrl,
-                signature_date: new Date().toISOString()
+                signed_date: new Date().toISOString()
             };
             if (booking.status === 'CONFIRMED') {
                 updatePayload.status = 'PICKED_UP';
             }
 
             const { error } = await supabaseClient
-                .from('bookings')
+                .from('rental_orders')
                 .update(updatePayload)
                 .eq('id', activeSignBookingId);
 
             if (error) {
                 if (error.message.includes("column") || error.code === "P0002" || error.code === "42703") {
-                    alert("Database-fout: De kolommen voor de handtekening ontbreken in de 'bookings' tabel. Schakelt tijdelijk over naar browseropslag. Run de SQL editor query!");
+                    alert("Database error: Signature columns are missing in 'rental_orders' table. Temporarily switching to browser storage.");
                     isSimulated = true;
                     await saveSignature();
                     return;
                 } else {
-                    alert("Fout bij opslaan handtekening: " + error.message);
+                    alert("Error saving signature: " + error.message);
                 }
             } else {
                 // Live assigned devices update to RENTED if confirmed
                 if (booking.status === 'CONFIRMED') {
                     await supabaseClient
-                        .from('devices')
+                        .from('inventory')
                         .update({ status: 'RENTED' })
-                        .eq('assigned_booking_id', activeSignBookingId);
+                        .eq('assigned_order_id', activeSignBookingId);
                 }
-                alert("Huurcontract succesvol live ondertekend!");
+                alert("Rental contract signed successfully live!");
                 closeAdminModal('modal-signature');
                 await loadDashboardData();
             }
         } catch (err) {
             console.error("Exception saving signature:", err);
-            alert("Uitzondering bij opslaan handtekening.");
+            alert("Exception occurred while saving signature.");
         }
     }
     if (saveBtn) saveBtn.disabled = false;
@@ -1703,11 +1756,11 @@ window.viewSignedContract = function(bookingId) {
     document.getElementById('contract-cust-name').textContent = booking.customer_name;
     document.getElementById('contract-cust-email').textContent = booking.customer_email;
     document.getElementById('contract-booking-id').textContent = booking.id;
-    document.getElementById('contract-period').textContent = `${formatDateString(booking.start_date)} t/m ${formatDateString(booking.end_date)}`;
+    document.getElementById('contract-period').textContent = `${formatDateString(booking.start_date)} to ${formatDateString(booking.end_date)}`;
     document.getElementById('contract-sets').textContent = `${booking.earbud_count}x W4 Pro`;
     document.getElementById('contract-deposit-type').textContent = booking.deposit_type || 'Cash THB';
     document.getElementById('contract-signature-img').src = booking.signature_data || '';
-    document.getElementById('contract-signed-date').textContent = booking.signature_date ? new Date(booking.signature_date).toLocaleString('nl-NL') : '-';
+    document.getElementById('contract-signed-date').textContent = booking.signature_date ? new Date(booking.signature_date).toLocaleString('en-US') : '-';
 
     openAdminModal('modal-view-contract');
 };
@@ -1756,12 +1809,12 @@ window.updateBookingDeposit = async function(bookingId, field, value) {
             }
             
             const { error } = await supabaseClient
-                .from('bookings')
+                .from('rental_orders')
                 .update(payload)
                 .eq('id', bookingId);
             
             if (error) {
-                console.error("Fout bij bijwerken borggegevens in live database:", error.message);
+                console.error("Error updating deposit data in live database, falling back to LocalStorage:", error.message);
                 isSimulated = true;
                 await updateBookingDeposit(bookingId, field, value);
             } else {
@@ -1784,21 +1837,21 @@ window.sendPickupNotification = function(bookingId) {
     activeNotifType = 'PICKUP';
 
     document.getElementById('notif-to').textContent = `${booking.customer_name} (${booking.customer_email})`;
-    document.getElementById('notif-channels').textContent = "E-mail & SMS (Simulated)";
-    document.getElementById('notif-subject').textContent = "Je True Time Thai W4 Pro AI-vertaaloordopjes liggen klaar!";
+    document.getElementById('notif-channels').textContent = "Email & SMS (Simulated)";
+    document.getElementById('notif-subject').textContent = "Your True Time Thai W4 Pro AI Translation Earbuds are ready!";
     
-    const message = `Beste ${booking.customer_name},
+    const message = `Dear ${booking.customer_name},
 
-Je boeking voor de True Time Thai W4 Pro AI-vertaaloordopjes gaat binnenkort van start!
+Your booking for the True Time Thai W4 Pro AI Translation Earbuds is starting soon!
 
-📍 Ophaallocatie: ${formatLocationText(booking.pickup_location)}
-📅 Startdatum: ${formatDateString(booking.start_date)}
-🎧 Aantal sets: ${booking.earbud_count}
+📍 Pickup Location: ${formatLocationText(booking.pickup_location)}
+📅 Start Date: ${formatDateString(booking.start_date)}
+🎧 Number of Sets: ${booking.earbud_count}
 
-We kijken ernaar uit om je te verwelkomen en je te helpen met een zorgeloze vertaalervaring in Pattaya! Vergeet niet om een borg van 1000 THB (of paspoortkopie) mee te nemen.
+We look forward to welcoming you and helping you experience a hassle-free journey in Pattaya! Please remember to bring a security deposit of 1,000 THB (or a copy of your passport).
 
-Met vriendelijke groet,
-Het True Time Thai Team`;
+Best regards,
+The True Time Thai Team`;
 
     document.getElementById('notif-body').textContent = message;
     openAdminModal('modal-notification-preview');
@@ -1812,22 +1865,22 @@ window.sendReturnNotification = function(bookingId) {
     activeNotifType = 'RETURN';
 
     document.getElementById('notif-to').textContent = `${booking.customer_name} (${booking.customer_email})`;
-    document.getElementById('notif-channels').textContent = "E-mail & SMS (Simulated)";
-    document.getElementById('notif-subject').textContent = "Belangrijke herinnering: inleveren oordopjes";
+    document.getElementById('notif-channels').textContent = "Email & SMS (Simulated)";
+    document.getElementById('notif-subject').textContent = "Important reminder: return your translation earbuds";
     
-    const message = `Beste ${booking.customer_name},
+    const message = `Dear ${booking.customer_name},
 
-We hopen dat je een fantastische tijd hebt gehad met de True Time Thai vertaaloordopjes!
+We hope you had a fantastic time using the True Time Thai translation earbuds!
 
-Dit is een herinnering dat je huurperiode eindigt op ${formatDateString(booking.end_date)}. We verzoeken je vriendelijk om de apparatuur (oordopjes, powerbank en oplaadkabels) tijdig te retourneren om extra kosten te voorkomen.
+This is a friendly reminder that your rental period ends on ${formatDateString(booking.end_date)}. Please return the equipment (earbuds, charging case, power bank, and charging cables) on time to avoid additional charges.
 
-📍 Inleverlocatie: ${formatLocationText(booking.pickup_location)}
-📅 Einddatum: ${formatDateString(booking.end_date)}
+📍 Return Location: ${formatLocationText(booking.pickup_location)}
+📅 End Date: ${formatDateString(booking.end_date)}
 
-Tot snel voor de inname!
+See you soon for the return!
 
-Met vriendelijke groet,
-Het True Time Thai Team`;
+Best regards,
+The True Time Thai Team`;
 
     document.getElementById('notif-body').textContent = message;
     openAdminModal('modal-notification-preview');
@@ -1835,5 +1888,5 @@ Het True Time Thai Team`;
 
 window.confirmSendNotification = function() {
     closeAdminModal('modal-notification-preview');
-    alert("Bericht succesvol verzonden via gesimuleerde e-mail- en SMS-gateway!");
+    alert("Message successfully sent via simulated email & SMS gateway!");
 };
