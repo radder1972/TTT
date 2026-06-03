@@ -74,9 +74,31 @@
         <section id="admin-dashboard-section" class="admin-section" style="display: none;">
             
             <!-- Welcome Header -->
-            <div class="dashboard-welcome">
+            <div class="dashboard-welcome" style="margin-bottom: 24px;">
                 <h2>Welkom terug, <span class="text-gradient">Manager</span></h2>
                 <p>Hier is het actuele overzicht van uw AI-oordopjes verhuur in Pattaya.</p>
+            </div>
+
+            <!-- Systeem Status -->
+            <div class="sidebar-card glass" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; margin-bottom: 28px; gap: 16px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <h4 style="margin: 0; font-size: 1.15rem; color: var(--thai-blue);">Systeem Status</h4>
+                    <div class="status-indicator-box" style="margin: 0;">
+                        <div class="db-status-badge" id="db-connection-status">
+                            <span class="pulse-dot green" id="db-status-dot"></span>
+                            <span id="db-status-text">Simulatiemodus (Local)</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+                    <p class="text-muted small" style="margin: 0; font-size: 0.85rem;">
+                        <strong>Supabase Project URL:</strong> 
+                        <span class="code-url-text" id="lbl-supabase-url">https://uuciegboqicihcanjqbh.supabase.co</span>
+                    </p>
+                    <p class="text-muted small" style="margin: 0; font-size: 0.85rem;">
+                        Gebruikt opgeslagen browserdata totdat de Anon Key is geconfigureerd.
+                    </p>
+                </div>
             </div>
 
             <!-- Stats Widgets Row -->
@@ -174,67 +196,6 @@
                         </div>
                         
                         <button type="button" class="btn btn-sm btn-neon btn-block" id="btn-save-stock">Voorraad Opslaan</button>
-                    </div>
-
-                    <!-- Live SQL Database Settings / Info -->
-                    <div class="sidebar-card glass">
-                        <h4>Systeem Status</h4>
-                        <div class="status-indicator-box">
-                            <div class="db-status-badge" id="db-connection-status">
-                                <span class="pulse-dot green" id="db-status-dot"></span>
-                                <span id="db-status-text">Simulatiemodus (Local)</span>
-                            </div>
-                        </div>
-                        <p class="text-muted small" style="margin-top: 12px;">
-                            <strong>Supabase Project URL:</strong><br>
-                            <span class="code-url-text" id="lbl-supabase-url">https://uuciegboqicihcanjqbh.supabase.co</span>
-                        </p>
-                        <p class="text-muted small">
-                            Gebruikt opgeslagen browserdata totdat de Anon Key is geconfigureerd.
-                        </p>
-                    </div>
-
-                    <!-- Database SQL Creation script helper -->
-                    <div class="sidebar-card glass">
-                        <h4>SQL Database Inrichting</h4>
-                        <p class="text-muted small">Indien u verbinding maakt met uw live Supabase-database, voer dan dit script uit in uw Supabase SQL Editor om de tabellen correct te genereren.</p>
-                        <textarea class="sql-code-box" readonly onclick="this.select()">-- Kopieer en plak in Supabase SQL Editor:
-CREATE TABLE IF NOT EXISTS bookings (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  created_at TIMESTAMPTZ DEFAULT now(),
-  customer_name TEXT NOT NULL,
-  customer_email TEXT NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  earbud_count INT NOT NULL DEFAULT 1,
-  pickup_location TEXT NOT NULL,
-  extra_sim BOOLEAN NOT NULL DEFAULT false,
-  extra_powerbank BOOLEAN NOT NULL DEFAULT false,
-  total_price_thb INT NOT NULL,
-  payment_method TEXT NOT NULL,
-  payment_status TEXT NOT NULL DEFAULT 'PAID',
-  transaction_id TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'CONFIRMED' -- CONFIRMED, PICKED_UP, RETURNED, CANCELLED
-);
-
-CREATE TABLE IF NOT EXISTS settings (
-  key TEXT PRIMARY KEY,
-  value TEXT NOT NULL
-);
-
-INSERT INTO settings (key, value) VALUES ('total_stock', '30')
-ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
-
--- Activeer publieke toegang
-ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow public read" ON bookings FOR SELECT USING (true);
-CREATE POLICY "Allow public insert" ON bookings FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow admin all" ON bookings FOR ALL TO authenticated USING (true);
-CREATE POLICY "Allow public read settings" ON settings FOR SELECT USING (true);
-CREATE POLICY "Allow admin all settings" ON settings FOR ALL TO authenticated USING (true);
-</textarea>
                     </div>
 
                 </div>
