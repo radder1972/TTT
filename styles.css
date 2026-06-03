@@ -4414,3 +4414,15 @@ hr {
     }
 }
 
+/* Detail icon styling */
+.detail-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
