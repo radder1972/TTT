@@ -1453,20 +1453,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add manual input option
         const manualOption = document.createElement('div');
         manualOption.className = 'hotel-item other-option';
-        if (tempSelectedHotel && !popularHotels.includes(tempSelectedHotel)) {
+        
+        const isCustomHotel = tempSelectedHotel && !popularHotels.includes(tempSelectedHotel);
+        if (isCustomHotel) {
             manualOption.classList.add('selected');
-            if (manualHotelGroup) {
-                manualHotelGroup.style.display = 'block';
-                if (manualHotelInput) manualHotelInput.value = tempSelectedHotel;
-            }
         }
-        manualOption.textContent = "Other hotel... (type manually)";
+
+        if (filterText.trim() !== '') {
+            manualOption.textContent = `Use custom search: "${filterText}"`;
+        } else {
+            manualOption.textContent = "Other hotel... (type manually)";
+        }
+
         manualOption.addEventListener('click', () => {
             document.querySelectorAll('.hotel-item').forEach(el => el.classList.remove('selected'));
             manualOption.classList.add('selected');
             if (manualHotelGroup) {
                 manualHotelGroup.style.display = 'block';
                 if (manualHotelInput) {
+                    if (filterText.trim() !== '' && !isCustomHotel) {
+                        manualHotelInput.value = filterText;
+                    }
                     manualHotelInput.focus();
                     tempSelectedHotel = manualHotelInput.value.trim();
                     if (btnConfirmHotel) btnConfirmHotel.disabled = tempSelectedHotel === '';
@@ -1488,7 +1495,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hotelSearchInput) {
         hotelSearchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
             renderHotelList(e.target.value);
+            
+            // Search in Google Maps live as they type to verify if it is found on the map
+            if (query) {
+                updateHotelMap(query);
+            } else {
+                updateHotelMap('Pattaya');
+            }
+        });
+
+        // Prevent form submission on Enter
+        hotelSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
         });
     }
 
