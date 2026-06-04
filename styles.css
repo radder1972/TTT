@@ -4452,3 +4452,51 @@ hr {
     }
 }
 
+/* 16.8 Hotel Search & Selection Popup styles */
+#hotel-selection-display {
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    background: rgba(0, 102, 204, 0.05);
+    border: 1px solid rgba(0, 102, 204, 0.15);
+    display: inline-flex;
+    width: 100%;
+}
+
+.hotel-results-list {
+    background: #FFFFFF;
+}
+
+.hotel-item {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: var(--text-white);
+    border-bottom: 1px solid var(--border-glass);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.hotel-item:last-child {
+    border-bottom: none;
+}
+
+.hotel-item:hover {
+    background: var(--bg-card-hover);
+    color: var(--neon-cyan);
+}
+
+.hotel-item.selected {
+    background: rgba(0, 102, 204, 0.1);
+    color: var(--neon-cyan);
+    font-weight: 600;
+}
+
+.hotel-item.other-option {
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px dashed var(--border-glass);
+}
+
+.hotel-item.other-option:hover {
+    color: var(--neon-cyan);
+}
+
