@@ -2568,13 +2568,27 @@ document.addEventListener('DOMContentLoaded', () => {
             resetAutoPlay();
         });
 
-        // Click on the Polaroid card itself to go to the next slide
+        let isHoverTransitionLocked = false;
+
+        // Click or mouseenter on the Polaroid card itself to go to the next slide
         slides.forEach(slide => {
             const card = slide.querySelector('.polaroid-card');
             if (card) {
                 card.addEventListener('click', () => {
                     nextSlide();
                     resetAutoPlay();
+                });
+
+                card.addEventListener('mouseenter', () => {
+                    if (isHoverTransitionLocked) return;
+                    isHoverTransitionLocked = true;
+                    nextSlide();
+                    stopAutoPlay();
+                    
+                    // Lock hover transitions for a short period to prevent looping
+                    setTimeout(() => {
+                        isHoverTransitionLocked = false;
+                    }, 800); // 800ms cooldown (matches hygiene page's shuffle duration)
                 });
             }
         });
@@ -2606,8 +2620,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         startAutoPlay();
 
-        carousel.addEventListener('mouseenter', stopAutoPlay);
-        carousel.addEventListener('mouseleave', startAutoPlay);
+        carousel.addEventListener('mouseleave', () => {
+            isHoverTransitionLocked = false;
+            startAutoPlay();
+        });
     };
 
     initHeaderScroll();
