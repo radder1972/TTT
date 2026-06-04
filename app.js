@@ -1318,6 +1318,183 @@ document.addEventListener('DOMContentLoaded', () => {
         extraPowerbankCheckbox.addEventListener('change', updatePricing);
     }
 
+    // ==========================================================
+    // HOTEL SELECTION MODAL SYSTEM
+    // ==========================================================
+    let selectedHotelName = '';
+    const popularHotels = [
+        "Hilton Pattaya",
+        "Hard Rock Hotel Pattaya",
+        "Dusit Thani Pattaya",
+        "Centara Grand Mirage Beach Resort Pattaya",
+        "Grande Centre Point Pattaya",
+        "Siam @ Siam Design Hotel Pattaya",
+        "Cape Dara Resort",
+        "Royal Cliff Beach Hotel",
+        "Avani Pattaya Resort",
+        "Mercure Pattaya Ocean Resort",
+        "Holiday Inn Pattaya",
+        "Amari Pattaya",
+        "InterContinental Pattaya Resort",
+        "U Pattaya",
+        "OZO North Pattaya",
+        "Pattaya Discovery Beach Hotel",
+        "Mera Mare Pattaya",
+        "LK The Empress Pattaya",
+        "Page 10 Hotel Pattaya",
+        "Woodlands Hotel & Resort Pattaya",
+        "Jomtien Palm Beach Hotel & Resort",
+        "Rabbit Resort Pattaya",
+        "Mytt Beach Hotel Pattaya",
+        "Pullman Pattaya Hotel G",
+        "D Varee Jomtien Beach Pattaya"
+    ];
+
+    const hotelModal = document.getElementById('hotel-search-modal');
+    const hotelSearchInput = document.getElementById('hotel-search-input');
+    const hotelResultsList = document.getElementById('hotel-results-list');
+    const manualHotelGroup = document.getElementById('manual-hotel-group');
+    const manualHotelInput = document.getElementById('manual-hotel-input');
+    const btnConfirmHotel = document.getElementById('btn-confirm-hotel');
+    const btnCancelHotel = document.getElementById('btn-cancel-hotel');
+    const btnCloseHotelModal = document.getElementById('btn-close-hotel-modal');
+    const pickupLocSelect = document.getElementById('pickup-loc');
+    const hotelSelectionDisplay = document.getElementById('hotel-selection-display');
+    const selectedHotelNameSpan = document.getElementById('selected-hotel-name');
+    const btnChangeHotel = document.getElementById('btn-change-hotel');
+
+    let tempSelectedHotel = '';
+
+    function openHotelModal() {
+        if (!hotelModal) return;
+        tempSelectedHotel = selectedHotelName;
+        if (hotelSearchInput) hotelSearchInput.value = '';
+        if (manualHotelInput) manualHotelInput.value = '';
+        if (manualHotelGroup) manualHotelGroup.style.display = 'none';
+        
+        renderHotelList('');
+        hotelModal.classList.add('active');
+        if (hotelSearchInput) hotelSearchInput.focus();
+    }
+
+    function closeHotelModal(confirmed = false) {
+        if (!hotelModal) return;
+        hotelModal.classList.remove('active');
+        
+        if (confirmed) {
+            selectedHotelName = tempSelectedHotel;
+            if (selectedHotelNameSpan) selectedHotelNameSpan.textContent = selectedHotelName;
+            if (hotelSelectionDisplay) hotelSelectionDisplay.style.display = 'flex';
+        } else {
+            // Cancelled
+            if (!selectedHotelName) {
+                // If no hotel was ever selected, revert select box to office pickup
+                if (pickupLocSelect) pickupLocSelect.value = 'pattaya_office';
+                if (hotelSelectionDisplay) hotelSelectionDisplay.style.display = 'none';
+            }
+        }
+    }
+
+    function renderHotelList(filterText = '') {
+        if (!hotelResultsList) return;
+        hotelResultsList.innerHTML = '';
+
+        const filtered = popularHotels.filter(h => 
+            h.toLowerCase().includes(filterText.toLowerCase())
+        );
+
+        filtered.forEach(h => {
+            const div = document.createElement('div');
+            div.className = 'hotel-item';
+            if (h === tempSelectedHotel) {
+                div.classList.add('selected');
+            }
+            div.textContent = h;
+            div.addEventListener('click', () => {
+                document.querySelectorAll('.hotel-item').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
+                tempSelectedHotel = h;
+                if (manualHotelGroup) manualHotelGroup.style.display = 'none';
+                if (btnConfirmHotel) btnConfirmHotel.disabled = false;
+            });
+            hotelResultsList.appendChild(div);
+        });
+
+        // Add manual input option
+        const manualOption = document.createElement('div');
+        manualOption.className = 'hotel-item other-option';
+        if (tempSelectedHotel && !popularHotels.includes(tempSelectedHotel)) {
+            manualOption.classList.add('selected');
+            if (manualHotelGroup) {
+                manualHotelGroup.style.display = 'block';
+                if (manualHotelInput) manualHotelInput.value = tempSelectedHotel;
+            }
+        }
+        manualOption.textContent = "Other hotel... (type manually)";
+        manualOption.addEventListener('click', () => {
+            document.querySelectorAll('.hotel-item').forEach(el => el.classList.remove('selected'));
+            manualOption.classList.add('selected');
+            if (manualHotelGroup) {
+                manualHotelGroup.style.display = 'block';
+                if (manualHotelInput) {
+                    manualHotelInput.focus();
+                    tempSelectedHotel = manualHotelInput.value.trim();
+                    if (btnConfirmHotel) btnConfirmHotel.disabled = tempSelectedHotel === '';
+                }
+            }
+        });
+        hotelResultsList.appendChild(manualOption);
+
+        if (btnConfirmHotel) {
+            btnConfirmHotel.disabled = tempSelectedHotel === '';
+        }
+    }
+
+    if (hotelSearchInput) {
+        hotelSearchInput.addEventListener('input', (e) => {
+            renderHotelList(e.target.value);
+        });
+    }
+
+    if (manualHotelInput) {
+        manualHotelInput.addEventListener('input', (e) => {
+            tempSelectedHotel = e.target.value.trim();
+            if (btnConfirmHotel) {
+                btnConfirmHotel.disabled = tempSelectedHotel === '';
+            }
+        });
+    }
+
+    if (pickupLocSelect) {
+        pickupLocSelect.addEventListener('change', () => {
+            if (pickupLocSelect.value === 'hotel_delivery') {
+                openHotelModal();
+            } else {
+                if (hotelSelectionDisplay) hotelSelectionDisplay.style.display = 'none';
+            }
+        });
+    }
+
+    if (btnChangeHotel) {
+        btnChangeHotel.addEventListener('click', openHotelModal);
+    }
+
+    if (btnConfirmHotel) {
+        btnConfirmHotel.addEventListener('click', () => {
+            if (tempSelectedHotel) {
+                closeHotelModal(true);
+            }
+        });
+    }
+
+    if (btnCancelHotel) {
+        btnCancelHotel.addEventListener('click', () => closeHotelModal(false));
+    }
+
+    if (btnCloseHotelModal) {
+        btnCloseHotelModal.addEventListener('click', () => closeHotelModal(false));
+    }
+
     // Submit handler
     // Submit handler - Navigates to payment wizard
     if (rentalForm) {
@@ -1331,7 +1508,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const earbudCount = document.getElementById('earbud-count') ? document.getElementById('earbud-count').value : '1';
             
             const pickupLocSelect = document.getElementById('pickup-loc');
-            const pickupLoc = pickupLocSelect ? pickupLocSelect.options[pickupLocSelect.selectedIndex].text : '';
+            let pickupLoc = pickupLocSelect ? pickupLocSelect.options[pickupLocSelect.selectedIndex].text : '';
+            if (pickupLocSelect && pickupLocSelect.value === 'hotel_delivery') {
+                pickupLoc = "Hotel Delivery: " + (selectedHotelName || 'Pattaya Hotel (unspecified)');
+            }
             
             const hasSim = document.getElementById('extra-sim') ? document.getElementById('extra-sim').checked : false;
             const hasPowerbank = document.getElementById('extra-powerbank') ? document.getElementById('extra-powerbank').checked : false;
