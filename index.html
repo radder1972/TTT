@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.4">
+    <link rel="stylesheet" href="styles.css?v=4.2.5">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
@@ -407,6 +407,11 @@
                                     <option value="pattaya_office">True Time Thai Office - Beach Road Pattaya</option>
                                     <option value="hotel_delivery">Hotel Delivery in Pattaya (Free)</option>
                                 </select>
+                                <div id="hotel-selection-display" style="display: none; margin-top: 8px; font-size: 0.85rem; align-items: center; gap: 8px;">
+                                    <span style="color: var(--text-muted);">Selected:</span>
+                                    <strong id="selected-hotel-name" style="color: var(--neon-cyan); font-weight: 600;">None</strong>
+                                    <button type="button" id="btn-change-hotel" class="btn btn-outline" style="padding: 2px 8px; font-size: 0.75rem; min-height: auto; height: auto; font-weight: normal; margin-left: auto;">Change</button>
+                                </div>
                             </div>
                         </div>
 
@@ -1134,7 +1139,7 @@
 
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.4</span></p>
+                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.5</span></p>
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiene Terms</a>
                     <a href="#pricing">Rental Terms</a>
@@ -1144,9 +1149,34 @@
         </div>
     </footer>
 
+    <!-- Hotel Search Modal Popup -->
+    <div class="admin-modal-overlay" id="hotel-search-modal">
+        <div class="admin-modal-card" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3>Select Delivery Hotel</h3>
+                <button type="button" class="btn-modal-close" id="btn-close-hotel-modal">&times;</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label for="hotel-search-input" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--text-white);">Search Hotel in Pattaya</label>
+                <input type="text" id="hotel-search-input" placeholder="Type to search (e.g. Hilton, Centara)..." style="width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); background: rgba(255, 255, 255, 0.9); font-size: 0.95rem; outline: none; box-shadow: inset var(--shadow-soft);">
+            </div>
+            <div class="hotel-results-list" id="hotel-results-list" style="max-height: 220px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); margin-bottom: 16px; background: rgba(255, 255, 255, 0.5);">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="form-group" id="manual-hotel-group" style="display: none; margin-bottom: 16px; animation: fadeIn 0.2s ease;">
+                <label for="manual-hotel-input" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--text-white);">Custom Hotel Name</label>
+                <input type="text" id="manual-hotel-input" placeholder="Type your hotel name manually..." style="width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); background: rgba(255, 255, 255, 0.9); font-size: 0.95rem; outline: none;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-glass); padding-top: 16px;">
+                <button type="button" class="btn btn-outline" id="btn-cancel-hotel" style="padding: 10px 20px; font-size: 0.9rem;">Cancel</button>
+                <button type="button" class="btn" id="btn-confirm-hotel" style="padding: 10px 20px; font-size: 0.9rem; background: var(--thai-blue); color: #fff;" disabled>Confirm Hotel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
-    <script src="app.js?v=4.2.4"></script>
+    <script src="app.js?v=4.2.5"></script>
 </body>
 </html>
