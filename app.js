@@ -785,8 +785,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nodes: {
                 greet: {
                     tourist: {
-                        text: "Hello, I would like to check in. My reservation is under the name of Matthijs.",
-                        translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ inชื่อ แมทธิว ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+                        text: "Hello, I would like to check in. My reservation is under the name of Jasper.",
+                        translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ในชื่อ แจสเปอร์ ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Jasper krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
