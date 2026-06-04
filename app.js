@@ -2523,8 +2523,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentIndex = 0;
         let autoPlayTimer = null;
+        let isHoverTransitionLocked = false;
+        let hoverLockTimeout = null;
 
         const showSlide = (index) => {
+            // Lock hover transitions during any slide change to prevent accidental skips or loops
+            isHoverTransitionLocked = true;
+            if (hoverLockTimeout) clearTimeout(hoverLockTimeout);
+            hoverLockTimeout = setTimeout(() => {
+                isHoverTransitionLocked = false;
+            }, 800); // 800ms cooldown (matches transition and hygiene stack duration)
+
             if (index < 0) {
                 currentIndex = slides.length - 1;
             } else if (index >= slides.length) {
@@ -2568,8 +2577,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resetAutoPlay();
         });
 
-        let isHoverTransitionLocked = false;
-
         // Click or mouseenter on the Polaroid card itself to go to the next slide
         slides.forEach(slide => {
             const card = slide.querySelector('.polaroid-card');
@@ -2581,14 +2588,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 card.addEventListener('mouseenter', () => {
                     if (isHoverTransitionLocked) return;
-                    isHoverTransitionLocked = true;
                     nextSlide();
                     stopAutoPlay();
-                    
-                    // Lock hover transitions for a short period to prevent looping
-                    setTimeout(() => {
-                        isHoverTransitionLocked = false;
-                    }, 800); // 800ms cooldown (matches hygiene page's shuffle duration)
                 });
             }
         });
