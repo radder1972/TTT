@@ -4500,3 +4500,37 @@ hr {
     color: var(--neon-cyan);
 }
 
+/* Split Layout for Hotel Modal with Google Maps */
+.hotel-modal-body {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.hotel-modal-left {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.hotel-modal-right {
+    flex: 1.2;
+    min-height: 320px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-soft);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .hotel-modal-body {
+        flex-direction: column;
+    }
+    .hotel-modal-right {
+        min-height: 220px;
+        height: 220px;
+    }
+}
+
