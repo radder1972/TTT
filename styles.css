@@ -4434,3 +4434,21 @@ hr {
     stroke-linejoin: round;
 }
 
+/* 16.7 Footer Map Container (Google Maps Location) */
+.footer-map-container {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-glass-glow);
+    height: 250px;
+    background: rgba(0, 0, 0, 0.2);
+    margin-top: 40px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .footer-map-container {
+        height: 380px;
+    }
+}
+
