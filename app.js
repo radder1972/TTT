@@ -1,4 +1,4 @@
-﻿﻿/* ==========================================================================
+?/* ==========================================================================
    True Time Thai - Web Application Logic (app.js)
    Features: SPA Router, Simulator, Booking Engine, Testimonials, FAQ Accordion
    ========================================================================== */
@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ? parseInt(bookingData.total_thb.replace(/[^0-9]/g, ''))
             : parseInt(bookingData.total_thb);
         
-        const extraSim = bookingData.extra_sim === true || bookingData.extra_sim === "Yes (+ à¸¿350 each)";
-        const extraPowerbank = bookingData.extra_powerbank === true || bookingData.extra_powerbank === "Yes (+ à¸¿175 each)";
+        const extraSim = bookingData.extra_sim === true || bookingData.extra_sim === "Yes (+ ฿350 each)";
+        const extraPowerbank = bookingData.extra_powerbank === true || bookingData.extra_powerbank === "Yes (+ ฿175 each)";
 
         const record = {
             customer_name: bookingData.name,
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     availDot.style.backgroundColor = "";
                 }
                 if (availText) {
-                    availText.textContent = `âœ“ ${available} sets available in this period.`;
+                    availText.textContent = `✓ ${available} sets available in this period.`;
                 }
                 if (submitBtn) submitBtn.disabled = false;
             } else {
@@ -399,9 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (availText) {
                     if (available <= 0) {
-                        availText.textContent = `âœ— Sold out! No sets available from ${formatDateString(startDate)} to ${formatDateString(endDate)}.`;
+                        availText.textContent = `✗ Sold out! No sets available from ${formatDateString(startDate)} to ${formatDateString(endDate)}.`;
                     } else {
-                        availText.textContent = `âœ— Insufficient stock! Only ${available} set(s) available.`;
+                        availText.textContent = `✗ Insufficient stock! Only ${available} set(s) available.`;
                     }
                 }
                 if (submitBtn) submitBtn.disabled = true;
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 availDot.className = "availability-dot bg-green";
             }
             if (availText) {
-                availText.textContent = "âœ“ Availability checked (Simulation)";
+                availText.textContent = "✓ Availability checked (Simulation)";
             }
             if (submitBtn) submitBtn.disabled = false;
         }
@@ -496,28 +496,28 @@ document.addEventListener('DOMContentLoaded', () => {
        2. LANGUAGE SHOWCASE GRID
        ========================================================================== */
     const languages = [
-        { name: "Nederlands (Dutch)", category: "West-Germaans", flag: "ðŸ‡³ðŸ‡±" },
-        { name: "English (British)", category: "14 Engelse Accenten", flag: "ðŸ‡¬ðŸ‡§" },
-        { name: "English (American)", category: "14 Engelse Accenten", flag: "ðŸ‡ºðŸ‡¸" },
-        { name: "English (Australian)", category: "14 Engelse Accenten", flag: "ðŸ‡¦ðŸ‡º" },
-        { name: "English (Indian)", category: "14 Engelse Accenten", flag: "ðŸ‡®ðŸ‡³" },
-        { name: "Thai English (Tinglish)", category: "14 Engelse Accenten", flag: "ðŸ‡¹ðŸ‡­" },
-        { name: "Thai (à¹„à¸—à¸¢)", category: "Thais - Doeltaal", flag: "ðŸ‡¹ðŸ‡­" },
-        { name: "Deutsch (German)", category: "West-Germaans", flag: "ðŸ‡©ðŸ‡ª" },
-        { name: "FranÃ§ais (French)", category: "Romaans", flag: "ðŸ‡«ðŸ‡·" },
-        { name: "EspaÃ±ol (Spanish)", category: "Romaans", flag: "ðŸ‡ªðŸ‡¸" },
-        { name: "Italiano (Italian)", category: "Romaans", flag: "ðŸ‡®ðŸ‡¹" },
-        { name: "PortuguÃªs (Portuguese)", category: "Romaans", flag: "ðŸ‡µðŸ‡¹" },
-        { name: "æ—¥æœ¬èªž (Japanese)", category: "Oost-Aziatisch", flag: "ðŸ‡¯ðŸ‡µ" },
-        { name: "í•œêµ­ì–´ (Korean)", category: "Oost-Aziatisch", flag: "ðŸ‡°ðŸ‡·" },
-        { name: "ç®€ä½“ä¸­æ–‡ (Chinese Simplified)", category: "Oost-Aziatisch", flag: "ðŸ‡¨ðŸ‡³" },
-        { name: "Ð ÑƒÑÑÐºÐ¸Ð¹ (Russian)", category: "Slavisch", flag: "ðŸ‡·ðŸ‡º" },
-        { name: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© (Arabic)", category: "Semitisch", flag: "ðŸ‡¸ðŸ‡¦" },
-        { name: "Bahasa Indonesia", category: "Austronesisch", flag: "ðŸ‡®ðŸ‡©" },
-        { name: "Tiáº¿ng Viá»‡t (Vietnamese)", category: "Austroaziatisch", flag: "ðŸ‡»ðŸ‡³" },
-        { name: "TÃ¼rkÃ§e (Turkish)", category: "Turks", flag: "ðŸ‡¹ðŸ‡·" },
-        { name: "Polski (Polish)", category: "Slavisch", flag: "ðŸ‡µðŸ‡±" },
-        { name: "Svenska (Swedish)", category: "Noord-Germaans", flag: "ðŸ‡¸ðŸ‡ª" }
+        { name: "Nederlands (Dutch)", category: "West-Germaans", flag: "🇳🇱" },
+        { name: "English (British)", category: "14 Engelse Accenten", flag: "🇬🇧" },
+        { name: "English (American)", category: "14 Engelse Accenten", flag: "🇺🇸" },
+        { name: "English (Australian)", category: "14 Engelse Accenten", flag: "🇦🇺" },
+        { name: "English (Indian)", category: "14 Engelse Accenten", flag: "🇮🇳" },
+        { name: "Thai English (Tinglish)", category: "14 Engelse Accenten", flag: "🇹🇭" },
+        { name: "Thai (ไทย)", category: "Thais - Doeltaal", flag: "🇹🇭" },
+        { name: "Deutsch (German)", category: "West-Germaans", flag: "🇩🇪" },
+        { name: "Français (French)", category: "Romaans", flag: "🇫🇷" },
+        { name: "Español (Spanish)", category: "Romaans", flag: "🇪🇸" },
+        { name: "Italiano (Italian)", category: "Romaans", flag: "🇮🇹" },
+        { name: "Português (Portuguese)", category: "Romaans", flag: "🇵🇹" },
+        { name: "日本語 (Japanese)", category: "Oost-Aziatisch", flag: "🇯🇵" },
+        { name: "한국어 (Korean)", category: "Oost-Aziatisch", flag: "🇰🇷" },
+        { name: "简体中文 (Chinese Simplified)", category: "Oost-Aziatisch", flag: "🇨🇳" },
+        { name: "Русский (Russian)", category: "Slavisch", flag: "🇷🇺" },
+        { name: "العربية (Arabic)", category: "Semitisch", flag: "🇸🇦" },
+        { name: "Bahasa Indonesia", category: "Austronesisch", flag: "🇮🇩" },
+        { name: "Tiếng Việt (Vietnamese)", category: "Austroaziatisch", flag: "🇻🇳" },
+        { name: "Türkçe (Turkish)", category: "Turks", flag: "🇹🇷" },
+        { name: "Polski (Polish)", category: "Slavisch", flag: "🇵🇱" },
+        { name: "Svenska (Swedish)", category: "Noord-Germaans", flag: "🇸🇪" }
     ];
 
     const languagesList = document.getElementById('languages-list');
@@ -649,11 +649,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 greet: {
                     tourist: {
                         text: "Hello! How much do these tiger prawns cost per kilo?",
-                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¸à¸¸à¹‰à¸‡à¸¥à¸²à¸¢à¹€à¸ªà¸·à¸­à¸žà¸§à¸à¸™à¸µà¹‰à¸à¸´à¹‚à¸¥à¸¥à¸°à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
+                        translation: "สวัสดีครับ กุ้งลายเสือพวกนี้กิโลละเท่าไหร่ครับ (Sawatdee krap, kung lai suea puak nee kilo la tao rai krap?)"
                     },
                     local: {
                         name: "P'Som (Fishmonger)",
-                        text: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸ˆà¹‰à¸²! à¸à¸´à¹‚à¸¥à¸¥à¸° 450 à¸šà¸²à¸—à¸ˆà¹‰à¸² à¸¥à¸”à¹„à¸”à¹‰à¸™à¸´à¸”à¸«à¸™à¹ˆà¸­à¸¢à¸™à¸°à¸ˆà¹Šà¸° à¹€à¸­à¸²à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸”à¸µà¸ˆà¹Šà¸°",
+                        text: "สวัสดีจ้า! กิโลละ 450 บาทจ้า ลดได้นิดหน่อยนะจ๊ะ เอาเท่าไหร่ดีจ๊ะ",
                         translation: "Hello! They cost 450 Baht per kilo. I can give a small discount. How much would you like?"
                     },
                     choices: [
@@ -664,11 +664,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 negotiate_discount: {
                     tourist: {
                         text: "I would like two kilos. Can we make it 800 Baht for two kilos?",
-                        translation: "à¸‚à¸­à¸ªà¸­à¸‡à¸à¸´à¹‚à¸¥à¸„à¸£à¸±à¸š à¸¥à¸”à¹€à¸«à¸¥à¸·à¸­à¹à¸›à¸”à¸£à¹‰à¸­à¸¢à¸šà¸²à¸—à¹„à¸”à¹‰à¹„à¸«à¸¡à¸„à¸£à¸±à¸š (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
+                        translation: "ขอสองกิโลครับ ลดเหลือแปดร้อยบาทได้ไหมครับ (Kor song kilo krap. Lod luea paed roy baht dai mai krap?)"
                     },
                     local: {
                         name: "P'Som (Fishmonger)",
-                        text: "à¹‚à¸­à¹€à¸„à¸ˆà¹‰à¸² à¸„à¸™à¸«à¸¥à¹ˆà¸­! à¹„à¸”à¹‰à¸ˆà¹‰à¸² à¸ªà¸­à¸‡à¸à¸´à¹‚à¸¥ 800 à¸šà¸²à¸— à¹€à¸”à¸µà¹‹à¸¢à¸§à¸›à¹‰à¸²à¹à¸–à¸¡à¸«à¸­à¸¢à¹à¸¡à¸¥à¸‡à¸ à¸¹à¹ˆà¹ƒà¸«à¹‰à¸”à¹‰à¸§à¸¢à¸ˆà¹‰à¸²",
+                        text: "โอเคจ้า คนหล่อ! ได้จ้า สองกิโล 800 บาท เดี๋ยวป้าแถมหอยแมลงภู่ให้ด้วยจ้า",
                         translation: "Okay handsome! Sure, two kilos for 800 Baht. I will throw in some free mussels too!"
                     },
                     choices: [
@@ -678,11 +678,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 agree_price: {
                     tourist: {
                         text: "That is a good price. I will take one kilo.",
-                        translation: "à¸£à¸²à¸„à¸²à¸”à¸µà¸„à¸£à¸±à¸š à¹€à¸­à¸²à¸«à¸™à¸¶à¹ˆà¸‡à¸à¸´à¹‚à¸¥à¸„à¸£à¸±à¸š (Racha dee krap. Ao nueng kilo krap.)"
+                        translation: "ราคาดีครับ เอาหนึ่งกิโลครับ (Racha dee krap. Ao nueng kilo krap.)"
                     },
                     local: {
                         name: "P'Som (Fishmonger)",
-                        text: "à¹„à¸”à¹‰à¹€à¸¥à¸¢à¸ˆà¹‰à¸²! à¹€à¸”à¸µà¹‹à¸¢à¸§à¸›à¹‰à¸²à¹€à¸¥à¸·à¸­à¸à¸•à¸±à¸§à¹‚à¸•à¹† à¹ƒà¸«à¹‰à¹€à¸¥à¸¢à¸™à¸°à¸ˆà¹Šà¸° à¸£à¸­à¸ªà¸±à¸à¸„à¸£à¸¹à¹ˆà¸ˆà¹‰à¸²",
+                        text: "ได้เลยจ้า! เดี๋ยวป้าเลือกตัวโตๆ ให้เลยนะจ๊ะ รอสักครู่จ้า",
                         translation: "Sure! I will select some nice big ones for you. A moment please."
                     },
                     choices: [
@@ -692,11 +692,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 thanks_happy: {
                     tourist: {
                         text: "Great! Thank you very much for the excellent service!",
-                        translation: "à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸šà¸£à¸´à¸à¸²à¸£à¸—à¸µà¹ˆà¸”à¸µà¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸™à¸°à¸„à¸£à¸±à¸š (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
+                        translation: "เยี่ยมเลยครับ ขอบคุณมากสำหรับบริการที่ดีเยี่ยมนะครับ (Yiem loey krap! Khop khun mak sam-rab bo-ri-kan tee dee yiem na krap.)"
                     },
                     local: {
                         name: "P'Som (Fishmonger)",
-                        text: "à¸¢à¸´à¸™à¸”à¸µà¸¡à¸²à¸à¸ˆà¹‰à¸² à¹€à¸—à¸µà¹ˆà¸¢à¸§à¸žà¸±à¸—à¸¢à¸²à¹ƒà¸«à¹‰à¸ªà¸™à¸¸à¸à¸™à¸°à¸ˆà¹Šà¸°! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
+                        text: "ยินดีมากจ้า เที่ยวพัทยาให้สนุกนะจ๊ะ! (Yindee mak ja, thiew Pattaya hai sanook na ja!)",
                         translation: "You are very welcome, have fun in Pattaya!"
                     },
                     choices: []
@@ -710,11 +710,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 greet: {
                     tourist: {
                         text: "Good evening, are you going to Walking Street?",
-                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¹„à¸›à¸–à¸™à¸™à¸„à¸™à¹€à¸”à¸´à¸™à¸§à¸­à¸„à¸à¸´à¹‰à¸‡à¸ªà¸•à¸£à¸µà¸—à¹„à¸«à¸¡à¸„à¸£à¸±à¸š (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
+                        translation: "สวัสดีครับ ไปถนนคนเดินวอคกิ้งสตรีทไหมครับ (Sawatdee krap, pai tha-non khon dern Walking Street mai krap?)"
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¹„à¸›à¸„à¸£à¸±à¸š à¸‚à¸¶à¹‰à¸™à¸¡à¸²à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š à¸„à¸™à¸¥à¸° 20 à¸šà¸²à¸—à¸„à¸£à¸±à¸šà¸œà¸¡",
+                        text: "ไปครับ ขึ้นมาเลยครับ คนละ 20 บาทครับผม",
                         translation: "Yes, I am! Get in, it is 20 Baht per person."
                     },
                     choices: [
@@ -725,11 +725,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 taxi_standard: {
                     tourist: {
                         text: "Perfect, we will get in. 20 Baht is fine.",
-                        translation: "à¸•à¸à¸¥à¸‡à¸„à¸£à¸±à¸š à¸‚à¸¶à¹‰à¸™à¸£à¸–à¹€à¸¥à¸¢ à¸„à¸™à¸¥à¸°à¸¢à¸µà¹ˆà¸ªà¸´à¸šà¸šà¸²à¸—à¸„à¸£à¸±à¸š (Tok-long krap, khuen rot loey, khon la yee-sip baht krap.)"
+                        translation: "ตกลงครับ ขึ้นรถเลย คนละยี่สิบบาทครับ (Tok-long krap, khuen rot loey, khon la yee-sip baht krap.)"
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¸”à¸µà¸„à¸£à¸±à¸š! à¹€à¸”à¸µà¹‹à¸¢à¸§à¸œà¹ˆà¸²à¸™à¸–à¸™à¸™à¹€à¸¥à¸µà¸¢à¸šà¸«à¸²à¸”à¹à¸¥à¹‰à¸§à¸ˆà¸°à¸ˆà¸­à¸”à¸ªà¹ˆà¸‡à¸—à¸µà¹ˆà¸ªà¸µà¹ˆà¹à¸¢à¸à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¸™à¸°à¸„à¸£à¸±à¸š",
+                        text: "ดีครับ! เดี๋ยวผ่านถนนเลียบหาดแล้วจะจอดส่งที่สี่แยกข้างหน้านะครับ",
                         translation: "Great! We will drive along Beach Road and I will drop you off at the intersection nearby."
                     },
                     choices: [
@@ -739,11 +739,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 taxi_direct: {
                     tourist: {
                         text: "Wait, can you drop us off directly at the entrance? We are 4 people.",
-                        translation: "à¹€à¸”à¸µà¹‹à¸¢à¸§à¸„à¸£à¸±à¸š à¸Šà¹ˆà¸§à¸¢à¹„à¸›à¸ªà¹ˆà¸‡à¸—à¸µà¹ˆà¸«à¸™à¹‰à¸²à¸—à¸²à¸‡à¹€à¸‚à¹‰à¸²à¹€à¸¥à¸¢à¹„à¸”à¹‰à¹„à¸«à¸¡à¸„à¸£à¸±à¸š à¸žà¸§à¸à¹€à¸£à¸²à¸¡à¸µà¸à¸±à¸™à¸ªà¸µà¹ˆà¸„à¸™ (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
+                        translation: "เดี๋ยวครับ ช่วยไปส่งที่หน้าทางเข้าเลยได้ไหมครับ พวกเรามีกันสี่คน (Diew krap, chuay pai song tee nah tang khao loey dai mai krap? Puak rao mee kan see khon.)"
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¸–à¹‰à¸²à¹€à¸«à¸¡à¸²à¹„à¸›à¸ªà¹ˆà¸‡à¸‚à¹‰à¸²à¸‡à¸«à¸™à¹‰à¸²à¹€à¸¥à¸¢ à¸„à¸´à¸”à¹€à¸«à¸¡à¸² 150 à¸šà¸²à¸—à¸¥à¸°à¸à¸±à¸™à¸„à¸£à¸±à¸š à¸ªà¸°à¸”à¸§à¸à¸à¸§à¹ˆà¸² à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸”à¸´à¸™à¹„gel",
+                        text: "ถ้าเหมาไปส่งข้างหน้าเลย คิดเหมา 150 บาทละกันครับ สะดวกกว่า ไม่ต้องเดินไgel",
                         translation: "If you charter the bus to drop you off directly at the entrance, I will charge 150 Baht in total. It is more convenient and saves walking."
                     },
                     choices: [
@@ -754,11 +754,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 taxi_direct_accept: {
                     tourist: {
                         text: "150 Baht is perfect. Let's go. Thank you!",
-                        translation: "à¸£à¹‰à¸­à¸¢à¸«à¹‰à¸²à¸ªà¸´à¸šà¸šà¸²à¸—à¸•à¸à¸¥à¸‡à¸„à¸£à¸±à¸š à¹„à¸›à¸à¸±à¸™à¹€à¸¥à¸¢ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸„à¸£à¸±à¸š (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
+                        translation: "ร้อยห้าสิบบาทตกลงครับ ไปกันเลย ขอบคุณครับ (Roy ha-sip baht tok-long krap. Pai kan loey. Khop khun krap!)"
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¹„à¸”à¹‰à¹€à¸¥à¸¢à¸„à¸£à¸±à¸š! à¸™à¸±à¹ˆà¸‡à¹ƒà¸«à¹‰à¸ªà¸šà¸²à¸¢à¹€à¸¥à¸¢ à¹€à¸”à¸µà¹‹à¸¢à¸§à¸‹à¸´à¹ˆà¸‡à¹„à¸›à¸ªà¹ˆà¸‡à¹ƒà¸«à¹‰à¸–à¸¶à¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸¢à¸„à¸£à¸±à¸š",
+                        text: "ได้เลยครับ! นั่งให้สบายเลย เดี๋ยวซิ่งไปส่งให้ถึงที่เลยครับ",
                         translation: "No problem! Have a comfortable seat, I'll drive you there directly."
                     },
                     choices: [
@@ -768,11 +768,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 taxi_arrive: {
                     tourist: {
                         text: "We are here! Thank you for the safe ride.",
-                        translation: "à¸–à¸¶à¸‡à¹à¸¥à¹‰à¸§à¸„à¸£à¸±à¸š à¸‚à¸­à¸šà¸„à¸¸à¸“à¸—à¸µà¹ˆà¸‚à¸±à¸šà¸£à¸–à¸¡à¸²à¸ªà¹ˆà¸‡à¸­à¸¢à¹ˆà¸²à¸‡à¸›à¸¥à¸­à¸”à¸ à¸±à¸¢à¸™à¸°à¸„à¸£à¸±à¸š (Thueng laew krap. Khop khun tee khap rot ma song yangà¸›à¸¥à¸­à¸”à¸ à¸±à¸¢ na krap.)"
+                        translation: "ถึงแล้วครับ ขอบคุณที่ขับรถมาส่งอย่างปลอดภัยนะครับ (Thueng laew krap. Khop khun tee khap rot ma song yangปลอดภัย na krap.)"
                     },
                     local: {
                         name: "Looong (Driver)",
-                        text: "à¹€à¸—à¸µà¹ˆà¸¢à¸§à¹ƒà¸«à¹‰à¸ªà¸™à¸¸à¸à¸™à¸°à¸„à¸£à¸±à¸š à¹‚à¸Šà¸„à¸”à¸µà¸„à¸£à¸±à¸š! (Thiew hai sanook na krap. Chok dee krap!)",
+                        text: "เที่ยวให้สนุกนะครับ โชคดีครับ! (Thiew hai sanook na krap. Chok dee krap!)",
                         translation: "Have fun there and good luck!"
                     },
                     choices: []
@@ -786,11 +786,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 greet: {
                     tourist: {
                         text: "Hello, I would like to check in. My reservation is under the name of Matthijs.",
-                        translation: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¸£à¸±à¸š à¸‚à¸­à¹€à¸Šà¹‡à¸„à¸­à¸´à¸™à¸„à¸£à¸±à¸š à¸ˆà¸­à¸‡à¹„à¸§à¹‰ inà¸Šà¸·à¹ˆà¸­ à¹à¸¡à¸—à¸˜à¸´à¸§ à¸„à¸£à¸±à¸š (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
+                        translation: "สวัสดีครับ ขอเช็คอินครับ จองไว้ inชื่อ แมทธิว ครับ (Sawatdee krap, kor check-in krap. Jong wai nai chue Matthieu krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "à¸ªà¸§à¸±à¸ªà¸”à¸µà¸„à¹ˆà¸° à¸¢à¸´à¸™à¸”à¸µà¸•à¹‰à¸­à¸™à¸£à¸±à¸šà¸„à¹ˆà¸° à¸‚à¸­à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¸·à¸™à¸¢à¸±à¸™à¸à¸²à¸£à¸ˆà¸­à¸‡à¸à¸±à¸šà¸žà¸²à¸ªà¸›à¸­à¸£à¹Œà¸•à¸”à¹‰à¸§à¸¢à¸™à¸°à¸„à¸°",
+                        text: "สวัสดีค่ะ ยินดีต้อนรับค่ะ ขอเอกสารยืนยันการจองกับพาสปอร์ตด้วยนะคะ",
                         translation: "Hello, welcome! May I have your booking confirmation and passport, please?"
                     },
                     choices: [
@@ -800,11 +800,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 docs_provided: {
                     tourist: {
                         text: "Here you go. Here are my passport and booking confirmation.",
-                        translation: "à¸™à¸µà¹ˆà¸„à¸£à¸±à¸š à¸žà¸²à¸ªà¸›à¸­à¸£à¹Œà¸•à¸à¸±à¸šà¹ƒà¸šà¸ˆà¸­à¸‡à¸„à¸£à¸±à¸š (Nee krap, passport kab bai jong krap.)"
+                        translation: "นี่ครับ พาสปอร์ตกับใบจองครับ (Nee krap, passport kab bai jong krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "à¸‚à¸­à¸šà¸„à¸¸à¸“à¸„à¹ˆà¸° à¸ˆà¸­à¸‡à¸«à¹‰à¸­à¸‡à¸”à¸µà¸¥à¸±à¸à¸‹à¹Œà¹„à¸§à¹‰ 5 à¸„à¸·à¸™à¸™à¸°à¸„à¸° à¸£à¸šà¸à¸§à¸™à¸ªà¸­à¸šà¸–à¸²à¸¡à¸§à¹ˆà¸²à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸–à¸²à¸¡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸šà¸à¸²à¸£à¹€à¸‚à¹‰à¸²à¸žà¸±à¸à¹„à¸«à¸¡à¸„à¸°",
+                        text: "ขอบคุณค่ะ จองห้องดีลักซ์ไว้ 5 คืนนะคะ รบกวนสอบถามว่าต้องการถามข้อมูลเพิ่มเติมเกี่ยวกับการเข้าพักไหมคะ",
                         translation: "Thank you. You booked a Deluxe room for 5 nights. Would you like any additional information about your stay?"
                     },
                     choices: [
@@ -815,11 +815,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 pool_breakfast: {
                     tourist: {
                         text: "Is breakfast included and what time does the pool open?",
-                        translation: "à¸£à¸§à¸¡à¸­à¸²à¸«à¸²à¸£à¹€à¸Šà¹‰à¸²à¸”à¹‰à¸§à¸¢à¹„à¸«à¸¡à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸ªà¸£à¸°à¸§à¹ˆà¸²à¸¢à¸™à¹‰à¸³à¹€à¸›à¸´à¸”à¸–à¸¶à¸‡à¸à¸µà¹ˆà¹‚à¸¡à¸‡à¸„à¸£à¸±à¸š (Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
+                        translation: "รวมอาหารเช้าด้วยไหมครับ แล้วสระว่ายน้ำเปิดถึงกี่โมงครับ (Ruam ar-han chao duay mai krap? Laew sa-wai-nam perd tueng kee mong krap?)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "à¸£à¸§à¸¡à¸­à¸²à¸«à¸²à¸£à¹€à¸Šà¹‰à¸²à¹€à¸£à¸µà¸¢à¸šà¸£à¹‰à¸­à¸¢à¸„à¹ˆà¸° à¸—à¸²à¸™à¹„à¸”à¹‰à¸—à¸µà¹ˆà¸«à¹‰à¸­à¸‡à¸­à¸²à¸«à¸²à¸£à¸Šà¸±à¹‰à¸™à¸«à¸™à¸¶à¹ˆà¸‡ à¸ªà¹ˆà¸§à¸™à¸ªà¸£à¸°à¸§à¹ˆà¸²à¸¢à¸™à¹‰à¸³à¹€à¸›à¸´à¸”à¹€à¸ˆà¹‡à¸”à¹‚à¸¡à¸‡à¹€à¸Šà¹‰à¸²à¸–à¸¶à¸‡à¸ªà¸µà¹ˆà¸—à¸¸à¹ˆà¸¡à¸„à¹ˆà¸°",
+                        text: "รวมอาหารเช้าเรียบร้อยค่ะ ทานได้ที่ห้องอาหารชั้นหนึ่ง ส่วนสระว่ายน้ำเปิดเจ็ดโมงเช้าถึงสี่ทุ่มค่ะ",
                         translation: "Yes, breakfast is included and is served in the restaurant on the first floor. The pool is open from 7:00 AM to 10:00 PM."
                     },
                     choices: [
@@ -829,11 +829,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 wifi_deposit: {
                     tourist: {
                         text: "What is the Wi-Fi code and how does the security deposit work?",
-                        translation: "à¸£à¸«à¸±à¸ªà¹„à¸§à¹„à¸Ÿà¸­à¸°à¹„à¸£à¸„à¸£à¸±à¸š à¹à¸¥à¹‰à¸§à¸•à¹‰à¸­à¸‡à¸§à¸²à¸‡à¹€à¸‡à¸´à¸™à¸¡à¸±à¸”à¸ˆà¸³à¹€à¸—à¹ˆà¸²à¹„à¸«à¸£à¹ˆà¸„à¸£à¸±à¸š (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
+                        translation: "รหัสไวไฟอะไรครับ แล้วต้องวางเงินมัดจำเท่าไหร่ครับ (Rahat wifi arai krap? Laew tong wang ngoen mat-jam tao rai krap?)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "à¹„à¸§à¹„à¸Ÿà¹ƒà¸Šà¹‰à¹„à¸”à¹‰à¸Ÿà¸£à¸µà¸—à¸±à¹ˆà¸§à¸—à¸±à¹‰à¸‡à¸£à¸µà¸ªà¸­à¸£à¹Œà¸—à¸„à¹ˆà¸° à¸£à¸«à¸±à¸ªà¸­à¸¢à¸¹à¹ˆà¸šà¸™à¸‹à¸­à¸‡à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” à¸ªà¹ˆà¸§à¸™à¸¡à¸±à¸”à¸ˆà¸³à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸” 1,000 à¸šà¸²à¸—à¸«à¸£à¸·à¸­à¸ªà¹à¸à¸™à¸šà¸±à¸•à¸£à¹€à¸„à¸£à¸”à¸´à¸•à¸„à¹ˆà¸°",
+                        text: "ไวไฟใช้ได้ฟรีทั่วทั้งรีสอร์ทค่ะ รหัสอยู่บนซองคีย์การ์ด ส่วนมัดจำคีย์การ์ด 1,000 บาทหรือสแกนบัตรเครดิตค่ะ",
                         translation: "Wi-Fi is free throughout the resort, the code is on your keycard envelope. The deposit is 1,000 Baht in cash or a credit card imprint."
                     },
                     choices: [
@@ -843,11 +843,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkin_done: {
                     tourist: {
                         text: "Fantastic. Thank you very much for the clear explanation and the keys.",
-                        translation: "à¸¢à¸­à¸”à¹€à¸¢à¸µà¹ˆà¸¢à¸¡à¸¡à¸²à¸ à¸‚à¸­à¸šà¸„à¸¸à¸“à¸¡à¸²à¸à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸—à¸µà¹ˆà¸Šà¸±à¸”à¹€à¸ˆà¸™à¹à¸¥à¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸™à¸°à¸„à¸£à¸±à¸š (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
+                        translation: "ยอดเยี่ยมมาก ขอบคุณมากสำหรับคำอธิบายที่ชัดเจนและคีย์การ์ดนะครับ (Yod-yiem mak. Khop khun mak sam-rab kam ar-thi-bay tee chad-jen laew kab keycard na krap.)"
                     },
                     local: {
                         name: "Kwan (Receptionist)",
-                        text: "à¸¢à¸´à¸™à¸”à¸µà¸„à¹ˆà¸° à¸™à¸µà¹ˆà¸„à¹ˆà¸°à¸„à¸µà¸¢à¹Œà¸à¸²à¸£à¹Œà¸”à¸«à¹‰à¸­à¸‡ 402 à¸‚à¸­à¹ƒà¸«à¹‰à¸žà¸±à¸à¸œà¹ˆà¸­à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸¡à¸µà¸„à¸§à¸²à¸¡à¸ªà¸¸à¸‚à¸™à¸°à¸„à¸°! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
+                        text: "ยินดีค่ะ นี่ค่ะคีย์การ์ดห้อง 402 ขอให้พักผ่อนอย่างมีความสุขนะคะ! (Yindee ka. Nee ka keycard hong see-roy-song. Kor hai pak-phon yang mee khwam sook na ka!)",
                         translation: "You're welcome! Here is your keycard for room 402. Have a wonderful stay!"
                     },
                     choices: []
@@ -879,10 +879,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSimSound.addEventListener('click', () => {
             simSoundEnabled = !simSoundEnabled;
             if (simSoundEnabled) {
-                simSoundIcon.textContent = "ðŸ”Š";
+                simSoundIcon.textContent = "🔊";
                 btnSimSound.title = "Mute Sound";
             } else {
-                simSoundIcon.textContent = "ðŸ”‡";
+                simSoundIcon.textContent = "🔇";
                 btnSimSound.title = "Unmute Sound";
                 stopSpeaking();
             }
@@ -910,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (simMessages) {
             simMessages.innerHTML = `
                 <div class="msg-bubble glass msg-local" style="align-self: center; border-radius: var(--radius-md); text-align: center; max-width: 90%;">
-                    <div class="msg-text">ðŸ’¡ Kies een scenario aan de linkerkant of klik op <strong>"Start Gesprek"</strong> om te beginnen!</div>
+                    <div class="msg-text">💡 Kies een scenario aan de linkerkant of klik op <strong>"Start Gesprek"</strong> om te beginnen!</div>
                 </div>
             `;
         }
@@ -953,8 +953,8 @@ document.addEventListener('DOMContentLoaded', () => {
             touristBubble.className = "msg-bubble glass msg-tourist";
             touristBubble.innerHTML = `
                 <div class="msg-meta">You (Tourist)</div>
-                <div class="msg-text">${node.tourist.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">ðŸ”Š</button></div>
-                <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">ðŸ”Š</button> Translation: "${node.tourist.translation}"</div>
+                <div class="msg-text">${node.tourist.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">🔊</button></div>
+                <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">🔊</button> Translation: "${node.tourist.translation}"</div>
             `;
             
             // Register Speech Replay button clicks
@@ -990,8 +990,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         localBubble.className = "msg-bubble glass msg-local";
                         localBubble.innerHTML = `
                             <div class="msg-meta">${node.local.name}</div>
-                            <div class="msg-text">${node.local.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">ðŸ”Š</button></div>
-                            <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">ðŸ”Š</button> Translation: "${node.local.translation}"</div>
+                            <div class="msg-text">${node.local.text} <button class="btn-replay-speech btn-speak-main" title="Listen to original" type="button">🔊</button></div>
+                            <div class="msg-trans"><button class="btn-replay-speech btn-speak-trans" title="Listen to translation" type="button">🔊</button> Translation: "${node.local.translation}"</div>
                         `;
 
                         // Register Speech Replays for Local
@@ -1033,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
         simChoices.innerHTML = '';
 
         const node = scenarios[currentScenario].nodes[currentNodeId];
-        const isStart = simMessages && simMessages.innerHTML.includes('ðŸ’¡');
+        const isStart = simMessages && simMessages.innerHTML.includes('💡');
         
         if (isStart) {
             const startBtn = document.createElement('button');
@@ -1061,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', () => {
             endText.className = "text-green font-bold";
             endText.style.fontSize = "0.95rem";
             endText.style.padding = "10px";
-            endText.textContent = "âœ“ Gesprek voltooid!";
+            endText.textContent = "✓ Gesprek voltooid!";
             simChoices.appendChild(endText);
 
             const resetBtn = document.createElement('button');
@@ -1211,8 +1211,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             if (recDiscountBox) recDiscountBox.style.display = 'none';
-            if (recTotalThb) recTotalThb.textContent = 'à¸¿0';
-            if (recTotalEur) recTotalEur.textContent = 'â‚¬0.00';
+            if (recTotalThb) recTotalThb.textContent = '฿0';
+            if (recTotalEur) recTotalEur.textContent = '€0.00';
             return;
         }
 
@@ -1248,8 +1248,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (recItemsList) {
             let itemsHtml = `
                 <div class="receipt-row-item">
-                    <span>W4 Pro Rental (${quantity}x set, ${days}d @ à¸¿250):</span>
-                    <span>à¸¿${rawRentalTotal}</span>
+                    <span>W4 Pro Rental (${quantity}x set, ${days}d @ ฿250):</span>
+                    <span>฿${rawRentalTotal}</span>
                 </div>
             `;
 
@@ -1257,7 +1257,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 itemsHtml += `
                     <div class="receipt-row-item">
                         <span>5G SIM Card (${quantity}x flat):</span>
-                        <span>à¸¿${simCost}</span>
+                        <span>฿${simCost}</span>
                     </div>
                 `;
             }
@@ -1266,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 itemsHtml += `
                     <div class="receipt-row-item">
                         <span>Premium Power Bank (${quantity}x flat):</span>
-                        <span>à¸¿${powerbankCost}</span>
+                        <span>฿${powerbankCost}</span>
                     </div>
                 `;
             }
@@ -1277,13 +1277,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 5. Update discounts & totals
         if (discountAmount > 0) {
             if (recDiscountBox) recDiscountBox.style.display = 'flex';
-            if (recDiscount) recDiscount.textContent = `-à¸¿${discountAmount} (${discountPercent * 100}%)`;
+            if (recDiscount) recDiscount.textContent = `-฿${discountAmount} (${discountPercent * 100}%)`;
         } else {
             if (recDiscountBox) recDiscountBox.style.display = 'none';
         }
 
-        if (recTotalThb) recTotalThb.textContent = `à¸¿${totalThb}`;
-        if (recTotalEur) recTotalEur.textContent = `â‚¬${totalEur.toFixed(2)}`;
+        if (recTotalThb) recTotalThb.textContent = `฿${totalThb}`;
+        if (recTotalEur) recTotalEur.textContent = `€${totalEur.toFixed(2)}`;
 
         // Check availability in the background
         checkAvailability();
@@ -1349,8 +1349,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 end_date: endDate,
                 quantity: earbudCount,
                 pickup_location: pickupLoc,
-                extra_sim: hasSim ? "Yes (+ à¸¿350 each)" : "No",
-                extra_powerbank: hasPowerbank ? "Yes (+ à¸¿175 each)" : "No",
+                extra_sim: hasSim ? "Yes (+ ฿350 each)" : "No",
+                extra_powerbank: hasPowerbank ? "Yes (+ ฿175 each)" : "No",
                 duration: durationText,
                 total_thb: totalThb,
                 total_eur: totalEur
@@ -1396,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(dbId => {
                 const finalFormData = {
                     ...bookingData,
-                    _subject: `ðŸŽ‰ Paid Booking from ${bookingData.name} (${paymentMethod})`,
+                    _subject: `🎉 Paid Booking from ${bookingData.name} (${paymentMethod})`,
                     _replyto: bookingData.email,
                     Payment_Status: `PAID via ${paymentMethod}`,
                     Transaction_ID: txnId,
@@ -1531,7 +1531,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formatted += val[i];
             }
             e.target.value = formatted;
-            if (cardNumberDisplay) cardNumberDisplay.textContent = formatted || 'â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢';
+            if (cardNumberDisplay) cardNumberDisplay.textContent = formatted || '•••• •••• •••• ••••';
             
             if (cardBrandLogo) {
                 if (val.startsWith('4')) {
@@ -1575,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (val.length > 3) val = val.substring(0, 3);
             e.target.value = val;
             if (cardCvvDisplay) {
-                cardCvvDisplay.textContent = val || 'â€¢â€¢â€¢';
+                cardCvvDisplay.textContent = val || '•••';
             }
         });
 
@@ -1733,10 +1733,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cardExpiryInput) cardExpiryInput.value = '';
             if (cardCvvInput) cardCvvInput.value = '';
             
-            if (cardNumberDisplay) cardNumberDisplay.textContent = 'â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢';
+            if (cardNumberDisplay) cardNumberDisplay.textContent = '•••• •••• •••• ••••';
             if (cardHolderDisplay) cardHolderDisplay.textContent = 'NAAM KAARTHOUDER';
             if (cardExpiryDisplay) cardExpiryDisplay.textContent = 'MM/JJ';
-            if (cardCvvDisplay) cardCvvDisplay.textContent = 'â€¢â€¢â€¢';
+            if (cardCvvDisplay) cardCvvDisplay.textContent = '•••';
             if (cardBrandLogo) cardBrandLogo.textContent = 'VISA';
 
             // Clear receipt customer details
@@ -1859,11 +1859,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             q: "Do I need internet for the translations in Pattaya?",
-            a: "Yes, for the most accurate, advanced AI translations, an internet connection is required. We highly recommend selecting our <strong>5G local SIM card option</strong> when booking (only à¸¿350 / â‚¬10 flat). This gives you unlimited high-speed data on your smartphone, enabling the Timekettle app to function flawlessly anywhere in Pattaya, both online and offline."
+            a: "Yes, for the most accurate, advanced AI translations, an internet connection is required. We highly recommend selecting our <strong>5G local SIM card option</strong> when booking (only ฿350 / €10 flat). This gives you unlimited high-speed data on your smartphone, enabling the Timekettle app to function flawlessly anywhere in Pattaya, both online and offline."
         },
         {
             q: "What happens if I damage or lose the earbuds?",
-            a: "We understand that accidents can happen while traveling. Upon pickup, we verify your credit card. We offer an optional damage coverage for à¸¿50 per day, which fully covers you against accidental physical damage, water damage, or theft (with police report). Without insurance, the fee for loss or irreparable damage is a maximum of à¸¿4,500 per earbud."
+            a: "We understand that accidents can happen while traveling. Upon pickup, we verify your credit card. We offer an optional damage coverage for ฿50 per day, which fully covers you against accidental physical damage, water damage, or theft (with police report). Without insurance, the fee for loss or irreparable damage is a maximum of ฿4,500 per earbud."
         }
     ];
 
@@ -1934,7 +1934,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const formData = {
-                _subject: `âœ‰ï¸ Nieuw Contactbericht van ${name} - True Time Thai`,
+                _subject: `✉️ Nieuw Contactbericht van ${name} - True Time Thai`,
                 _replyto: email,
                 Naam: name,
                 E_mailadres: email,
@@ -2266,7 +2266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <li><strong>Pattaya Beach Road Office:</strong> Open from 08:00 AM to 10:00 PM. Our office is centrally located and easy to reach.</li>
                         <li><strong>Free Hotel Delivery & Return:</strong> We deliver the sealed sets for free to the reception of your hotel or resort in Pattaya (including Jomtien and Naklua). You can simply leave the set at reception upon departure.</li>
                     </ul>
-                    <p><em>Please note:</em> The rental period starts on the agreed start date from 08:00 AM and ends on the end date by 10:00 PM at the latest. Late returns without consultation will incur a surcharge of à¸¿250 per day.</p>
+                    <p><em>Please note:</em> The rental period starts on the agreed start date from 08:00 AM and ends on the end date by 10:00 PM at the latest. Late returns without consultation will incur a surcharge of ฿250 per day.</p>
                 `
             },
             deposit: {
@@ -2275,7 +2275,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>We prefer clear and simple agreements without unnecessary hassle:</p>
                     <ul>
                         <li><strong>No Cash Deposit:</strong> With verification of a valid credit card (Visa or Mastercard) upon pickup or online booking, <strong>no cash deposit</strong> is required.</li>
-                        <li><strong>Alternative Deposit:</strong> Don't have a credit card? No problem! You can also choose to leave a cash deposit of à¸¿3.000 (â‚¬80) per set, or leave a copy of your passport. Cash deposits are returned directly and in full upon return.</li>
+                        <li><strong>Alternative Deposit:</strong> Don't have a credit card? No problem! You can also choose to leave a cash deposit of ฿3.000 (€80) per set, or leave a copy of your passport. Cash deposits are returned directly and in full upon return.</li>
                         <li><strong>Payment Methods:</strong> We accept online payments by Credit Card, PromptPay, and cash payments in THB or EUR upon delivery.</li>
                     </ul>
                 `
@@ -2285,8 +2285,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 content: `
                     <p>Of course, something unexpected can always happen while traveling. We offer full transparency regarding damage and loss:</p>
                     <ul>
-                        <li><strong>Optional Damage Coverage (+à¸¿50 / â‚¬1.35 per day):</strong> This fully covers you (100%) against accidental physical damage, water damage, or theft (with police report). No deductible!</li>
-                        <li><strong>Without Insurance:</strong> In case of loss, theft, or irreparable damage to the earbuds, you are liable for the replacement value. This is a maximum of à¸¿4,500 per earbud or charging case.</li>
+                        <li><strong>Optional Damage Coverage (+฿50 / €1.35 per day):</strong> This fully covers you (100%) against accidental physical damage, water damage, or theft (with police report). No deductible!</li>
+                        <li><strong>Without Insurance:</strong> In case of loss, theft, or irreparable damage to the earbuds, you are liable for the replacement value. This is a maximum of ฿4,500 per earbud or charging case.</li>
                         <li><strong>Normal Wear and Tear:</strong> Small scratches or normal signs of use are covered under our service and will never be charged.</li>
                     </ul>
                 `
