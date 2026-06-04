@@ -1364,6 +1364,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnChangeHotel = document.getElementById('btn-change-hotel');
 
     let tempSelectedHotel = '';
+    let mapUpdateTimeout = null;
+
+    function updateHotelMap(locationName, immediate = false) {
+        const mapIframe = document.getElementById('hotel-map-iframe');
+        if (!mapIframe) return;
+
+        if (mapUpdateTimeout) clearTimeout(mapUpdateTimeout);
+
+        const update = () => {
+            const query = encodeURIComponent(locationName + (locationName.toLowerCase().includes('pattaya') ? '' : ' Pattaya'));
+            mapIframe.src = `https://maps.google.com/maps?q=${query}&z=16&output=embed`;
+        };
+
+        if (immediate) {
+            update();
+        } else {
+            mapUpdateTimeout = setTimeout(update, 450); // Debounce typing
+        }
+    }
 
     function openHotelModal() {
         if (!hotelModal) return;
@@ -1373,6 +1392,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (manualHotelGroup) manualHotelGroup.style.display = 'none';
         
         renderHotelList('');
+        
+        // Initialize map to the selected hotel or default Pattaya
+        if (tempSelectedHotel) {
+            updateHotelMap(tempSelectedHotel, true);
+        } else {
+            updateHotelMap('Pattaya', true);
+        }
+
         hotelModal.classList.add('active');
         if (hotelSearchInput) hotelSearchInput.focus();
     }
@@ -1416,6 +1443,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempSelectedHotel = h;
                 if (manualHotelGroup) manualHotelGroup.style.display = 'none';
                 if (btnConfirmHotel) btnConfirmHotel.disabled = false;
+                
+                // Update map immediately on list item selection
+                updateHotelMap(h, true);
             });
             hotelResultsList.appendChild(div);
         });
@@ -1440,6 +1470,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     manualHotelInput.focus();
                     tempSelectedHotel = manualHotelInput.value.trim();
                     if (btnConfirmHotel) btnConfirmHotel.disabled = tempSelectedHotel === '';
+                    
+                    if (tempSelectedHotel) {
+                        updateHotelMap(tempSelectedHotel, true);
+                    } else {
+                        updateHotelMap('Pattaya', true);
+                    }
                 }
             }
         });
@@ -1461,6 +1497,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tempSelectedHotel = e.target.value.trim();
             if (btnConfirmHotel) {
                 btnConfirmHotel.disabled = tempSelectedHotel === '';
+            }
+            if (tempSelectedHotel) {
+                updateHotelMap(tempSelectedHotel);
+            } else {
+                updateHotelMap('Pattaya');
             }
         });
     }
