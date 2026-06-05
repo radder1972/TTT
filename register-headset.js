@@ -278,7 +278,7 @@ async function handleAddDevice(e) {
         
         // Update local settings (total stock) if needed
         let totalStock = devices.length;
-        // In simulation, we can sync stock settings too
+        localStorage.setItem('ttt_total_stock', totalStock.toString());
         
         alert("Headset successfully registered in simulation!");
         serialInput.value = '';
