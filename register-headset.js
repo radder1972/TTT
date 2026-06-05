@@ -230,7 +230,7 @@ async function handleAddDevice(e) {
     const notesInput = document.getElementById('input-device-notes');
     if (!serialInput) return;
     
-    const serial = serialInput.value.trim();
+    const serial = serialInput.value.trim().toUpperCase();
     const notes = notesInput ? notesInput.value.trim() : '';
     
     if (!serial) {
@@ -278,6 +278,7 @@ async function handleAddDevice(e) {
         
         // Update local settings (total stock) if needed
         let totalStock = devices.length;
+        // In simulation, we can sync stock settings too
         localStorage.setItem('ttt_total_stock', totalStock.toString());
         
         alert("Headset successfully registered in simulation!");
