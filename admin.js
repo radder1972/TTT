@@ -2250,6 +2250,26 @@ window.deleteCategory = async function(id) {
 };
 
 // Product Submission (Add or Edit)
+window.openProductModal = function() {
+    cancelProductEdit();
+    openAdminModal('modal-product-form');
+};
+
+window.closeProductModal = function() {
+    closeAdminModal('modal-product-form');
+};
+
+window.openCategoriesModal = function() {
+    const nameInput = document.getElementById('input-category-name');
+    if (nameInput) nameInput.value = '';
+    renderCategoriesList();
+    openAdminModal('modal-categories-form');
+};
+
+window.closeCategoriesModal = function() {
+    closeAdminModal('modal-categories-form');
+};
+
 window.handleAddProduct = async function(e) {
     e.preventDefault();
     const idInput = document.getElementById('input-product-id');
@@ -2291,6 +2311,7 @@ window.handleAddProduct = async function(e) {
                 localStorage.setItem('ttt_products', JSON.stringify(prods));
                 alert("Product updated successfully in simulation!");
                 cancelProductEdit();
+                closeProductModal();
                 await loadProducts();
             }
         } else {
@@ -2304,6 +2325,7 @@ window.handleAddProduct = async function(e) {
                 } else {
                     alert("Product updated successfully live!");
                     cancelProductEdit();
+                    closeProductModal();
                     await loadProducts();
                 }
             } catch (err) {
@@ -2328,6 +2350,7 @@ window.handleAddProduct = async function(e) {
             nameInput.value = '';
             rateInput.value = '';
             descInput.value = '';
+            closeProductModal();
             await loadProducts();
         } else {
             try {
@@ -2341,6 +2364,7 @@ window.handleAddProduct = async function(e) {
                     nameInput.value = '';
                     rateInput.value = '';
                     descInput.value = '';
+                    closeProductModal();
                     await loadProducts();
                 }
             } catch (err) {
@@ -2353,7 +2377,28 @@ window.handleAddProduct = async function(e) {
 window.editProduct = function(id) {
     const product = productsList.find(p => p.id === id);
     if (!product) return;
-    window.location.href = `add-product.html?id=${product.id}`;
+    
+    // Populate form fields
+    const idInput = document.getElementById('input-product-id');
+    const nameInput = document.getElementById('input-product-name');
+    const catSelect = document.getElementById('select-product-category');
+    const rateInput = document.getElementById('input-product-rate');
+    const typeSelect = document.getElementById('select-product-type');
+    const descInput = document.getElementById('input-product-description');
+    
+    if (idInput) idInput.value = product.id;
+    if (nameInput) nameInput.value = product.name;
+    if (catSelect) catSelect.value = product.category_id || '';
+    if (rateInput) rateInput.value = product.base_rate;
+    if (typeSelect) typeSelect.value = product.type;
+    if (descInput) descInput.value = product.description || '';
+    
+    const formTitle = document.getElementById('product-form-title');
+    const formDesc = document.getElementById('product-form-desc');
+    if (formTitle) formTitle.textContent = "Edit Product";
+    if (formDesc) formDesc.textContent = "Update this product's details.";
+    
+    openAdminModal('modal-product-form');
 };
 
 window.cancelProductEdit = function() {
@@ -2369,11 +2414,9 @@ window.cancelProductEdit = function() {
     
     const formTitle = document.getElementById('product-form-title');
     const formDesc = document.getElementById('product-form-desc');
-    const cancelBtn = document.getElementById('btn-cancel-product-edit');
     
     if (formTitle) formTitle.textContent = "Add New Product";
     if (formDesc) formDesc.textContent = "Add a rental item to the catalog.";
-    if (cancelBtn) cancelBtn.style.display = 'none';
 };
 
 window.deleteProduct = async function(id) {
