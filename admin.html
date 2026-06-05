@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.18">
+    <link rel="stylesheet" href="styles.css?v=4.2.19">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -313,12 +313,12 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th onclick="handleSort('products', 'name')" class="sortable-header" style="cursor: pointer; user-select: none;">Name <span id="sort-icon-products-name" class="sort-icon"></span></th>
-                                    <th onclick="handleSort('products', 'category_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Category <span id="sort-icon-products-category_name" class="sort-icon"></span></th>
-                                    <th onclick="handleSort('products', 'base_rate')" class="sortable-header" style="cursor: pointer; user-select: none;">Base Rate (Daily) <span id="sort-icon-products-base_rate" class="sort-icon"></span></th>
-                                    <th onclick="handleSort('products', 'type')" class="sortable-header" style="cursor: pointer; user-select: none;">Type <span id="sort-icon-products-type" class="sort-icon"></span></th>
-                                    <th onclick="handleSort('products', 'description')" class="sortable-header" style="cursor: pointer; user-select: none;">Description <span id="sort-icon-products-description" class="sort-icon"></span></th>
-                                    <th>Action</th>
+                                    <th onclick="handleSort('products', 'name')" class="sortable-header" style="cursor: pointer; user-select: none; width: 22%;">Name <span id="sort-icon-products-name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'category_name')" class="sortable-header" style="cursor: pointer; user-select: none; width: 20%;">Category <span id="sort-icon-products-category_name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'base_rate')" class="sortable-header" style="cursor: pointer; user-select: none; width: 18%; white-space: nowrap;">Base Rate (Daily) <span id="sort-icon-products-base_rate" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'type')" class="sortable-header" style="cursor: pointer; user-select: none; width: 12%; white-space: nowrap;">Type <span id="sort-icon-products-type" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'description')" class="sortable-header" style="cursor: pointer; user-select: none; width: 18%;">Description <span id="sort-icon-products-description" class="sort-icon"></span></th>
+                                    <th style="width: 10%; white-space: nowrap;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="products-table-body">
@@ -392,7 +392,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.2.18</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.2.19</span></p>
         </div>
     </footer>
 
@@ -797,6 +797,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=4.2.18"></script>
+    <script src="admin.js?v=4.2.19"></script>
 </body>
 </html>
