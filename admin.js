@@ -3100,3 +3100,91 @@ window.handleAddBooking = async function(e) {
     }
 };
 
+// ==========================================================================
+// Pickups Today Modal Logic
+// ==========================================================================
+
+window.showTodayPickupsModal = function() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const dateLabel = document.getElementById('pickups-today-date');
+    if (dateLabel) dateLabel.textContent = todayStr;
+    
+    // Filter bookings starting today in CONFIRMED status
+    const pickupsToday = activeBookings.filter(b => b.start_date === todayStr && b.status === "CONFIRMED");
+    
+    // Calculate aggregate sums
+    let totalEarbuds = 0;
+    let totalSims = 0;
+    let totalPowerbanks = 0;
+    
+    let listHtml = '';
+    
+    if (pickupsToday.length === 0) {
+        listHtml = `
+            <tr>
+                <td colspan="3" class="text-center text-muted" style="padding: 24px;">No pickups scheduled for today.</td>
+            </tr>
+        `;
+    } else {
+        pickupsToday.forEach(b => {
+            const hasSim = b.extra_sim === true || b.extra_sim === "Yes" || b.extra_sim === "Yes (+ ฿350 each)" || b.extra_sim === "Ja (+ ฿350 per stuk)";
+            const hasPowerbank = b.extra_powerbank === true || b.extra_powerbank === "Yes" || b.extra_powerbank === "Yes (+ ฿175 each)" || b.extra_powerbank === "Ja (+ ฿175 per stuk)";
+            
+            totalEarbuds += parseInt(b.earbud_count) || 0;
+            if (hasSim) totalSims += parseInt(b.earbud_count) || 0;
+            if (hasPowerbank) totalPowerbanks += parseInt(b.earbud_count) || 0;
+            
+            // Format products list text
+            const productsList = [];
+            productsList.push(`<strong>${b.earbud_count}x</strong> Timekettle W4 Pro Earbuds`);
+            if (hasSim) {
+                productsList.push(`<strong>${b.earbud_count}x</strong> 5G SIM Card`);
+            }
+            if (hasPowerbank) {
+                productsList.push(`<strong>${b.earbud_count}x</strong> Premium Power Bank`);
+            }
+            
+            const productsHtml = productsList.join('<br>');
+            
+            // Format location text
+            let locationText = b.pickup_location || 'True Time Thai Office';
+            if (locationText.startsWith('Hotel Delivery:')) {
+                locationText = `<span style="color: var(--neon-cyan); font-weight: bold;">🏨 Hotel Delivery</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">${locationText.replace('Hotel Delivery:', '').trim()}</span>`;
+            } else {
+                locationText = `<span style="color: var(--thai-blue); font-weight: bold;">🏢 Office Pickup</span>`;
+            }
+            
+            listHtml += `
+                <tr>
+                    <td style="padding: 10px 14px;">
+                        <strong>${b.customer_name}</strong><br>
+                        <span class="text-muted small">${b.customer_email}</span>
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: top;">
+                        ${locationText}
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: top; line-height: 1.4;">
+                        ${productsHtml}
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    
+    const sumEarbudsEl = document.getElementById('pickup-sum-earbuds');
+    const sumSimsEl = document.getElementById('pickup-sum-sims');
+    const sumPowerbanksEl = document.getElementById('pickup-sum-powerbanks');
+    const listBodyEl = document.getElementById('pickups-today-list-body');
+    
+    if (sumEarbudsEl) sumEarbudsEl.textContent = totalEarbuds;
+    if (sumSimsEl) sumSimsEl.textContent = totalSims;
+    if (sumPowerbanksEl) sumPowerbanksEl.textContent = totalPowerbanks;
+    if (listBodyEl) listBodyEl.innerHTML = listHtml;
+    
+    openAdminModal('modal-today-pickups');
+};
+
+window.closeTodayPickupsModal = function() {
+    closeAdminModal('modal-today-pickups');
+};
+
