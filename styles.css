@@ -2933,6 +2933,111 @@ hr {
 }
 
 /* --------------------------------------------------------------------------
+   14.6 SECTION: MISSION (OUR MISSION)
+   -------------------------------------------------------------------------- */
+.mission-layout {
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 48px;
+    align-items: stretch;
+}
+
+@media (max-width: 992px) {
+    .mission-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+.mission-text {
+    padding: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    background: rgba(255, 255, 255, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mission-text p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.mission-text .editorial-lead {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--thai-blue);
+    line-height: 1.6;
+}
+
+.mission-text .editorial-conclusion {
+    font-size: 1.05rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--thai-blue);
+    border-top: 1px solid rgba(27, 37, 66, 0.08);
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.mission-visual {
+    padding: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    background: rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.mission-badge {
+    text-align: center;
+    border-bottom: 1px solid rgba(27, 37, 66, 0.08);
+    padding-bottom: 24px;
+}
+
+.mission-badge .badge-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.mission-badge h3 {
+    font-size: 1.4rem;
+    color: var(--thai-blue);
+    margin-bottom: 6px;
+}
+
+.mission-badge p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.mission-values {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.value-item strong {
+    font-size: 1rem;
+    color: var(--thai-blue);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.value-item p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
    15. SECTION: GEBRUIKERSERVARINGEN (REVIEWS)
    -------------------------------------------------------------------------- */
 .reviews-grid {
