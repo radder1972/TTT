@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.16">
+    <link rel="stylesheet" href="styles.css?v=4.2.17">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -168,6 +168,7 @@
                             <option value="RETURNED">Returned / Complete</option>
                             <option value="CANCELLED">Cancelled</option>
                         </select>
+                        <button type="button" class="btn btn-sm btn-neon" onclick="openBookingAddModal()" style="height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Add New Booking">+</button>
                     </div>
                 </div>
 
@@ -176,11 +177,11 @@
                     <table class="admin-table" id="bookings-table">
                         <thead>
                             <tr>
-                                <th>Customer</th>
-                                <th>Rental Period</th>
-                                <th>Sets</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                                <th onclick="handleSort('bookings', 'customer_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Customer <span id="sort-icon-bookings-customer_name" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'start_date')" class="sortable-header" style="cursor: pointer; user-select: none;">Rental Period <span id="sort-icon-bookings-start_date" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'earbud_count')" class="sortable-header" style="cursor: pointer; user-select: none;">Sets <span id="sort-icon-bookings-earbud_count" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'total_price_thb')" class="sortable-header" style="cursor: pointer; user-select: none;">Amount <span id="sort-icon-bookings-total_price_thb" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'status')" class="sortable-header" style="cursor: pointer; user-select: none;">Status <span id="sort-icon-bookings-status" class="sort-icon"></span></th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -253,7 +254,7 @@
                 </div>
 
                 <!-- Main Inventory Grid -->
-                <div class="dashboard-layout">
+
                     <!-- Left: Headsets Table -->
                     <div class="dashboard-content-card glass">
                         <div class="card-header-actions">
@@ -275,12 +276,12 @@
                             <table class="admin-table">
                                 <thead>
                                     <tr>
-                                        <th>Serial Number</th>
-                                        <th>Model</th>
-                                        <th>Status</th>
-                                        <th>Assigned Booking</th>
-                                        <th>Notes / Comments</th>
-                                        <th>Last Checked</th>
+                                        <th onclick="handleSort('devices', 'serial_number')" class="sortable-header" style="cursor: pointer; user-select: none;">Serial Number <span id="sort-icon-devices-serial_number" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'product_id')" class="sortable-header" style="cursor: pointer; user-select: none;">Model <span id="sort-icon-devices-product_id" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'status')" class="sortable-header" style="cursor: pointer; user-select: none;">Status <span id="sort-icon-devices-status" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'assigned_booking_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Assigned Booking <span id="sort-icon-devices-assigned_booking_name" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'notes')" class="sortable-header" style="cursor: pointer; user-select: none;">Notes / Comments <span id="sort-icon-devices-notes" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'last_checked')" class="sortable-header" style="cursor: pointer; user-select: none;">Last Checked <span id="sort-icon-devices-last_checked" class="sort-icon"></span></th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -293,53 +294,7 @@
                         </div>
                     </div>
 
-                    <!-- Right: Inventory & Headset Controls -->
-                    <div class="dashboard-sidebar">
-                        <!-- Inventory Overview Card -->
-                        <div class="sidebar-card glass">
-                            <h4>Inventory Overview</h4>
-                            <p class="text-muted">Status overview of all registered headsets in Pattaya.</p>
-                            
-                            <div class="sidebar-stats-list" style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
-                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                                    <span style="font-weight: bold; color: var(--text-light); display: inline-flex; align-items: center; gap: 8px;">
-                                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;" fill="none" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-                                            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-                                        </svg>
-                                        Total Registered:
-                                    </span>
-                                    <strong id="sb-total-devices" style="font-size: 1.1rem; color: var(--neon-cyan);">0</strong>
-                                </div>
-                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: var(--text-muted);"><span class="pulse-dot green" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle;"></span>Free / Available:</span>
-                                    <strong id="sb-available-devices" style="color: var(--success);">0</strong>
-                                </div>
-                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-blue); box-shadow: 0 0 8px var(--thai-blue);"></span>In Active Rental:</span>
-                                    <strong id="sb-rented-devices" style="color: var(--neon-cyan);">0</strong>
-                                </div>
-                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-gold); box-shadow: 0 0 8px var(--thai-gold);"></span>In Cleaning (UV-C):</span>
-                                    <strong id="sb-cleaning-devices" style="color: var(--thai-gold);">0</strong>
-                                </div>
-                                <div class="sidebar-stat-item" style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: var(--text-muted);"><span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: middle; background: var(--thai-red); box-shadow: 0 0 8px var(--thai-red);"></span>In Maintenance:</span>
-                                    <strong id="sb-maintenance-devices" style="color: var(--thai-red);">0</strong>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Headset Registreren Card -->
-                        <div class="sidebar-card glass">
-                            <h4>Register Headsets</h4>
-                            <p class="text-muted">Registering new Timekettle W4 Pro sets is now done on a dedicated page.</p>
-                            <a href="register-headset.html" target="_blank" class="btn btn-sm btn-neon btn-block" style="height: 36px; display: flex; align-items: center; justify-content: center; margin-top: 16px;">
-                                Open Registration Page ↗
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div> <!-- End view-inventory -->
 
             <!-- SECTION: VIEW PRODUCTS (Initially Hidden) -->
@@ -358,11 +313,11 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Base Rate (Daily)</th>
-                                    <th>Type</th>
-                                    <th>Description</th>
+                                    <th onclick="handleSort('products', 'name')" class="sortable-header" style="cursor: pointer; user-select: none;">Name <span id="sort-icon-products-name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'category_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Category <span id="sort-icon-products-category_name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'base_rate')" class="sortable-header" style="cursor: pointer; user-select: none;">Base Rate (Daily) <span id="sort-icon-products-base_rate" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'type')" class="sortable-header" style="cursor: pointer; user-select: none;">Type <span id="sort-icon-products-type" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'description')" class="sortable-header" style="cursor: pointer; user-select: none;">Description <span id="sort-icon-products-description" class="sort-icon"></span></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -391,11 +346,11 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>City</th>
-                                    <th>Address</th>
+                                    <th onclick="handleSort('customers', 'name')" class="sortable-header" style="cursor: pointer; user-select: none;">Name <span id="sort-icon-customers-name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'email')" class="sortable-header" style="cursor: pointer; user-select: none;">Email <span id="sort-icon-customers-email" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'phone')" class="sortable-header" style="cursor: pointer; user-select: none;">Phone <span id="sort-icon-customers-phone" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'city')" class="sortable-header" style="cursor: pointer; user-select: none;">City <span id="sort-icon-customers-city" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'address')" class="sortable-header" style="cursor: pointer; user-select: none;">Address <span id="sort-icon-customers-address" class="sort-icon"></span></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -437,7 +392,7 @@
 
     <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container text-center">
-            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.2.16</span></p>
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.2.17</span></p>
         </div>
     </footer>
 
@@ -757,9 +712,91 @@
         </div>
     </div>
 
+    <!-- MODAL 8: Booking Form (Add Booking) -->
+    <div id="modal-booking-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 550px;">
+            <div class="admin-modal-header">
+                <h3>Add New Booking</h3>
+                <button type="button" class="btn-modal-close" onclick="closeBookingAddModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted">Create a new manual reservation.</p>
+                <form id="add-booking-form" style="margin-top: 16px;">
+                    <!-- Customer Details -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-name">Renter Name</label>
+                            <input type="text" id="input-booking-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-email">Email Address</label>
+                            <input type="email" id="input-booking-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-phone">Phone Number</label>
+                            <input type="text" id="input-booking-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-earbuds">Number of Sets</label>
+                            <input type="number" id="input-booking-earbuds" value="1" min="1" max="10" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+
+                    <!-- Rental Period -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-start">Start Date</label>
+                            <input type="date" id="input-booking-start" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-end">End Date</label>
+                            <input type="date" id="input-booking-end" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem;">
+                        </div>
+                    </div>
+
+                    <!-- Delivery/Pickup Location -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="select-booking-pickup">Pickup/Delivery Location</label>
+                            <select id="select-booking-pickup" required onchange="toggleBookingHotelField()" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; color: #1d1d1f;">
+                                <option value="pattaya_office">True Time Thai Office (Pattaya)</option>
+                                <option value="hotel_delivery">Hotel Delivery in Pattaya (Free)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="group-booking-hotel" style="display: none;">
+                            <label for="input-booking-hotel">Hotel Name</label>
+                            <input type="text" id="input-booking-hotel" placeholder="e.g. Hilton Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+
+                    <!-- Accessories & Extras checkboxes -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 0.85rem; font-weight: bold; color: var(--thai-blue); display: block; margin-bottom: 6px;">Extras & Accessories</label>
+                        <div style="display: flex; gap: 16px;">
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; color: var(--text-light);">
+                                <input type="checkbox" id="checkbox-booking-sim" style="cursor: pointer;"> 5G SIM Card
+                            </label>
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; color: var(--text-light);">
+                                <input type="checkbox" id="checkbox-booking-powerbank" style="cursor: pointer;"> Power Bank
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; margin-top: 20px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeBookingAddModal()" style="flex: 1; height: 36px;">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-neon btn-block" style="flex: 2; height: 36px; margin: 0;">✓ Create Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Admin Dashboard Logic JS -->
-    <script src="admin.js?v=4.2.16"></script>
+    <script src="admin.js?v=4.2.17"></script>
 </body>
 </html>
