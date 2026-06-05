@@ -4534,3 +4534,19 @@ hr {
     }
 }
 
+/* Sortable Table Headers */
+.sortable-header {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sortable-header:hover {
+    color: var(--neon-cyan) !important;
+    background: rgba(255, 255, 255, 0.03);
+}
+.sort-icon {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 0.7rem;
+    vertical-align: middle;
+    transition: opacity 0.2s ease;
+}
+
