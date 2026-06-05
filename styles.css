@@ -3006,7 +3006,9 @@ hr {
 }
 
 .mission-logo {
-    height: 70px;
+    height: 350px;
+    max-width: 100%;
+    object-fit: contain;
     display: block;
     margin: 0 auto 16px auto;
     filter: drop-shadow(0 4px 12px rgba(27, 37, 66, 0.08));
