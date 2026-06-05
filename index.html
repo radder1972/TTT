@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.24">
+    <link rel="stylesheet" href="styles.css?v=4.2.25">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
@@ -1005,13 +1005,17 @@
 
     <!-- Footer & Contact Form -->
     <footer class="app-footer" id="contact">
-        <div class="container footer-grid">
-            <!-- Contact Details & Form -->
-            <div class="footer-contact">
-                <h3>Contact Us</h3>
-                <p>Do you have specific questions about your booking, long-term rentals, or collaborations? Send us a message directly.</p>
-                
-                <form class="contact-form" id="contact-form" action="#" method="POST">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag">Get in Touch</span>
+                <h2>Contact Us</h2>
+                <p class="section-lead-sub">Do you have specific questions about your booking, long-term rentals, or collaborations? Send us a message directly.</p>
+            </div>
+
+            <div class="footer-grid">
+                <!-- Contact Details & Form -->
+                <div class="footer-contact">
+                    <form class="contact-form" id="contact-form" action="#" method="POST">
                     <div class="form-group">
                         <label for="contact-name">Name</label>
                         <input type="text" id="contact-name" required placeholder="Your name">
@@ -1121,6 +1125,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
         <!-- Google Maps Location Map -->
         <div class="container" style="margin-top: 40px; margin-bottom: 20px;">
@@ -1139,7 +1144,7 @@
 
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.24</span></p>
+                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.25</span></p>
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiene Terms</a>
                     <a href="#pricing">Rental Terms</a>
@@ -1193,6 +1198,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
-    <script src="app.js?v=4.2.24"></script>
+    <script src="app.js?v=4.2.25"></script>
 </body>
 </html>
