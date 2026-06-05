@@ -1022,6 +1022,12 @@ input, select, textarea {
     color: var(--thai-blue);
 }
 
+.scenario-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .scenario-card {
     width: 100%;
     display: flex;
