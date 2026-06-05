@@ -3005,6 +3005,18 @@ hr {
     margin-bottom: 12px;
 }
 
+.mission-logo {
+    height: 70px;
+    display: block;
+    margin: 0 auto 16px auto;
+    filter: drop-shadow(0 4px 12px rgba(27, 37, 66, 0.08));
+    transition: var(--transition-smooth);
+}
+
+.mission-logo:hover {
+    transform: scale(1.05);
+}
+
 .mission-badge h3 {
     font-size: 1.4rem;
     color: var(--thai-blue);
