@@ -3081,7 +3081,7 @@ window.handleAddBooking = async function(e) {
             const invoiceRecord = {
                 order_id: orderId,
                 total_amount: totalThb,
-                vat_amount: vatAmount,
+                vat: vatAmount,
                 payment_status: 'paid'
             };
             const { error: invoiceInsertError } = await supabaseClient
