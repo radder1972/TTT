@@ -2864,6 +2864,75 @@ hr {
 }
 
 /* --------------------------------------------------------------------------
+   14.5 SECTION: NIEUWS (NEWS)
+   -------------------------------------------------------------------------- */
+.news-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: start;
+}
+
+@media (max-width: 992px) {
+    .news-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+.news-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.news-card {
+    padding: 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    transition: var(--transition-smooth);
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--neon-cyan);
+}
+
+.news-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+}
+
+.news-date {
+    color: var(--text-muted);
+}
+
+.news-tag-badge {
+    background: rgba(27, 37, 66, 0.05);
+    color: var(--thai-blue);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.news-title {
+    font-size: 1.25rem;
+    color: var(--thai-blue);
+    margin-bottom: 12px;
+}
+
+.news-excerpt {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
    15. SECTION: GEBRUIKERSERVARINGEN (REVIEWS)
    -------------------------------------------------------------------------- */
 .reviews-grid {
