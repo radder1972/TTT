@@ -253,6 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
         addDeviceForm.addEventListener('submit', handleAddDevice);
     }
 
+    // Add Booking Form Submission
+    const addBookingForm = document.getElementById('add-booking-form');
+    if (addBookingForm) {
+        addBookingForm.addEventListener('submit', handleAddBooking);
+    }
+
     // Signature Pad Initialization
     canvas = document.getElementById('signature-canvas');
     if (canvas) {
@@ -612,17 +618,25 @@ function renderBookingsTable() {
         return matchesSearch && matchesStatus;
     });
 
-    if (filtered.length === 0) {
+    // Sort Bookings
+    let sortedBookings = [...filtered];
+    const state = sortStates['bookings'];
+    if (state && state.column) {
+        sortedBookings = sortData(sortedBookings, state.column, state.direction);
+    }
+
+    if (sortedBookings.length === 0) {
         tableBody.innerHTML = `
             <tr>
                 <td colspan="6" class="text-center text-muted">No bookings found matching the criteria.</td>
             </tr>
         `;
+        updateSortIndicators('bookings');
         return;
     }
 
     let rowsHtml = '';
-    filtered.forEach(b => {
+    sortedBookings.forEach(b => {
         // Date Formatting helper
         const periodText = `${formatDateString(b.start_date)} to ${formatDateString(b.end_date)}`;
         
@@ -684,6 +698,7 @@ function renderBookingsTable() {
     });
 
     tableBody.innerHTML = rowsHtml;
+    updateSortIndicators('bookings');
     
     // Auto-refresh details modal if it is currently open
     refreshBookingDetailsIfOpen();
@@ -1299,17 +1314,25 @@ window.renderDevicesTable = function() {
 
     calculateDeviceStats();
 
-    if (filtered.length === 0) {
+    // Sort Devices
+    let sortedDevices = [...filtered];
+    const state = sortStates['devices'];
+    if (state && state.column) {
+        sortedDevices = sortData(sortedDevices, state.column, state.direction);
+    }
+
+    if (sortedDevices.length === 0) {
         tableBody.innerHTML = `
             <tr>
                 <td colspan="7" class="text-center text-muted">No headsets found matching the criteria.</td>
             </tr>
         `;
+        updateSortIndicators('devices');
         return;
     }
 
     let rowsHtml = '';
-    filtered.forEach(d => {
+    sortedDevices.forEach(d => {
         let bookingText = '<span class="text-muted">-</span>';
         if (d.assigned_booking_id) {
             const booking = activeBookings.find(b => b.id === d.assigned_booking_id);
@@ -1352,6 +1375,7 @@ window.renderDevicesTable = function() {
     });
 
     tableBody.innerHTML = rowsHtml;
+    updateSortIndicators('devices');
 };
 
 // Calculate and show device status counts
@@ -2095,13 +2119,21 @@ function renderProductsTable() {
         const catMatch = catName.toLowerCase().includes(searchVal);
         return nameMatch || descMatch || catMatch;
     });
+
+    // Sort Products
+    let sortedProducts = [...filtered];
+    const state = sortStates['products'];
+    if (state && state.column) {
+        sortedProducts = sortData(sortedProducts, state.column, state.direction);
+    }
     
-    if (filtered.length === 0) {
+    if (sortedProducts.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding: 16px;">No products found.</td></tr>`;
+        updateSortIndicators('products');
         return;
     }
     
-    tableBody.innerHTML = filtered.map(p => {
+    tableBody.innerHTML = sortedProducts.map(p => {
         let catName = '-';
         if (p.categories) {
             catName = p.categories.name;
@@ -2126,6 +2158,7 @@ function renderProductsTable() {
             </tr>
         `;
     }).join('');
+    updateSortIndicators('products');
 }
 
 function renderCustomersTable() {
@@ -2141,13 +2174,21 @@ function renderCustomersTable() {
         const phoneMatch = (c.phone || '').toLowerCase().includes(searchVal);
         return nameMatch || emailMatch || cityMatch || phoneMatch;
     });
+
+    // Sort Customers
+    let sortedCustomers = [...filtered];
+    const state = sortStates['customers'];
+    if (state && state.column) {
+        sortedCustomers = sortData(sortedCustomers, state.column, state.direction);
+    }
     
-    if (filtered.length === 0) {
+    if (sortedCustomers.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding: 16px;">No customers found.</td></tr>`;
+        updateSortIndicators('customers');
         return;
     }
     
-    tableBody.innerHTML = filtered.map(c => `
+    tableBody.innerHTML = sortedCustomers.map(c => `
         <tr>
             <td style="font-weight: bold; color: var(--thai-blue);">${c.name}</td>
             <td style="font-size: 0.8rem;">${c.email}</td>
@@ -2162,6 +2203,7 @@ function renderCustomersTable() {
             </td>
         </tr>
     `).join('');
+    updateSortIndicators('customers');
 }
 
 // Category Submission
@@ -2617,6 +2659,443 @@ window.deleteCustomer = async function(id) {
             }
         } catch (err) {
             alert("Exception deleting customer: " + err.message);
+        }
+    }
+};
+
+// ==========================================================================
+// Sortable Tables Extension
+// ==========================================================================
+
+window.sortStates = {
+    bookings: { column: 'start_date', direction: 'desc' },
+    devices: { column: 'serial_number', direction: 'asc' },
+    products: { column: 'name', direction: 'asc' },
+    customers: { column: 'name', direction: 'asc' }
+};
+
+window.sortData = function(array, sortKey, direction) {
+    return [...array].sort((a, b) => {
+        let valA, valB;
+        
+        // Custom key getters
+        if (sortKey === 'total_price_thb') {
+            valA = parseFloat(a.total_price_thb) || 0;
+            valB = parseFloat(b.total_price_thb) || 0;
+        } else if (sortKey === 'assigned_booking_name') {
+            const getBookingName = (d) => {
+                if (!d.assigned_booking_id) return '';
+                const booking = activeBookings.find(bk => bk.id === d.assigned_booking_id);
+                return booking ? booking.customer_name.toLowerCase() : '';
+            };
+            valA = getBookingName(a);
+            valB = getBookingName(b);
+        } else if (sortKey === 'last_checked') {
+            valA = a.last_checked ? new Date(a.last_checked).getTime() : 0;
+            valB = b.last_checked ? new Date(b.last_checked).getTime() : 0;
+        } else if (sortKey === 'category_name') {
+            const getCatName = (p) => {
+                if (p.categories) return p.categories.name.toLowerCase();
+                if (p.category_id) {
+                    const cat = categoriesList.find(c => c.id === p.category_id);
+                    return cat ? cat.name.toLowerCase() : '';
+                }
+                return '';
+            };
+            valA = getCatName(a);
+            valB = getCatName(b);
+        } else if (sortKey === 'base_rate') {
+            valA = parseFloat(a.base_rate) || 0;
+            valB = parseFloat(b.base_rate) || 0;
+        } else {
+            // General property lookup
+            valA = a[sortKey];
+            valB = b[sortKey];
+        }
+        
+        if (valA === undefined || valA === null) valA = '';
+        if (valB === undefined || valB === null) valB = '';
+        
+        // If string, compare case-insensitively
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return direction === 'asc' 
+                ? valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' })
+                : valB.localeCompare(valA, undefined, { numeric: true, sensitivity: 'base' });
+        }
+        
+        // Default comparison
+        if (valA < valB) return direction === 'asc' ? -1 : 1;
+        if (valA > valB) return direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+};
+
+window.handleSort = function(tableId, sortKey) {
+    const state = sortStates[tableId];
+    if (!state) return;
+    
+    if (state.column === sortKey) {
+        state.direction = state.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        state.column = sortKey;
+        state.direction = 'asc';
+    }
+    
+    if (tableId === 'bookings') {
+        renderBookingsTable();
+    } else if (tableId === 'devices') {
+        renderDevicesTable();
+    } else if (tableId === 'products') {
+        renderProductsTable();
+    } else if (tableId === 'customers') {
+        renderCustomersTable();
+    }
+};
+
+window.updateSortIndicators = function(tableId) {
+    const state = sortStates[tableId];
+    if (!state) return;
+    
+    let container;
+    if (tableId === 'bookings') container = document.getElementById('view-bookings');
+    else if (tableId === 'devices') container = document.getElementById('view-inventory');
+    else if (tableId === 'products') container = document.getElementById('view-products');
+    else if (tableId === 'customers') container = document.getElementById('view-customers');
+    
+    if (!container) return;
+    
+    const icons = container.querySelectorAll('.sort-icon');
+    icons.forEach(icon => {
+        const id = icon.id || '';
+        const fieldName = id.replace(`sort-icon-${tableId}-`, '');
+        if (fieldName === state.column) {
+            icon.textContent = state.direction === 'asc' ? ' ▲' : ' ▼';
+            icon.style.color = 'var(--neon-cyan)';
+            icon.style.opacity = '1';
+        } else {
+            icon.textContent = ' ↕';
+            icon.style.color = 'var(--text-muted)';
+            icon.style.opacity = '0.35';
+        }
+    });
+};
+
+// ==========================================================================
+// Bookings Creation Extension
+// ==========================================================================
+
+window.openBookingAddModal = function() {
+    // Reset form fields
+    const form = document.getElementById('add-booking-form');
+    if (form) form.reset();
+    
+    // Set default dates
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const formattedTomorrow = tomorrow.toISOString().split('T')[0];
+    
+    const startInput = document.getElementById('input-booking-start');
+    const endInput = document.getElementById('input-booking-end');
+    if (startInput) {
+        startInput.value = formattedToday;
+        startInput.min = formattedToday;
+    }
+    if (endInput) {
+        endInput.value = formattedTomorrow;
+        endInput.min = formattedTomorrow;
+    }
+    
+    const hotelGroup = document.getElementById('group-booking-hotel');
+    if (hotelGroup) hotelGroup.style.display = 'none';
+
+    openAdminModal('modal-booking-form');
+};
+
+window.closeBookingAddModal = function() {
+    closeAdminModal('modal-booking-form');
+};
+
+window.toggleBookingHotelField = function() {
+    const pickupSelect = document.getElementById('select-booking-pickup');
+    const hotelGroup = document.getElementById('group-booking-hotel');
+    const hotelInput = document.getElementById('input-booking-hotel');
+    if (pickupSelect && hotelGroup) {
+        if (pickupSelect.value === 'hotel_delivery') {
+            hotelGroup.style.display = 'block';
+            if (hotelInput) hotelInput.required = true;
+        } else {
+            hotelGroup.style.display = 'none';
+            if (hotelInput) {
+                hotelInput.required = false;
+                hotelInput.value = '';
+            }
+        }
+    }
+};
+
+window.handleAddBooking = async function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('input-booking-name').value.trim();
+    const email = document.getElementById('input-booking-email').value.trim();
+    const phone = document.getElementById('input-booking-phone').value.trim();
+    const earbuds = parseInt(document.getElementById('input-booking-earbuds').value) || 1;
+    const start_date = document.getElementById('input-booking-start').value;
+    const end_date = document.getElementById('input-booking-end').value;
+    const pickup_loc = document.getElementById('select-booking-pickup').value;
+    const hotel_name = document.getElementById('input-booking-hotel').value.trim();
+    const hasSim = document.getElementById('checkbox-booking-sim').checked;
+    const hasPowerbank = document.getElementById('checkbox-booking-powerbank').checked;
+
+    // Validate dates
+    const start = new Date(start_date);
+    const end = new Date(end_date);
+    if (end <= start) {
+        alert("End date must be after start date.");
+        return;
+    }
+
+    const diffTime = end - start;
+    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Calculate total price
+    const baseCostPerDay = 250; // DAILY_RATE
+    let discountPercent = 0;
+    if (days >= 30) {
+        discountPercent = 0.40;
+    } else if (days >= 5) {
+        discountPercent = 0.20;
+    }
+
+    const rawRentalTotal = baseCostPerDay * days * earbuds;
+    const discountAmount = Math.round(rawRentalTotal * discountPercent);
+    const finalRentalTotal = rawRentalTotal - discountAmount;
+
+    const simCost = hasSim ? (350 * earbuds) : 0;
+    const powerbankCost = hasPowerbank ? (175 * earbuds) : 0;
+    const totalThb = finalRentalTotal + simCost + powerbankCost;
+
+    const pickupLocationText = pickup_loc === 'hotel_delivery' ? `Hotel Delivery: ${hotel_name}` : 'True Time Thai Office (Pattaya)';
+
+    // New Booking ID
+    const newBookingId = 'b_' + Math.random().toString(36).substr(2, 9);
+    const timestamp = new Date().toISOString();
+
+    if (isSimulated) {
+        // Flat bookings array (dashboard uses this)
+        const bookingsStr = localStorage.getItem('ttt_bookings') || '[]';
+        const bookings = JSON.parse(bookingsStr);
+        const simRecord = {
+            id: newBookingId,
+            customer_name: name,
+            customer_email: email,
+            customer_phone: phone || '',
+            start_date: start_date,
+            end_date: end_date,
+            pickup_location: pickupLocationText,
+            status: 'CONFIRMED',
+            total_price_thb: totalThb,
+            earbud_count: earbuds,
+            extra_sim: hasSim ? 'Yes' : 'No',
+            extra_powerbank: hasPowerbank ? 'Yes' : 'No',
+            created_at: timestamp
+        };
+        bookings.push(simRecord);
+        localStorage.setItem('ttt_bookings', JSON.stringify(bookings));
+
+        // Relational Simulation
+        // 1. Customer
+        const customersStr = localStorage.getItem('ttt_customers') || '[]';
+        const customers = JSON.parse(customersStr);
+        let customer = customers.find(c => c.email === email);
+        if (!customer) {
+            customer = {
+                id: 'c_' + Math.random().toString(36).substr(2, 9),
+                name: name,
+                email: email,
+                phone: phone || null,
+                address: null,
+                city: null,
+                created_at: timestamp
+            };
+            customers.push(customer);
+            localStorage.setItem('ttt_customers', JSON.stringify(customers));
+        }
+
+        // 2. Order
+        const ordersStr = localStorage.getItem('ttt_rental_orders') || '[]';
+        const orders = JSON.parse(ordersStr);
+        orders.push({
+            id: newBookingId,
+            customer_id: customer.id,
+            start_date: start_date,
+            end_date: end_date,
+            total_price: totalThb,
+            status: "CONFIRMED",
+            payment_method: 'Cash',
+            payment_status: "PAID",
+            transaction_id: 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+            pickup_location: pickupLocationText,
+            created_at: timestamp
+        });
+        localStorage.setItem('ttt_rental_orders', JSON.stringify(orders));
+
+        // 3. Order Lines
+        const linesStr = localStorage.getItem('ttt_rental_order_lines') || '[]';
+        const lines = JSON.parse(linesStr);
+        lines.push({
+            id: 'l_' + Math.random().toString(36).substr(2, 9),
+            order_id: newBookingId,
+            product_id: 'e1111111-1111-1111-1111-111111111111',
+            quantity: earbuds,
+            agreed_price_per_day: 250
+        });
+        if (hasSim) {
+            lines.push({
+                id: 'l_' + Math.random().toString(36).substr(2, 9),
+                order_id: newBookingId,
+                product_id: 'e2222222-2222-2222-2222-222222222222',
+                quantity: earbuds,
+                agreed_price_per_day: 350
+            });
+        }
+        if (hasPowerbank) {
+            lines.push({
+                id: 'l_' + Math.random().toString(36).substr(2, 9),
+                order_id: newBookingId,
+                product_id: 'e3333333-3333-3333-3333-333333333333',
+                quantity: earbuds,
+                agreed_price_per_day: 175
+            });
+        }
+        localStorage.setItem('ttt_rental_order_lines', JSON.stringify(lines));
+
+        // 4. Invoice
+        const invoicesStr = localStorage.getItem('ttt_invoices') || '[]';
+        const invoices = JSON.parse(invoicesStr);
+        const vatAmount = Math.round(totalThb - (totalThb / 1.07));
+        invoices.push({
+            id: 'i_' + Math.random().toString(36).substr(2, 9),
+            order_id: newBookingId,
+            date: start_date,
+            total_amount: totalThb,
+            vat: vatAmount,
+            payment_status: 'paid'
+        });
+        localStorage.setItem('ttt_invoices', JSON.stringify(invoices));
+
+        alert("Booking successfully created in simulation!");
+        closeBookingAddModal();
+        await loadBookings();
+        await loadCustomersData();
+    } else {
+        try {
+            // Live relational DB insertion flow
+            // 1. Get or Create Customer
+            let customerId = null;
+            const { data: customerData, error: customerFetchError } = await supabaseClient
+                .from('customers')
+                .select('id')
+                .eq('email', email)
+                .maybeSingle();
+
+            if (customerFetchError) throw customerFetchError;
+
+            if (customerData) {
+                customerId = customerData.id;
+            } else {
+                const { data: newCust, error: custInsertError } = await supabaseClient
+                    .from('customers')
+                    .insert([{
+                        name: name,
+                        email: email,
+                        phone: phone || null,
+                        address: null,
+                        city: null
+                    }])
+                    .select('id')
+                    .single();
+                if (custInsertError) throw custInsertError;
+                customerId = newCust.id;
+            }
+
+            // 2. Insert Order
+            const txnId = 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const orderRecord = {
+                customer_id: customerId,
+                start_date: start_date,
+                end_date: end_date,
+                total_price: totalThb,
+                status: "CONFIRMED",
+                payment_method: 'Cash',
+                payment_status: "PAID",
+                transaction_id: txnId,
+                pickup_location: pickupLocationText
+            };
+            
+            const { data: newOrder, error: orderInsertError } = await supabaseClient
+                .from('rental_orders')
+                .insert([orderRecord])
+                .select('id')
+                .single();
+            if (orderInsertError) throw orderInsertError;
+            const orderId = newOrder.id;
+
+            // 3. Insert Order Lines
+            const orderLines = [
+                {
+                    order_id: orderId,
+                    product_id: 'e1111111-1111-1111-1111-111111111111',
+                    quantity: earbuds,
+                    agreed_price_per_day: 250
+                }
+            ];
+            
+            if (hasSim) {
+                orderLines.push({
+                    order_id: orderId,
+                    product_id: 'e2222222-2222-2222-2222-222222222222',
+                    quantity: earbuds,
+                    agreed_price_per_day: 350
+                });
+            }
+            
+            if (hasPowerbank) {
+                orderLines.push({
+                    order_id: orderId,
+                    product_id: 'e3333333-3333-3333-3333-333333333333',
+                    quantity: earbuds,
+                    agreed_price_per_day: 175
+                });
+            }
+            
+            const { error: linesInsertError } = await supabaseClient
+                .from('rental_order_lines')
+                .insert(orderLines);
+            if (linesInsertError) throw linesInsertError;
+
+            // 4. Insert Invoice
+            const vatAmount = Math.round(totalThb - (totalThb / 1.07));
+            const invoiceRecord = {
+                order_id: orderId,
+                total_amount: totalThb,
+                vat_amount: vatAmount,
+                payment_status: 'paid'
+            };
+            const { error: invoiceInsertError } = await supabaseClient
+                .from('invoices')
+                .insert([invoiceRecord]);
+            if (invoiceInsertError) throw invoiceInsertError;
+
+            alert("Booking successfully created live!");
+            closeBookingAddModal();
+            await loadBookings();
+            await loadCustomersData();
+        } catch (err) {
+            console.error("Exception creating booking live:", err);
+            alert("Error creating booking: " + err.message);
         }
     }
 };
