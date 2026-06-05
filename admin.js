@@ -3188,3 +3188,80 @@ window.closeTodayPickupsModal = function() {
     closeAdminModal('modal-today-pickups');
 };
 
+// ==========================================================================
+// Active Rentals Modal Logic
+// ==========================================================================
+
+window.showActiveRentalsModal = function() {
+    // Filter bookings with status: PICKED_UP
+    const activeRentalsList = activeBookings.filter(b => b.status === "PICKED_UP");
+    
+    // Calculate aggregate sums
+    let totalEarbuds = 0;
+    let totalSims = 0;
+    let totalPowerbanks = 0;
+    
+    let listHtml = '';
+    
+    if (activeRentalsList.length === 0) {
+        listHtml = `
+            <tr>
+                <td colspan="3" class="text-center text-muted" style="padding: 24px;">No active rentals currently.</td>
+            </tr>
+        `;
+    } else {
+        activeRentalsList.forEach(b => {
+            const hasSim = b.extra_sim === true || b.extra_sim === "Yes" || b.extra_sim === "Yes (+ ฿350 each)" || b.extra_sim === "Ja (+ ฿350 per stuk)";
+            const hasPowerbank = b.extra_powerbank === true || b.extra_powerbank === "Yes" || b.extra_powerbank === "Yes (+ ฿175 each)" || b.extra_powerbank === "Ja (+ ฿175 per stuk)";
+            
+            totalEarbuds += parseInt(b.earbud_count) || 0;
+            if (hasSim) totalSims += parseInt(b.earbud_count) || 0;
+            if (hasPowerbank) totalPowerbanks += parseInt(b.earbud_count) || 0;
+            
+            // Format products list text
+            const productsList = [];
+            productsList.push(`<strong>${b.earbud_count}x</strong> Timekettle W4 Pro Earbuds`);
+            if (hasSim) {
+                productsList.push(`<strong>${b.earbud_count}x</strong> 5G SIM Card`);
+            }
+            if (hasPowerbank) {
+                productsList.push(`<strong>${b.earbud_count}x</strong> Premium Power Bank`);
+            }
+            
+            const productsHtml = productsList.join('<br>');
+            const periodText = `${formatDateString(b.start_date)} to ${formatDateString(b.end_date)}`;
+            
+            listHtml += `
+                <tr>
+                    <td style="padding: 10px 14px;">
+                        <strong>${b.customer_name}</strong><br>
+                        <span class="text-muted small">${b.customer_email}</span>
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: top;">
+                        <span class="small">${periodText}</span>
+                    </td>
+                    <td style="padding: 10px 14px; vertical-align: top; line-height: 1.4;">
+                        ${productsHtml}
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    
+    const sumEarbudsEl = document.getElementById('active-sum-earbuds');
+    const sumSimsEl = document.getElementById('active-sum-sims');
+    const sumPowerbanksEl = document.getElementById('active-sum-powerbanks');
+    const listBodyEl = document.getElementById('active-rentals-list-body');
+    
+    if (sumEarbudsEl) sumEarbudsEl.textContent = totalEarbuds;
+    if (sumSimsEl) sumSimsEl.textContent = totalSims;
+    if (sumPowerbanksEl) sumPowerbanksEl.textContent = totalPowerbanks;
+    if (listBodyEl) listBodyEl.innerHTML = listHtml;
+    
+    openAdminModal('modal-active-rentals');
+};
+
+window.closeActiveRentalsModal = function() {
+    closeAdminModal('modal-active-rentals');
+};
+
