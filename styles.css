@@ -2707,20 +2707,22 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
         gap: 4px;
     }
     
     .thai-word {
-        font-size: 1.45rem;
+        font-size: 1.25rem;
     }
     
     .brand-sub {
-        font-size: 0.62rem;
+        font-size: 0.55rem;
     }
     
     .nav-toggle {
         display: flex;
+        position: relative;
+        z-index: 1005;
     }
     
     .nav-toggle.active span:nth-child(1) {
