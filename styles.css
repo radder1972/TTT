@@ -2348,6 +2348,28 @@ hr {
     transform: scale(1.2);
 }
 
+/* Footer Polaroid Carousel styles overrides for visibility against navy background */
+.app-footer .carousel-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
+}
+
+.app-footer .carousel-btn:hover {
+    background: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    color: #FFFFFF;
+}
+
+.app-footer .carousel-dot {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.app-footer .carousel-dot.active {
+    background: var(--neon-cyan);
+}
+
+
 /* Footer bottom */
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
