@@ -73,7 +73,7 @@ const DUMMY_BOOKINGS = [
         start_date: "2026-06-03",
         end_date: "2026-06-06",
         earbud_count: 2,
-        pickup_location: "True Time Thai Office - Beach Road Pattaya",
+        pickup_location: "True Time Thai Office - Pattaya Sai Song Road",
         extra_sim: true,
         extra_powerbank: false,
         total_price_thb: 2200,
@@ -107,7 +107,7 @@ const DUMMY_BOOKINGS = [
         start_date: "2026-05-25",
         end_date: "2026-05-30",
         earbud_count: 3,
-        pickup_location: "True Time Thai Office - Beach Road Pattaya",
+        pickup_location: "True Time Thai Office - Pattaya Sai Song Road",
         extra_sim: true,
         extra_powerbank: true,
         total_price_thb: 5325,
@@ -1064,7 +1064,7 @@ function formatDateString(dateStr) {
 
 function formatLocationText(locText) {
     if (!locText) return '';
-    if (locText.includes("Office")) return "Beach Road Office";
+    if (locText.includes("Office")) return "Sai Song Road Office";
     if (locText.includes("Bezorging") || locText.includes("delivery") || locText.includes("Delivery")) return "Hotel Delivery";
     return locText;
 }
