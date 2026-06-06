@@ -2181,6 +2181,9 @@ hr {
 .info-icon {
     font-size: 1.4rem;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .info-item p {
@@ -2191,6 +2194,35 @@ hr {
 .info-item strong {
     display: block;
     margin-bottom: 2px;
+}
+
+/* Concept 3 Style subtle icon integration */
+.concept-header-icon {
+    display: block;
+    height: 48px;
+    width: auto;
+    margin: 0 auto 16px auto;
+    opacity: 0.85;
+    transition: var(--transition-smooth);
+    object-fit: contain;
+}
+
+.section-header:hover .concept-header-icon {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.concept-info-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    transition: var(--transition-smooth);
+}
+
+.info-item:hover .concept-info-img {
+    transform: scale(1.1);
 }
 
 .trust-icons {
