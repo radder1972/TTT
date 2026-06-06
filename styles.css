@@ -2096,7 +2096,8 @@ hr {
     color: #94A3B8;
 }
 
-.app-footer .section-header h2 {
+.app-footer .section-header h2,
+.app-footer .section-header-text-layout h2 {
     color: #FFFFFF;
 }
 
