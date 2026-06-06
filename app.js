@@ -2814,4 +2814,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initNewsCarousel();
 });
 
+// Image Lightbox Functions
+window.openLightbox = function(imgElement) {
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    
+    lightboxImg.src = imgElement.src;
+    lightboxCaption.textContent = imgElement.alt || '';
+    lightbox.classList.add('active');
+    
+    // Disable scrolling behind lightbox
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeLightbox = function() {
+    const lightbox = document.getElementById('image-lightbox');
+    lightbox.classList.remove('active');
+    
+    // Restore scrolling
+    document.body.style.overflow = '';
+};
+
+
 
