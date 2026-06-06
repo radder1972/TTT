@@ -2940,6 +2940,69 @@ hr {
     line-height: 1.5;
 }
 
+/* News Relocation Photo comparison */
+.relocation-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.photo-compare-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.photo-compare-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--neon-cyan);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: var(--shadow-soft);
+}
+
+.photo-compare-card .compare-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+.photo-compare-card .photo-caption {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.photo-compare-card .photo-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.photo-compare-card .photo-badge.old {
+    background: rgba(208, 42, 42, 0.85);
+    color: #FFFFFF;
+}
+
+.photo-compare-card .photo-badge.new {
+    background: rgba(16, 185, 129, 0.85);
+    color: #FFFFFF;
+}
+
 /* --------------------------------------------------------------------------
    14.6 SECTION: MISSION (OUR MISSION)
    -------------------------------------------------------------------------- */
