@@ -2691,12 +2691,14 @@ hr {
     }
     
     .logo {
-        position: static;
-        transform: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         flex-direction: row;
         align-items: center;
         gap: 12px;
-        z-index: auto;
+        z-index: 1002;
     }
     
     .logo-text {
@@ -2752,7 +2754,8 @@ hr {
     }
     
     .nav-menu.open {
-        max-height: 450px; /* Large enough to fit all links */
+        max-height: 600px; /* Large enough to fit all links */
+        overflow-y: auto;
     }
     
     .nav-menu li {
