@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>True Time Thai | Product Management</title>
+    <!-- Google Fonts: Architects Daughter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=4.2.38">
+    
+    <!-- Favicon / Meta -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
+</head>
+<body class="admin-body">
+    <!-- Decorative Background Elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+    <div class="mandala-overlay" aria-hidden="true"></div>
+    
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container header-container">
+            <a href="admin.html" class="logo">
+                <img src="assets/logo.png" alt="True Time Thai Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">TRUE TIME <span class="thai-word">THAI</span></span>
+                    <span class="brand-sub">PRODUCT MANAGEMENT</span>
+                </div>
+            </a>
+            
+            <div class="header-right" id="header-logout-wrapper" style="display: none;">
+                <button type="button" class="btn btn-sm btn-outline" id="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main container admin-main-container" style="display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 120px); padding: 40px 20px;">
+        
+        <!-- SECTION 1: LOGIN (Shown when unauthenticated) -->
+        <section id="login-section" class="admin-section" style="width: 100%; max-width: 480px; display: none;">
+            <div class="admin-login-card glass" style="margin: 0 auto; width: 100%;">
+                <div class="login-header">
+                    <div class="lock-icon">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 48px; height: 48px;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="var(--thai-blue)" stroke-width="2" fill="none"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <h2>Technician Login</h2>
+                    <p>Enter your administrator credentials to manage catalog products.</p>
+                </div>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="info@truetimethai.com" style="width: 100%; height: 38px;">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" style="width: 100%; height: 38px;">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-login" style="margin-top: 20px;">Authorize</button>
+                </form>
+                
+                <div class="login-footer-text" style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: var(--text-muted);">
+                    <p>Demo credentials: <strong>info@truetimethai.com</strong> / <strong>R@dd3r1972?12345</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PRODUCT FORM (Shown when authenticated) -->
+        <section id="product-section" class="admin-section" style="width: 100%; max-width: 600px; display: none;">
+            <div class="admin-login-card glass" style="margin: 0 auto; width: 100%; padding: 32px;">
+                
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h2 id="product-form-title" style="font-size: 1.75rem; color: var(--thai-blue); margin-bottom: 6px;">Add New Product</h2>
+                    <p id="product-form-desc" style="color: var(--text-muted); font-size: 0.85rem;">Add a rental item to the catalog.</p>
+                </div>
+
+                <form id="add-product-form" style="margin-top: 16px;">
+                    <input type="hidden" id="input-product-id" value="">
+                    
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="input-product-name" style="font-weight: 600; font-size: 0.85rem; color: var(--thai-blue);">Product Name</label>
+                        <input type="text" id="input-product-name" placeholder="e.g. 5G SIM Card" required style="width: 100%; height: 40px; box-sizing: border-box; margin-top: 6px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none; background: rgba(255, 255, 255, 0.65);">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="select-product-category" style="font-weight: 600; font-size: 0.85rem; color: var(--thai-blue);">Category</label>
+                        <select id="select-product-category" required style="width: 100%; height: 40px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none;">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="input-product-rate" style="font-weight: 600; font-size: 0.85rem; color: var(--thai-blue);">Base Rate (THB / Day)</label>
+                        <input type="number" id="input-product-rate" placeholder="e.g. 150" required step="0.01" min="0" style="width: 100%; height: 40px; box-sizing: border-box; margin-top: 6px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none; background: rgba(255, 255, 255, 0.65);">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="select-product-type" style="font-weight: 600; font-size: 0.85rem; color: var(--thai-blue);">Type</label>
+                        <select id="select-product-type" required style="width: 100%; height: 40px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none;">
+                            <option value="bulk">Bulk Item (No Serial Required)</option>
+                            <option value="serialized">Serialized (Needs Serial Number)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="input-product-description" style="font-weight: 600; font-size: 0.85rem; color: var(--thai-blue);">Description</label>
+                        <textarea id="input-product-description" placeholder="Description of the rental item..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-lg btn-neon btn-block" style="height: 42px; margin-bottom: 20px;">✓ Save Product</button>
+                </form>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; font-size: 0.8rem;">
+                    <a href="admin.html" style="color: var(--neon-cyan); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                        ← Back to Admin Dashboard
+                    </a>
+                    
+                    <div class="status-indicator-box" style="margin: 0;">
+                        <div class="db-status-badge" id="db-connection-status" style="padding: 4px 10px; font-size: 0.7rem; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                            <span class="pulse-dot green" id="db-status-dot" style="width: 6px; height: 6px;"></span>
+                            <span id="db-status-text">Checking Database...</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Supabase Client Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Add Product logic -->
+    <script src="add-product.js?v=4.2.38"></script>
+</body>
+</html>
