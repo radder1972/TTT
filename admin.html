@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>True Time Thai | Admin Dashboard</title>
+    <!-- Google Fonts: Architects Daughter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=4.2.38">
+    
+    <!-- Favicon / Meta -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+</head>
+<body class="admin-body">
+    <!-- Decorative Background Elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+    <div class="mandala-overlay" aria-hidden="true"></div>
+    
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="True Time Thai Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">TRUE TIME <span class="thai-word">THAI</span></span>
+                    <span class="brand-sub">ADMIN PORTAL</span>
+                </div>
+            </a>
+            
+            <div class="header-right" id="header-logout-wrapper" style="display: none;">
+                <button type="button" class="btn btn-sm btn-outline" id="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main container admin-main-container">
+        
+        <!-- SECTION 1: LOGIN (Shown by default) -->
+        <section id="admin-login-section" class="admin-section">
+            <div class="admin-login-card glass">
+                <div class="login-header">
+                    <div class="lock-icon">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 48px; height: 48px;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="var(--thai-blue)" stroke-width="2" fill="none"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <h2>Secure Access</h2>
+                    <p>Log in with your admin account to manage bookings and inventory in Pattaya.</p>
+                </div>
+                
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="info@truetimethai.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-lg btn-neon btn-block" id="btn-login">Login</button>
+                </form>
+                
+                <div class="login-footer-text">
+                    <p>Forgot password or need help? Contact support.</p>
+                    <p class="demo-credentials-info">Demo credentials: <strong>info@truetimethai.com</strong> / <strong>R@dd3r1972?12345</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: DASHBOARD (Initially Hidden) -->
+        <section id="admin-dashboard-section" class="admin-section" style="display: none;">
+            
+            <!-- Welcome Header -->
+            <div class="dashboard-welcome" style="margin-bottom: 24px;">
+                <h2>Welcome back, <span class="text-gradient">Manager</span></h2>
+                <p>Here is the current overview of your AI earbud rentals in Pattaya.</p>
+            </div>
+
+
+            <!-- Dashboard Navigation Tabs -->
+            <div class="dashboard-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+                <button type="button" class="dashboard-tab-btn active" id="btn-tab-bookings">Bookings & Reservations</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-inventory">Inventory (Headsets)</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-products">Products & Categories</button>
+                <button type="button" class="dashboard-tab-btn" id="btn-tab-customers">Customers</button>
+            </div>
+
+            <div id="view-bookings">
+                <!-- Stats Widgets Row -->
+                <div class="stats-grid">
+                <div class="stat-card glass" onclick="showActiveRentalsModal()" style="cursor: pointer;" title="View Active Rentals">
+                    <div class="stat-icon text-blue">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                            <path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" stroke="var(--thai-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Active Rentals</span>
+                        <strong class="stat-val" id="stat-active-rentals">0</strong>
+                        <span class="stat-sub">earbuds currently in use</span>
+                    </div>
+                </div>
+                <div class="stat-card glass" onclick="showTodayPickupsModal()" style="cursor: pointer;" title="View Today's Pickups">
+                    <div class="stat-icon text-red">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="var(--thai-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <line x1="16" y1="2" x2="16" y2="6" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="8" y1="2" x2="8" y2="6" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="3" y1="10" x2="21" y2="10" stroke="var(--thai-blue)" stroke-width="2"/>
+                            <circle cx="12" cy="15" r="1.5" fill="var(--thai-red)" stroke="var(--thai-red)" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Pickups Today</span>
+                        <strong class="stat-val" id="stat-today-pickups">0</strong>
+                        <span class="stat-sub">sets need to be picked up</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon text-green">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                            <circle cx="12" cy="12" r="9" stroke="var(--success)" stroke-width="2" fill="none"/>
+                            <path d="M10 7h4a2 2 0 0 1 0 4H10M10 11h4.5a2 2 0 0 1 0 4H10M10 7v8M12 5v14" stroke="var(--success)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Revenue</span>
+                        <strong class="stat-val" id="stat-total-revenue">฿0</strong>
+                        <span class="stat-sub">from all paid bookings</span>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon text-gold">
+                        <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="var(--thai-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <path d="M12 7l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" stroke="var(--thai-turquoise)" stroke-width="1.5" fill="var(--thai-turquoise)" stroke="var(--thai-turquoise)" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Available Now</span>
+                        <strong class="stat-val" id="stat-available-now">0 / 0</strong>
+                        <span class="stat-sub">sets available immediately in Pattaya</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Area (Full Width Bookings Table) -->
+            <div class="dashboard-content-card glass">
+                <div class="card-header-actions">
+                    <h3>Bookings & Reservations</h3>
+                    
+                    <!-- Search & Status filter tabs -->
+                    <div class="search-filter-row">
+                        <input type="text" id="booking-search" placeholder="Search by name or email...">
+                        <select id="booking-status-filter">
+                            <option value="ALL">All Statuses</option>
+                            <option value="CONFIRMED">Reserved / Paid</option>
+                            <option value="PICKED_UP">Picked Up / Active</option>
+                            <option value="RETURNED">Returned / Complete</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </select>
+                        <button type="button" class="btn btn-sm btn-neon" onclick="openBookingAddModal()" style="height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Add New Booking">+</button>
+                    </div>
+                </div>
+
+                <!-- Bookings Table container -->
+                <div class="table-scroll-wrapper">
+                    <table class="admin-table" id="bookings-table">
+                        <thead>
+                            <tr>
+                                <th onclick="handleSort('bookings', 'customer_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Customer <span id="sort-icon-bookings-customer_name" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'start_date')" class="sortable-header" style="cursor: pointer; user-select: none;">Rental Period <span id="sort-icon-bookings-start_date" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'earbud_count')" class="sortable-header" style="cursor: pointer; user-select: none;">Sets <span id="sort-icon-bookings-earbud_count" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'total_price_thb')" class="sortable-header" style="cursor: pointer; user-select: none;">Amount <span id="sort-icon-bookings-total_price_thb" class="sort-icon"></span></th>
+                                <th onclick="handleSort('bookings', 'status')" class="sortable-header" style="cursor: pointer; user-select: none;">Status <span id="sort-icon-bookings-status" class="sort-icon"></span></th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Bookings are loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- End view-bookings -->
+
+            <!-- SECTION: VIEW INVENTORY (Initially Hidden) -->
+            <div id="view-inventory" style="display: none;">
+                <!-- Headset Stats Grid -->
+                <div class="stats-grid" id="inventory-stats-grid">
+                    <div class="stat-card glass">
+                        <div class="stat-icon text-blue">
+                            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                                <path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" stroke="var(--thai-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Registered</span>
+                            <strong class="stat-val" id="inv-stat-total">0</strong>
+                            <span class="stat-sub">sets in Pattaya</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon text-green">
+                            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                                <circle cx="12" cy="12" r="10" stroke="var(--success)" stroke-width="2" fill="none"/>
+                                <path d="M8 12l3 3 5-5" stroke="var(--success)" stroke-width="2" stroke-linecap="round" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Available Now</span>
+                            <strong class="stat-val" id="inv-stat-available">0</strong>
+                            <span class="stat-sub">sets available immediately</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon text-blue">
+                            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="var(--neon-cyan)" stroke-width="2" fill="none"/>
+                                <circle cx="8.5" cy="7" r="4" stroke="var(--thai-blue)" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">In Active Rental</span>
+                            <strong class="stat-val" id="inv-stat-rented">0</strong>
+                            <span class="stat-sub">sets currently with customers</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon text-gold">
+                            <svg class="icon-brand" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="var(--thai-gold)" stroke-width="2" fill="none"/>
+                                <path d="M12 7l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" stroke="var(--thai-turquoise)" stroke-width="1.5" fill="var(--thai-turquoise)" stroke="var(--thai-turquoise)"/>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Maintenance & Cleaning</span>
+                            <strong class="stat-val" id="inv-stat-cleaning">0</strong>
+                            <span class="stat-sub">hygiene protocol & repairs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Inventory Grid -->
+
+                    <!-- Left: Headsets Table -->
+                    <div class="dashboard-content-card glass">
+                        <div class="card-header-actions">
+                            <h3>Individual Headset List</h3>
+                            <div class="search-filter-row">
+                                <input type="text" id="device-search" placeholder="Search by serial number...">
+                                <select id="device-status-filter">
+                                    <option value="ALL">All Statuses</option>
+                                    <option value="AVAILABLE">Available</option>
+                                    <option value="RENTED">In Rental</option>
+                                    <option value="CLEANING">In Cleaning (UV-C)</option>
+                                    <option value="MAINTENANCE">In Maintenance</option>
+                                </select>
+                                <a href="register-headset.html" target="_blank" class="btn btn-sm btn-neon" style="height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Register New Headset">+</a>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th onclick="handleSort('devices', 'serial_number')" class="sortable-header" style="cursor: pointer; user-select: none;">Serial Number <span id="sort-icon-devices-serial_number" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'product_id')" class="sortable-header" style="cursor: pointer; user-select: none;">Model <span id="sort-icon-devices-product_id" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'status')" class="sortable-header" style="cursor: pointer; user-select: none;">Status <span id="sort-icon-devices-status" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'assigned_booking_name')" class="sortable-header" style="cursor: pointer; user-select: none;">Assigned Booking <span id="sort-icon-devices-assigned_booking_name" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'notes')" class="sortable-header" style="cursor: pointer; user-select: none;">Notes / Comments <span id="sort-icon-devices-notes" class="sort-icon"></span></th>
+                                        <th onclick="handleSort('devices', 'last_checked')" class="sortable-header" style="cursor: pointer; user-select: none;">Last Checked <span id="sort-icon-devices-last_checked" class="sort-icon"></span></th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="devices-table-body">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">Loading headsets...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+            </div> <!-- End view-inventory -->
+
+            <!-- SECTION: VIEW PRODUCTS (Initially Hidden) -->
+            <div id="view-products" style="display: none;">
+                <div class="dashboard-content-card glass">
+                    <div class="card-header-actions">
+                        <h3>Product Catalog</h3>
+                        <div class="search-filter-row">
+                            <input type="text" id="product-search" placeholder="Search products...">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="openCategoriesModal()" style="height: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0; padding: 0 16px; font-weight: bold; border-radius: var(--radius-sm);" title="Manage Categories">Manage Categories</button>
+                            <button type="button" class="btn btn-sm btn-neon" onclick="openProductModal()" style="height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; margin: 0; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Add New Product">+</button>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="handleSort('products', 'name')" class="sortable-header" style="cursor: pointer; user-select: none; width: 22%;">Name <span id="sort-icon-products-name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'category_name')" class="sortable-header" style="cursor: pointer; user-select: none; width: 20%;">Category <span id="sort-icon-products-category_name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'base_rate')" class="sortable-header" style="cursor: pointer; user-select: none; width: 18%; white-space: nowrap;">Base Rate (Daily) <span id="sort-icon-products-base_rate" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'type')" class="sortable-header" style="cursor: pointer; user-select: none; width: 12%; white-space: nowrap;">Type <span id="sort-icon-products-type" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('products', 'description')" class="sortable-header" style="cursor: pointer; user-select: none; width: 18%;">Description <span id="sort-icon-products-description" class="sort-icon"></span></th>
+                                    <th style="width: 10%; white-space: nowrap;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading products...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: VIEW CUSTOMERS (Initially Hidden) -->
+            <div id="view-customers" style="display: none;">
+                <div class="dashboard-content-card glass">
+                    <div class="card-header-actions">
+                        <h3>Customer Registry</h3>
+                        <div class="search-filter-row">
+                            <input type="text" id="customer-search" placeholder="Search by name, email, or city...">
+                            <button type="button" class="btn btn-sm btn-neon" onclick="openCustomerAddModal()" style="margin: 0; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; padding: 0; font-size: 1.5rem; font-weight: bold; border-radius: var(--radius-sm);" title="Add New Customer">+</button>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="handleSort('customers', 'name')" class="sortable-header" style="cursor: pointer; user-select: none;">Name <span id="sort-icon-customers-name" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'email')" class="sortable-header" style="cursor: pointer; user-select: none;">Email <span id="sort-icon-customers-email" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'phone')" class="sortable-header" style="cursor: pointer; user-select: none;">Phone <span id="sort-icon-customers-phone" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'city')" class="sortable-header" style="cursor: pointer; user-select: none;">City <span id="sort-icon-customers-city" class="sort-icon"></span></th>
+                                    <th onclick="handleSort('customers', 'address')" class="sortable-header" style="cursor: pointer; user-select: none;">Address <span id="sort-icon-customers-address" class="sort-icon"></span></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading customers...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Systeem Status -->
+            <div class="sidebar-card glass" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; margin-top: 28px; margin-bottom: 12px; gap: 16px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <h4 style="margin: 0; font-size: 1.15rem; color: var(--thai-blue);">System Status</h4>
+                    <div class="status-indicator-box" style="margin: 0;">
+                        <div class="db-status-badge" id="db-connection-status">
+                            <span class="pulse-dot green" id="db-status-dot"></span>
+                            <span id="db-status-text">Simulation Mode (Local)</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+                    <p class="text-muted small" style="margin: 0; font-size: 0.85rem;">
+                        <strong>Supabase Project URL:</strong> 
+                        <span class="code-url-text" id="lbl-supabase-url">https://uuciegboqicihcanjqbh.supabase.co</span>
+                    </p>
+                    <p class="text-muted small" style="margin: 0; font-size: 0.85rem;">
+                        Uses saved browser data until the Anon Key is configured.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="app-footer" style="margin-top: 100px; padding: 40px 0; background: #1B2542; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="container text-center">
+            <p style="color: #94A3B8; font-size: 0.85rem;">&copy; 2026 True Time Thai. Admin Dashboard. <span style="opacity: 0.5; margin-left: 8px;">v4.2.38</span></p>
+        </div>
+    </footer>
+
+    <!-- Hidden Printable Invoice Container -->
+    <div id="admin-printable-invoice" class="receipt-card" style="display: none; width: 100%; max-width: 480px; margin: 0 auto; background: #fff; color: #000; border: 1px solid #000; padding: 20px; box-sizing: border-box; position: relative;">
+        <div class="receipt-header" style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
+            <span class="receipt-title" style="display: block; font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">RENTAL INVOICE</span>
+            <span class="receipt-brand" style="display: block; font-size: 0.9rem; color: #666; font-family: 'Architects Daughter', sans-serif;">TRUE TIME THAI</span>
+        </div>
+        <div class="receipt-body" style="font-size: 0.85rem; line-height: 1.6;">
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Booking ID:</span>
+                <strong id="print-invoice-id">-</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Rental Period:</span>
+                <span id="print-invoice-period">-</span>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Customer Name:</span>
+                <strong id="print-cust-name">-</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Email Address:</span>
+                <span id="print-cust-email">-</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Pickup Location:</span>
+                <span id="print-pickup-loc">-</span>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-items" id="print-invoice-items">
+                <!-- Dynamically populated -->
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #000; margin: 15px 0;">
+            <div class="receipt-row total-row" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.1rem; font-weight: bold;">
+                <span>Total Amount:</span>
+                <span id="print-total-thb">฿0</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Payment Method:</span>
+                <span id="print-pay-method">-</span>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Payment Status:</span>
+                <strong id="print-pay-status" style="color: #28a745;">PAID</strong>
+            </div>
+            <div class="receipt-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Transaction ID:</span>
+                <span id="print-txn-id" style="font-family: monospace;">-</span>
+            </div>
+        </div>
+        <div class="receipt-footer" style="text-align: center; margin-top: 30px; font-size: 0.75rem; border-top: 1px solid #000; padding-top: 15px;">
+            <p style="margin: 4px 0;">Thank you for booking with True Time Thai Pattaya!</p>
+            <p style="margin: 4px 0; font-weight: bold;">🧼 UV-C Disinfected Earbuds Rental</p>
+        </div>
+        <!-- Simulated green PAID stamp -->
+        <div class="paid-stamp" style="position: absolute; top: 120px; right: 20px; border: 4px solid #28a745; color: #28a745; padding: 5px 15px; font-size: 1.6rem; font-weight: bold; border-radius: 6px; transform: rotate(-15deg); opacity: 0.8; font-family: monospace;">PAID</div>
+    </div>
+
+    <!-- MODAL 1: Signature / Contract Signing -->
+    <div id="modal-signature" class="admin-modal-overlay">
+        <div class="admin-modal-card glass">
+            <div class="admin-modal-header">
+                <h3>Sign Rental Contract</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-signature')">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="contract-terms-box">
+                    <h5 style="margin-top: 0; color: var(--thai-blue);">RENTAL TERMS & LIABILITY</h5>
+                    <p>The renter hereby agrees to rent the True Time Thai W4 Pro AI translation earbuds. The earbuds are handed over in clean and good working condition.</p>
+                    <p><strong>Liability & Surcharges for Damage/Loss:</strong></p>
+                    <ul>
+                        <li>Loss or total destruction of a W4 Pro AI headset set: <strong>฿5,000 THB</strong></li>
+                        <li>Loss or destruction of the Power Bank: <strong>฿500 THB</strong></li>
+                        <li>Loss or damage of the 5G SIM Card: <strong>฿350 THB</strong></li>
+                        <li>Late return (per day late): <strong>฿500 THB</strong></li>
+                    </ul>
+                    <p>The renter is responsible for returning the equipment correctly and hygienically at the end of the agreed rental period.</p>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 12px; font-size: 0.85rem;">
+                    <div><strong>Customer:</strong> <span id="sign-customer-name">-</span> (<span id="sign-customer-email">-</span>)</div>
+                    <div><strong>Booking ID:</strong> <span id="sign-booking-id">-</span></div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>Sign below:</label>
+                    <div class="signature-canvas-container" id="signature-pad-container">
+                        <canvas id="signature-canvas"></canvas>
+                        <div class="signature-line-guide" id="canvas-guide-text">Signature here / Sign here</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <button type="button" class="btn btn-sm btn-outline" id="btn-clear-signature">Clear signature</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-signature')">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-neon" id="btn-save-signature">Sign & Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: View Signed Contract -->
+    <div id="modal-view-contract" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 650px;">
+            <div class="admin-modal-header">
+                <h3>Signed Rental Contract</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-view-contract')">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="contract-print-area">
+                <div style="text-align: center; border-bottom: 2px solid var(--thai-blue); padding-bottom: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0; font-family: 'Architects Daughter', sans-serif; font-size: 1.6rem; color: var(--thai-blue);">TRUE TIME THAI</h4>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); letter-spacing: 1px; font-weight: bold;">TRANSLATION EARBUDS RENTAL AGREEMENT</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 0.85rem;">
+                    <div>
+                        <strong>Booking Details:</strong><br>
+                        Renter: <span id="contract-cust-name">-</span><br>
+                        Email Address: <span id="contract-cust-email">-</span><br>
+                        Booking ID: <span id="contract-booking-id" style="font-family: monospace;">-</span>
+                    </div>
+                    <div>
+                        <strong>Rental Details:</strong><br>
+                        Period: <span id="contract-period">-</span><br>
+                        Number of sets: <span id="contract-sets">-</span><br>
+                        Deposit Type: <span id="contract-deposit-type">-</span>
+                    </div>
+                </div>
+
+                <div class="contract-terms-box" style="max-height: 200px; font-size: 0.75rem; background: #fafafa;">
+                    <h5 style="margin-top: 0; color: #000; font-size: 0.8rem; border-bottom: 1px solid #ddd; padding-bottom: 4px;">GENERAL TERMS & LIABILITY</h5>
+                    <p>The renter hereby agrees to rent the True Time Thai W4 Pro AI translation earbuds sets. The equipment has been handed over in excellent and working condition.</p>
+                    <p>In case of loss, theft or irreparable damage, the following replacement rates apply:</p>
+                    <ul>
+                        <li>Timekettle W4 Pro AI headset set: ฿5,000 THB</li>
+                        <li>Rental Power Bank: ฿500 THB</li>
+                        <li>5G SIM Card: ฿350 THB</li>
+                        <li>Late return: ฿500 THB per day</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 24px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 16px; background: #fff; text-align: center;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Customer's Digital Signature:</span>
+                    <img id="contract-signature-img" src="" alt="Signature" style="max-height: 100px; max-width: 100%; border-bottom: 1px solid #aaa;">
+                    <span style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 6px;">Signed on: <span id="contract-signed-date">-</span></span>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;" class="no-print">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-view-contract')">Close</button>
+                    <button type="button" class="btn btn-sm btn-neon" onclick="window.print()">Print Contract (A4)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Notification Preview -->
+    <div id="modal-notification-preview" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3>Customer Message Preview</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-notification-preview')">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div style="background: #1e293b; border-radius: 8px; padding: 12px 16px; color: #f8fafc; margin-bottom: 16px; font-size: 0.8rem; display: flex; flex-direction: column; gap: 4px;">
+                    <div><strong>To:</strong> <span id="notif-to" style="color: var(--neon-cyan);">-</span></div>
+                    <div><strong>Channels:</strong> <span id="notif-channels" style="color: var(--thai-gold);">-</span></div>
+                    <div><strong>Subject:</strong> <span id="notif-subject">-</span></div>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 20px; font-size: 0.85rem; line-height: 1.5; color: #334155; white-space: pre-line; max-height: 250px; overflow-y: auto;" id="notif-body">
+                    <!-- Message content -->
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeAdminModal('modal-notification-preview')">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-neon" id="btn-confirm-send-notif">✓ Send Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Booking Details Overview -->
+    <div id="modal-booking-details" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 800px;">
+            <div class="admin-modal-header">
+                <h3>Booking Details</h3>
+                <button type="button" class="btn-modal-close" onclick="closeAdminModal('modal-booking-details')">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="booking-details-body">
+                <!-- Dynamically populated via JS -->
+                <div class="text-center text-muted">Booking details are loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: Add/Edit Customer Form -->
+    <div id="modal-customer-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3 id="customer-form-title">Add New Customer</h3>
+                <button type="button" class="btn-modal-close" onclick="closeCustomerModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted" id="customer-form-desc">Register or edit a customer profile.</p>
+                <form id="add-customer-form" style="margin-top: 16px;">
+                    <input type="hidden" id="input-customer-id" value="">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-name">Full Name</label>
+                        <input type="text" id="input-customer-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-email">Email Address</label>
+                        <input type="email" id="input-customer-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-phone">Phone Number</label>
+                        <input type="text" id="input-customer-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-customer-city">City / Province</label>
+                        <input type="text" id="input-customer-city" placeholder="e.g. Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="input-customer-address">Address / Hotel Room</label>
+                        <textarea id="input-customer-address" placeholder="Hotel Name, Street Address, Room..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeCustomerModal()" style="flex: 1; height: 36px;">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-customer" style="flex: 2; height: 36px; margin: 0;">Save Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6: Product Form (Add/Edit) -->
+    <div id="modal-product-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 550px;">
+            <div class="admin-modal-header">
+                <h3 id="product-form-title">Add New Product</h3>
+                <button type="button" class="btn-modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted" id="product-form-desc">Add a rental item to the catalog.</p>
+                <form id="add-product-form" style="margin-top: 16px;">
+                    <input type="hidden" id="input-product-id" value="">
+                    
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-product-name">Product Name</label>
+                        <input type="text" id="input-product-name" placeholder="e.g. 5G SIM Card" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="select-product-category">Category</label>
+                        <select id="select-product-category" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none; color: #1D1D1F;">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-product-rate">Base Rate (THB / Day)</label>
+                        <input type="number" id="input-product-rate" placeholder="e.g. 150" required step="0.01" min="0" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="select-product-type">Type</label>
+                        <select id="select-product-type" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; outline: none; color: #1D1D1F;">
+                            <option value="bulk">Bulk Item (No Serial Required)</option>
+                            <option value="serialized">Serialized (Needs Serial Number)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="input-product-description">Description</label>
+                        <textarea id="input-product-description" placeholder="Description of the rental item..." style="width: 100%; min-height: 80px; padding: 8px 12px; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); outline: none; font-size: 0.85rem; margin-top: 6px; font-family: inherit; resize: vertical; box-sizing: border-box; background: rgba(255, 255, 255, 0.65);"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeProductModal()" style="flex: 1; height: 36px;">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-neon btn-block" id="btn-submit-product" style="flex: 2; height: 36px; margin: 0;">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 7: Category Form (Manage Categories) -->
+    <div id="modal-categories-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3>Manage Categories</h3>
+                <button type="button" class="btn-modal-close" onclick="closeCategoriesModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted">Create or delete product categories.</p>
+                <form id="add-category-form" style="margin-top: 16px; margin-bottom: 20px;">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="input-category-name">Category Name</label>
+                        <input type="text" id="input-category-name" placeholder="e.g. Virtual Reality" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-neon btn-block" style="height: 36px; margin: 0;">+ Add Category</button>
+                </form>
+                <hr style="border: 0; border-top: 1px solid var(--border-glass); margin: 20px 0;">
+                <div>
+                    <span style="font-size: 0.9rem; font-weight: bold; color: var(--thai-blue); display: block; margin-bottom: 8px;">Current Categories:</span>
+                    <ul id="categories-list" style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted); padding-left: 16px; display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto;">
+                        <!-- Populated via JS -->
+                        <li class="text-muted">Loading categories...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 8: Booking Form (Add Booking) -->
+    <div id="modal-booking-form" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 550px;">
+            <div class="admin-modal-header">
+                <h3>Add New Booking</h3>
+                <button type="button" class="btn-modal-close" onclick="closeBookingAddModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted">Create a new manual reservation.</p>
+                <form id="add-booking-form" style="margin-top: 16px;">
+                    <!-- Customer Details -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-name">Renter Name</label>
+                            <input type="text" id="input-booking-name" required placeholder="e.g. Alice Smith" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-email">Email Address</label>
+                            <input type="email" id="input-booking-email" required placeholder="e.g. alice@example.com" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-phone">Phone Number</label>
+                            <input type="text" id="input-booking-phone" placeholder="e.g. +66 81 234 5678" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-earbuds">Number of Sets</label>
+                            <input type="number" id="input-booking-earbuds" value="1" min="1" max="10" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+
+                    <!-- Rental Period -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="input-booking-start">Start Date</label>
+                            <input type="date" id="input-booking-start" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem;">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-booking-end">End Date</label>
+                            <input type="date" id="input-booking-end" required style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem;">
+                        </div>
+                    </div>
+
+                    <!-- Delivery/Pickup Location -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label for="select-booking-pickup">Pickup/Delivery Location</label>
+                            <select id="select-booking-pickup" required onchange="toggleBookingHotelField()" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px; padding: 6px 12px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); font-size: 0.95rem; color: #1d1d1f;">
+                                <option value="pattaya_office">True Time Thai Office (Pattaya)</option>
+                                <option value="hotel_delivery">Hotel Delivery in Pattaya (Free)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="group-booking-hotel" style="display: none;">
+                            <label for="input-booking-hotel">Hotel Name</label>
+                            <input type="text" id="input-booking-hotel" placeholder="e.g. Hilton Pattaya" style="width: 100%; height: 36px; box-sizing: border-box; margin-top: 6px;">
+                        </div>
+                    </div>
+
+                    <!-- Accessories & Extras checkboxes -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 0.85rem; font-weight: bold; color: var(--thai-blue); display: block; margin-bottom: 6px;">Extras & Accessories</label>
+                        <div style="display: flex; gap: 16px;">
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; color: var(--text-light);">
+                                <input type="checkbox" id="checkbox-booking-sim" style="cursor: pointer;"> 5G SIM Card
+                            </label>
+                            <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85rem; color: var(--text-light);">
+                                <input type="checkbox" id="checkbox-booking-powerbank" style="cursor: pointer;"> Power Bank
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; margin-top: 20px;">
+                        <button type="button" class="btn btn-sm btn-outline" onclick="closeBookingAddModal()" style="flex: 1; height: 36px;">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-neon btn-block" style="flex: 2; height: 36px; margin: 0;">✓ Create Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 9: Pickups Today Details -->
+    <div id="modal-today-pickups" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 650px;">
+            <div class="admin-modal-header">
+                <h3>Pickups Today Overview</h3>
+                <button type="button" class="btn-modal-close" onclick="closeTodayPickupsModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted" style="margin-bottom: 16px;">Here is the list of products and bookings to be picked up today (<span id="pickups-today-date">YYYY-MM-DD</span>).</p>
+                
+                <!-- Aggregate summary cards -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">W4 Pro Earbuds</span>
+                        <strong style="font-size: 1.5rem; color: var(--neon-cyan);" id="pickup-sum-earbuds">0</strong>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">5G SIM Cards</span>
+                        <strong style="font-size: 1.5rem; color: var(--thai-gold);" id="pickup-sum-sims">0</strong>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">Power Banks</span>
+                        <strong style="font-size: 1.5rem; color: var(--thai-red);" id="pickup-sum-powerbanks">0</strong>
+                    </div>
+                </div>
+
+                <!-- Detailed list of bookings -->
+                <div class="table-scroll-wrapper" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.02);">
+                    <table class="admin-table" style="font-size: 0.8rem;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--bg-card); z-index: 10;">
+                                <th style="padding: 10px 14px;">Customer</th>
+                                <th style="padding: 10px 14px;">Location</th>
+                                <th style="padding: 10px 14px;">Products</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pickups-today-list-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeTodayPickupsModal()" style="width: 100px; height: 36px; margin: 0;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 10: Active Rentals Details -->
+    <div id="modal-active-rentals" class="admin-modal-overlay">
+        <div class="admin-modal-card glass" style="max-width: 650px;">
+            <div class="admin-modal-header">
+                <h3>Active Rentals Overview</h3>
+                <button type="button" class="btn-modal-close" onclick="closeActiveRentalsModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <p class="text-muted" style="margin-bottom: 16px;">Here is the list of products and bookings currently active in rental.</p>
+                
+                <!-- Aggregate summary cards -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">W4 Pro Earbuds</span>
+                        <strong style="font-size: 1.5rem; color: var(--neon-cyan);" id="active-sum-earbuds">0</strong>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">5G SIM Cards</span>
+                        <strong style="font-size: 1.5rem; color: var(--thai-gold);" id="active-sum-sims">0</strong>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: var(--radius-sm); text-align: center;">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase;">Power Banks</span>
+                        <strong style="font-size: 1.5rem; color: var(--thai-red);" id="active-sum-powerbanks">0</strong>
+                    </div>
+                </div>
+
+                <!-- Detailed list of active bookings -->
+                <div class="table-scroll-wrapper" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.02);">
+                    <table class="admin-table" style="font-size: 0.8rem;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--bg-card); z-index: 10;">
+                                <th style="padding: 10px 14px;">Customer</th>
+                                <th style="padding: 10px 14px;">Rental Period</th>
+                                <th style="padding: 10px 14px;">Active Products</th>
+                            </tr>
+                        </thead>
+                        <tbody id="active-rentals-list-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="closeActiveRentalsModal()" style="width: 100px; height: 36px; margin: 0;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase Client Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Admin Dashboard Logic JS -->
+    <script src="admin.js?v=4.2.38"></script>
+</body>
+</html>
