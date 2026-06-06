@@ -2197,19 +2197,18 @@ hr {
 }
 
 /* Concept 3 Style subtle icon integration */
-.concept-header-icon {
-    display: block;
-    height: 48px;
+.concept-title-icon {
+    height: 32px;
     width: auto;
-    margin: 0 auto 16px auto;
-    opacity: 0.85;
-    transition: var(--transition-smooth);
     object-fit: contain;
+    vertical-align: middle;
+    margin-right: 12px;
+    display: inline-block;
+    transition: var(--transition-smooth);
 }
 
-.section-header:hover .concept-header-icon {
-    opacity: 1;
-    transform: translateY(-2px) scale(1.03);
+.section-header:hover .concept-title-icon {
+    transform: scale(1.08);
 }
 
 .concept-info-img {
@@ -2223,6 +2222,27 @@ hr {
 
 .info-item:hover .concept-info-img {
     transform: scale(1.1);
+}
+
+.nav-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    transition: var(--transition-smooth);
+}
+
+.nav-link:hover .nav-icon {
+    transform: scale(1.15);
+}
+
+/* Hide navigation icons on intermediate laptop screens to prevent menu wrapping */
+@media (min-width: 993px) and (max-width: 1350px) {
+    .nav-icon {
+        display: none !important;
+    }
 }
 
 .trust-icons {
