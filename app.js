@@ -2090,7 +2090,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const faqs = [
         {
             q: "How does the rental service work in practice?",
-            a: "It's very simple! You reserve the earbuds in advance via our platform. You can pick up the sets at our main office on Beach Road in Pattaya, or choose <strong>free delivery directly to your hotel or resort in Pattaya</strong>. For return, simply choose the location that suits you best."
+            a: "It's very simple! You reserve the earbuds in advance via our platform. You can pick up the sets at our main office on Pattaya Sai Song Road in Pattaya, or choose <strong>free delivery directly to your hotel or resort in Pattaya</strong>. For return, simply choose the location that suits you best."
         },
         {
             q: "Are the rented earbuds really hygienic and clean?",
@@ -2506,7 +2506,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 content: `
                     <p>When booking, you select your desired pickup and return location. We currently offer two convenient options in Pattaya:</p>
                     <ul>
-                        <li><strong>Pattaya Beach Road Office:</strong> Open from 08:00 AM to 10:00 PM. Our office is centrally located and easy to reach.</li>
+                        <li><strong>Pattaya Sai Song Road Office:</strong> Open from 08:00 AM to 10:00 PM. Our office is centrally located and easy to reach.</li>
                         <li><strong>Free Hotel Delivery & Return:</strong> We deliver the sealed sets for free to the reception of your hotel or resort in Pattaya (including Jomtien and Naklua). You can simply leave the set at reception upon departure.</li>
                     </ul>
                     <p><em>Please note:</em> The rental period starts on the agreed start date from 08:00 AM and ends on the end date by 10:00 PM at the latest. Late returns without consultation will incur a surcharge of ฿250 per day.</p>
