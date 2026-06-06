@@ -2814,27 +2814,112 @@ document.addEventListener('DOMContentLoaded', () => {
     initNewsCarousel();
 });
 
-// Image Lightbox Functions
+// Image Lightbox Functions & Group Navigation
+let lightboxImages = [];
+let lightboxCurrentIndex = -1;
+
 window.openLightbox = function(imgElement) {
     const lightbox = document.getElementById('image-lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    
-    lightboxImg.src = imgElement.src;
-    lightboxCaption.textContent = imgElement.alt || '';
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    if (!lightbox) return;
+
+    // Find grouping container (carousel or comparison grid)
+    let container = imgElement.closest('.polaroid-carousel, .relocation-photos');
+    if (container) {
+        lightboxImages = Array.from(container.querySelectorAll('img'));
+        // Filter out non-lightbox images (must have onclick or compare-img class)
+        lightboxImages = lightboxImages.filter(img => 
+            img.classList.contains('compare-img') || 
+            (img.getAttribute('onclick') && img.getAttribute('onclick').includes('openLightbox'))
+        );
+        lightboxCurrentIndex = lightboxImages.indexOf(imgElement);
+    } else {
+        lightboxImages = [imgElement];
+        lightboxCurrentIndex = 0;
+    }
+
+    updateLightboxContent();
+
+    // Toggle navigation arrows visibility
+    if (lightboxImages.length > 1) {
+        if (prevBtn) prevBtn.style.display = 'flex';
+        if (nextBtn) nextBtn.style.display = 'flex';
+    } else {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+    }
+
     lightbox.classList.add('active');
-    
-    // Disable scrolling behind lightbox
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // Disable scroll behind
 };
 
-window.closeLightbox = function() {
-    const lightbox = document.getElementById('image-lightbox');
-    lightbox.classList.remove('active');
-    
-    // Restore scrolling
-    document.body.style.overflow = '';
+function updateLightboxContent() {
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    if (!lightboxImg || !lightboxCaption) return;
+
+    if (lightboxCurrentIndex >= 0 && lightboxCurrentIndex < lightboxImages.length) {
+        const currentImg = lightboxImages[lightboxCurrentIndex];
+        lightboxImg.src = currentImg.src;
+        lightboxCaption.textContent = currentImg.alt || '';
+    }
+}
+
+window.lightboxPrev = function(event) {
+    if (event) event.stopPropagation();
+    if (lightboxImages.length <= 1) return;
+
+    lightboxCurrentIndex--;
+    if (lightboxCurrentIndex < 0) {
+        lightboxCurrentIndex = lightboxImages.length - 1;
+    }
+    updateLightboxContent();
 };
+
+window.lightboxNext = function(event) {
+    if (event) event.stopPropagation();
+    if (lightboxImages.length <= 1) return;
+
+    lightboxCurrentIndex++;
+    if (lightboxCurrentIndex >= lightboxImages.length) {
+        lightboxCurrentIndex = 0;
+    }
+    updateLightboxContent();
+};
+
+window.closeLightbox = function(event) {
+    if (event) {
+        // Only close if clicking the dark overlay background, the close button, or the image itself
+        const isCloseBtn = event.target.classList.contains('lightbox-close');
+        const isImg = event.target.id === 'lightbox-img';
+        const isOverlay = event.target.id === 'image-lightbox';
+        
+        if (!isCloseBtn && !isImg && !isOverlay) {
+            return; // Ignore clicks on navigation arrows or other container areas
+        }
+    }
+
+    const lightbox = document.getElementById('image-lightbox');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+    }
+    document.body.style.overflow = ''; // Restore scrolling
+};
+
+// Keyboard Arrow and Escape Key Navigation Support
+document.addEventListener('keydown', function(event) {
+    const lightbox = document.getElementById('image-lightbox');
+    if (!lightbox || !lightbox.classList.contains('active')) return;
+
+    if (event.key === 'ArrowLeft') {
+        window.lightboxPrev();
+    } else if (event.key === 'ArrowRight') {
+        window.lightboxNext();
+    } else if (event.key === 'Escape') {
+        window.closeLightbox();
+    }
+});
 
 
 
