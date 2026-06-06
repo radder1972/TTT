@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.42">
+    <link rel="stylesheet" href="styles.css?v=4.2.43">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
@@ -924,22 +924,22 @@
                             <div class="relocation-photos">
                                 <div class="photo-compare-card">
                                     <span class="photo-badge old">Old Storefront</span>
-                                    <img src="assets/store-front.jpg" alt="Old Store Location Front" class="compare-img">
+                                    <img src="assets/store-front.jpg" alt="Old Store Location Front" class="compare-img" onclick="openLightbox(this)">
                                     <span class="photo-caption">Our original beachfront storefront</span>
                                 </div>
                                 <div class="photo-compare-card">
                                     <span class="photo-badge new">New Storefront</span>
-                                    <img src="assets/store-front-new.jpg" alt="New Storefront on Pattaya Beach Road" class="compare-img">
+                                    <img src="assets/store-front-new.jpg" alt="New Storefront on Pattaya Beach Road" class="compare-img" onclick="openLightbox(this)">
                                     <span class="photo-caption">Our brand-new building & outdoor cafe!</span>
                                 </div>
                                 <div class="photo-compare-card">
                                     <span class="photo-badge old">Old Reception</span>
-                                    <img src="assets/store-reception-new.jpg" alt="Old Store Location Reception" class="compare-img">
+                                    <img src="assets/store-reception-new.jpg" alt="Old Store Location Reception" class="compare-img" onclick="openLightbox(this)">
                                     <span class="photo-caption">The interior of our old premises</span>
                                 </div>
                                 <div class="photo-compare-card">
                                     <span class="photo-badge new">New Lounge</span>
-                                    <img src="assets/store-lounge-new.jpg" alt="New Store Location & Coffee Bar Lounge Counter" class="compare-img">
+                                    <img src="assets/store-lounge-new.jpg" alt="New Store Location & Coffee Bar Lounge Counter" class="compare-img" onclick="openLightbox(this)">
                                     <span class="photo-caption">Our indoor Coffee Bar Lounge & counter!</span>
                                 </div>
                             </div>
@@ -983,7 +983,7 @@
                             <div class="polaroid-slide active">
                                 <div class="polaroid-card">
                                     <div class="polaroid-img-container">
-                                        <img src="assets/store-front-new.jpg" alt="True Time Thai Pattaya Branch Exterior">
+                                        <img src="assets/store-front-new.jpg" alt="True Time Thai Pattaya Branch Exterior" onclick="openLightbox(this)">
                                     </div>
                                     <p class="polaroid-caption">Our shop on Pattaya Beach Road</p>
                                 </div>
@@ -992,7 +992,7 @@
                             <div class="polaroid-slide">
                                 <div class="polaroid-card rotate-left">
                                     <div class="polaroid-img-container">
-                                        <img src="assets/store-lounge-new.jpg" alt="True Time Thai Lounge Station">
+                                        <img src="assets/store-lounge-new.jpg" alt="True Time Thai Lounge Station" onclick="openLightbox(this)">
                                     </div>
                                     <p class="polaroid-caption">Our new Coffee Bar Lounge</p>
                                 </div>
@@ -1001,7 +1001,7 @@
                             <div class="polaroid-slide">
                                 <div class="polaroid-card rotate-right">
                                     <div class="polaroid-img-container">
-                                        <img src="assets/news-3.png" alt="True Time Thai Lounge Cafe Menu">
+                                        <img src="assets/news-3.png" alt="True Time Thai Lounge Cafe Menu" onclick="openLightbox(this)">
                                     </div>
                                     <p class="polaroid-caption">Our cafe lounge menu</p>
                                 </div>
@@ -1326,7 +1326,7 @@
 
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.42</span></p>
+                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.43</span></p>
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiene Terms</a>
                     <a href="#pricing">Rental Terms</a>
@@ -1377,9 +1377,16 @@
         </div>
     </div>
 
+    <!-- Image Lightbox Modal -->
+    <div id="image-lightbox" class="lightbox-modal" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" alt="Enlarged view">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
-    <script src="app.js?v=4.2.42"></script>
+    <script src="app.js?v=4.2.43"></script>
 </body>
 </html>
