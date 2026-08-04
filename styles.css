@@ -344,7 +344,7 @@ input, select, textarea {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100px; /* Apple clean compact header height */
+    height: 80px; /* Apple clean compact header height */
     z-index: 1000;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
@@ -2628,7 +2628,7 @@ hr {
 /* Intermediate Scaling for Laptop Screens (Prevents wrapping of large logo and long nav menu) */
 @media (min-width: 993px) and (max-width: 1350px) {
     .app-header {
-        height: 100px;
+        height: 80px;
         transition: var(--transition-smooth);
     }
     
