@@ -5084,4 +5084,42 @@ hr {
     }
 }
 
+/* ==========================================================================
+   17. FALLING LILAVADI BLOSSOMS ANIMATION
+   ========================================================================== */
+.falling-flower {
+    position: fixed;
+    top: -50px;
+    z-index: -2; /* Behind glass cards, but in front of body background photo container */
+    pointer-events: none;
+    opacity: 0;
+    animation-name: fallAndSway;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fallAndSway {
+    0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.85;
+    }
+    25% {
+        transform: translateY(27vh) rotate(90deg) translateX(25px);
+    }
+    50% {
+        transform: translateY(55vh) rotate(180deg) translateX(-25px);
+    }
+    75% {
+        transform: translateY(82vh) rotate(270deg) translateX(25px);
+    }
+    100% {
+        transform: translateY(112vh) rotate(360deg) translateX(0px);
+        opacity: 0;
+    }
+}
+
 
