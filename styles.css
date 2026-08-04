@@ -1366,7 +1366,9 @@ input, select, textarea {
 .booking-form {
     padding: 40px;
     border-radius: var(--radius-lg);
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
     width: 100%;
     max-width: 680px;
@@ -1412,7 +1414,7 @@ input, select, textarea {
     width: 100%;
     padding: 12px 16px;
     background: var(--bg-dark);
-    border: 1px solid var(--border-glass);
+    border: 2px solid var(--border-glass);
     border-radius: var(--radius-sm);
     color: var(--thai-blue);
     font-size: 0.95rem;
@@ -1460,7 +1462,7 @@ input, select, textarea {
     cursor: pointer;
     position: relative;
     background: var(--bg-dark);
-    border: 1px solid var(--border-glass);
+    border: 2px solid var(--border-glass);
 }
 
 .checkbox-card input[type="checkbox"] {
@@ -2160,12 +2162,17 @@ hr {
     width: 100%;
     padding: 12px 16px;
     background: var(--bg-dark);
-    border: 1px solid var(--border-glass);
+    border: 2px solid var(--border-glass);
     border-radius: var(--radius-sm);
     color: var(--thai-blue);
     font-size: 0.95rem;
     outline: none;
     transition: var(--transition-smooth);
+}
+
+/* Make Contact page form card transparent matching news articles */
+#contact .footer-grid > .glass {
+    background: rgba(255, 255, 255, 0.45);
 }
 
 .contact-form input:focus,
