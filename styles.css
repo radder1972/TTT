@@ -470,9 +470,10 @@ input, select, textarea {
 }
 
 .brand-name {
-    font-size: 1.95rem;
-    font-weight: 800;
-    letter-spacing: 0.02em;
+    font-family: 'Satisfy', cursive, sans-serif;
+    font-size: 2.3rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
     color: var(--thai-blue);
     line-height: 1.1;
     display: flex;
@@ -481,10 +482,10 @@ input, select, textarea {
 }
 
 .thai-word {
-    font-family: 'Architects Daughter', 'Segoe Print', 'Segoe Script', 'Brush Script MT', cursive, sans-serif;
+    font-family: inherit;
     font-style: italic;
-    font-weight: 700;
-    font-size: 2.1rem;
+    font-weight: 400;
+    font-size: 2.3rem;
     color: var(--thai-red) !important;
     -webkit-text-fill-color: var(--thai-red) !important;
     display: inline-block;
@@ -617,12 +618,13 @@ input, select, textarea {
 }
 
 .brand-name-badge {
-    font-size: 1.15rem; /* Highly visible text overlay */
-    font-weight: 800;
+    font-family: 'Satisfy', cursive, sans-serif;
+    font-size: 1.3rem; /* Highly visible text overlay */
+    font-weight: 400;
     color: var(--thai-blue);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.01em;
     display: flex;
-    flex-direction: column; /* Stack TRUE TIME and THAI vertically */
+    flex-direction: column; /* Stack True Time and Thai vertically */
     align-items: flex-start; /* Left-aligned typography */
     gap: 2px;
     line-height: 1.1;
@@ -630,7 +632,8 @@ input, select, textarea {
 }
 
 .brand-name-badge .thai-word {
-    font-size: 1.35rem;
+    font-family: inherit;
+    font-size: 1.3rem;
     margin: 0;
     text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6);
 }
