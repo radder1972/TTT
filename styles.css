@@ -138,6 +138,22 @@ input, select, textarea {
 /* --------------------------------------------------------------------------
    3. BACKGROUND GLOWS & OVERLAYS (Soft and Subtle Pastel Glows for Light Theme)
    -------------------------------------------------------------------------- */
+/* Lilavadi Tree Background Photo (Subtle and atmospheric backdrop) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/lilavadi_background.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08; /* Extremely subtle opacity to preserve high contrast and slate text readability */
+    z-index: -4; /* Placed deep behind all page contents and geometric watermarks */
+    pointer-events: none;
+}
+
 .bg-glow {
     position: absolute;
     width: 700px;
