@@ -2088,27 +2088,27 @@ hr {
    14. FOOTER & CONTACT
    -------------------------------------------------------------------------- */
 .app-footer {
-    background: #1B2542; /* Corporate Deep Royal Navy as footer base */
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 80px 0 0 0;
-    margin-top: 100px;
+    background: transparent;
+    border-top: 1px solid var(--border-glass);
+    padding: 40px 0;
+    margin-top: 60px;
+    text-align: center;
 }
 
-.app-footer h3, 
 .app-footer p, 
-.app-footer label,
-.app-footer strong {
-    color: #FFFFFF;
+.app-footer a {
+    color: var(--text-muted) !important;
+    font-size: 0.85rem;
 }
 
-.app-footer .text-muted,
-.app-footer p {
-    color: #94A3B8;
+.app-footer a {
+    margin: 0 12px;
+    transition: var(--transition-smooth);
+    text-decoration: none;
 }
 
-.app-footer .section-header h2,
-.app-footer .section-header-text-layout h2 {
-    color: #FFFFFF;
+.app-footer a:hover {
+    color: var(--neon-cyan) !important;
 }
 
 .footer-grid {
@@ -2149,11 +2149,11 @@ hr {
 .contact-form textarea {
     width: 100%;
     padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-dark);
+    border: 1px solid var(--border-glass);
     border-radius: var(--radius-sm);
-    color: #FFFFFF;
-    font-size: 0.9rem;
+    color: var(--thai-blue);
+    font-size: 0.95rem;
     outline: none;
     transition: var(--transition-smooth);
 }
@@ -2161,8 +2161,8 @@ hr {
 .contact-form input:focus,
 .contact-form textarea:focus {
     border-color: var(--neon-cyan);
-    box-shadow: 0 0 8px rgba(43, 179, 192, 0.2);
-    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 8px rgba(217, 119, 6, 0.15);
+    background: #FFFFFF;
 }
 
 .contact-success {
