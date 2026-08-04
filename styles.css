@@ -149,8 +149,8 @@ body::before {
     background-image: url('assets/lilavadi_background.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.08; /* Extremely subtle opacity to preserve high contrast and slate text readability */
-    z-index: -4; /* Placed deep behind all page contents and geometric watermarks */
+    opacity: 0.12; /* Subtly visible behind text and cards */
+    z-index: -1; /* Sit in front of the white root background, but behind all text content */
     pointer-events: none;
 }
 
