@@ -735,7 +735,9 @@ input, select, textarea {
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
     margin-bottom: 16px;
     color: var(--thai-blue);
 }
@@ -793,7 +795,8 @@ input, select, textarea {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 3.8rem;
     line-height: 1.15;
     margin-bottom: 24px;
     color: var(--thai-blue);
@@ -5097,7 +5100,9 @@ hr {
 }
 
 .section-header-text-layout h2 {
-    font-size: 2.5rem;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
