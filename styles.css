@@ -73,7 +73,7 @@ html {
 
 body {
     font-family: var(--font-primary);
-    background-color: var(--bg-dark); /* Fallback solid base white background */
+    background-color: transparent; /* Must be transparent to let fixed background container render through */
     color: var(--silver-platinum);
     line-height: 1.6;
     overflow-x: hidden;
@@ -3808,7 +3808,7 @@ hr {
    ========================================================================== */
 
 .admin-body {
-    background-color: var(--bg-dark);
+    background-color: transparent;
 }
 
 .admin-main-container {
