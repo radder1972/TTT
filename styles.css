@@ -471,8 +471,8 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700; /* Bold calligraphic script */
+    font-size: 2.6rem; /* Even larger logo text */
+    font-weight: 800; /* Extra bold brush script */
     letter-spacing: 0.01em;
     color: var(--thai-blue);
     line-height: 1.1;
@@ -483,9 +483,9 @@ input, select, textarea {
 
 .thai-word {
     font-family: inherit;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 2.3rem;
+    font-style: normal; /* Not cursive/italic */
+    font-weight: 800; /* Extra bold */
+    font-size: 2.7rem; /* Even larger */
     color: var(--thai-red) !important;
     -webkit-text-fill-color: var(--thai-red) !important;
     display: inline-block;
@@ -619,8 +619,8 @@ input, select, textarea {
 
 .brand-name-badge {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.25rem; /* Highly visible text overlay */
-    font-weight: 700;
+    font-size: 1.45rem; /* Even larger badge text */
+    font-weight: 800; /* Extra bold */
     color: var(--thai-blue);
     letter-spacing: 0.01em;
     display: flex;
@@ -633,7 +633,9 @@ input, select, textarea {
 
 .brand-name-badge .thai-word {
     font-family: inherit;
-    font-size: 1.3rem;
+    font-style: normal; /* Not cursive/italic */
+    font-size: 1.5rem; /* Even larger */
+    font-weight: 800; /* Extra bold */
     margin: 0;
     text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6);
 }
