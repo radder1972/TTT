@@ -74,7 +74,7 @@ html {
 body {
     font-family: var(--font-primary);
     /* Subtle fixed background photo of Lilavadi tree with linear gradient overlay for readability */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), url('assets/lilavadi_background.jpg');
+    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url('/assets/lilavadi_background.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
