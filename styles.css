@@ -470,9 +470,9 @@ input, select, textarea {
 }
 
 .brand-name {
-    font-family: 'Satisfy', cursive, sans-serif;
-    font-size: 2.3rem;
-    font-weight: 400;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700; /* Bold calligraphic script */
     letter-spacing: 0.01em;
     color: var(--thai-blue);
     line-height: 1.1;
@@ -618,9 +618,9 @@ input, select, textarea {
 }
 
 .brand-name-badge {
-    font-family: 'Satisfy', cursive, sans-serif;
-    font-size: 1.3rem; /* Highly visible text overlay */
-    font-weight: 400;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 1.25rem; /* Highly visible text overlay */
+    font-weight: 700;
     color: var(--thai-blue);
     letter-spacing: 0.01em;
     display: flex;
