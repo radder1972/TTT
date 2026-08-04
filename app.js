@@ -4,6 +4,45 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --------------------------------------------------------------------------
+    // FALLING LILAVADI BLOSSOMS EFFECT
+    // --------------------------------------------------------------------------
+    function createFallingFlowers() {
+        const flowerCount = 18;
+        const container = document.body;
+        
+        for (let i = 0; i < flowerCount; i++) {
+            const flower = document.createElement('img');
+            flower.src = 'assets/logo.svg';
+            flower.className = 'falling-flower';
+            flower.alt = '';
+            
+            // Randomize position, size, duration, delay and opacity
+            const leftPos = Math.random() * 100;
+            const size = 15 + Math.random() * 25; // 15px to 40px
+            const duration = 7 + Math.random() * 6; // 7s to 13s
+            const delay = Math.random() * 6; // 0s to 6s
+            const opacity = 0.4 + Math.random() * 0.55; // depth illusion
+            
+            flower.style.left = `${leftPos}%`;
+            flower.style.width = `${size}px`;
+            flower.style.height = `${size}px`;
+            flower.style.animationDuration = `${duration}s`;
+            flower.style.animationDelay = `${delay}s`;
+            flower.style.opacity = opacity;
+            
+            // Auto clean-up
+            flower.addEventListener('animationend', () => {
+                flower.remove();
+            });
+            
+            container.appendChild(flower);
+        }
+    }
+
+    // Trigger initial rain of flowers
+    createFallingFlowers();
+
     // ==========================================================================
     // Supabase Connection & Configuration
     // ==========================================================================
@@ -430,6 +469,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Routing Function
     function navigateToSection(targetId) {
         const id = targetId.replace('#', '');
+        
+        // Trigger a fresh shower of blossoms when returning to home page
+        if (id === 'home') {
+            const activeBlossoms = document.querySelectorAll('.falling-flower').length;
+            if (activeBlossoms < 10) {
+                createFallingFlowers();
+            }
+        }
         
         // Hide all sections, show target
         sections.forEach(section => {
