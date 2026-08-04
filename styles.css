@@ -73,17 +73,27 @@ html {
 
 body {
     font-family: var(--font-primary);
-    /* Subtle fixed background photo of Lilavadi tree with linear gradient overlay for readability */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url('/assets/lilavadi_background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background-color: var(--bg-dark); /* Fallback solid base white background */
     color: var(--silver-platinum);
     line-height: 1.6;
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+}
+
+/* Fixed Lilavadi Tree Background Photo (Bypasses Safari/WebKit fixed-background rendering bugs) */
+.app-bg-fixed-photo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url('/assets/lilavadi_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -4; /* Behind glows, watermark and all content */
+    pointer-events: none;
 }
 
 /* Base Headings & Links */
