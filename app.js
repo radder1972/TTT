@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Randomize position, size, duration, delay and opacity
             const leftPos = Math.random() * 100;
-            const size = 15 + Math.random() * 25; // 15px to 40px
-            const duration = 7 + Math.random() * 6; // 7s to 13s
-            const delay = Math.random() * 6; // 0s to 6s
-            const opacity = 0.4 + Math.random() * 0.55; // depth illusion
+            const size = 30 + Math.random() * 40; // 30px to 70px (larger)
+            const duration = 12 + Math.random() * 10; // 12s to 22s (slower, lasts longer)
+            const delay = Math.random() * 10; // 0s to 10s (spread out longer)
+            const opacity = 0.45 + Math.random() * 0.5; // depth illusion
             
             flower.style.left = `${leftPos}%`;
             flower.style.width = `${size}px`;
