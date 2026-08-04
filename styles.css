@@ -361,7 +361,10 @@ input, select, textarea {
 }
 
 .logo {
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Center the logo horizontally and vertically in the header */
     display: flex;
     flex-direction: row !important;
     align-items: center;
@@ -2637,7 +2640,10 @@ hr {
     }
     
     .logo {
-        position: relative;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         display: flex;
         flex-direction: row !important;
         align-items: center;
