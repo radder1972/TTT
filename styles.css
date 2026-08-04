@@ -73,7 +73,12 @@ html {
 
 body {
     font-family: var(--font-primary);
-    background-color: transparent; /* Transparent body allows negative z-index background watermarks to render perfectly! */
+    /* Subtle fixed background photo of Lilavadi tree with linear gradient overlay for readability */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), url('assets/lilavadi_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--silver-platinum);
     line-height: 1.6;
     overflow-x: hidden;
@@ -138,21 +143,7 @@ input, select, textarea {
 /* --------------------------------------------------------------------------
    3. BACKGROUND GLOWS & OVERLAYS (Soft and Subtle Pastel Glows for Light Theme)
    -------------------------------------------------------------------------- */
-/* Lilavadi Tree Background Photo (Subtle and atmospheric backdrop) */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('assets/lilavadi_background.jpg');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.12; /* Subtly visible behind text and cards */
-    z-index: -1; /* Sit in front of the white root background, but behind all text content */
-    pointer-events: none;
-}
+/* Lilavadi Tree Background Photo styling is now defined directly on body for robust cross-browser rendering */
 
 .bg-glow {
     position: absolute;
