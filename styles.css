@@ -192,12 +192,12 @@ input, select, textarea {
     max-width: 900px;
     height: 80vw;
     max-height: 900px;
-    z-index: -3; /* Placed completely in the background behind all elements */
+    z-index: -1; /* Placed in front of body background but behind content */
     pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.06; /* Very subtle premium backdrop watermark */
+    opacity: 0.15; /* Increased opacity so it is visible over the tree background photo */
 }
 
 .watermark-img {
