@@ -16,17 +16,17 @@
     --bg-card: #F5F5F7;               /* Apple Signature smooth off-white/light grey card background */
     --bg-card-hover: #E8E8ED;         /* Slightly deeper grey for subtle card hover state */
     
-    --thai-blue: #122C54;            /* Premium Royal Dark Blue for headings and primary accents */
-    --thai-red: #D02A2A;             /* Refined, high-end crimson red brand accent */
-    --thai-red-glow: rgba(208, 42, 42, 0.06);
-    --thai-turquoise: #2BB3C0;       /* Luminous resort light turquoise */
-    --thai-turquoise-glow: rgba(43, 179, 192, 0.08);
+    --thai-blue: #1E293B;            /* Slate dark blue for modern minimalist headings */
+    --thai-red: #FABB49;             /* New brand gold/yellow from the new logo star */
+    --thai-red-glow: rgba(250, 187, 73, 0.06);
+    --thai-turquoise: #8B8B8B;       /* Neutral gray outline accent from the new logo flower */
+    --thai-turquoise-glow: rgba(139, 139, 139, 0.08);
     
-    --neon-cyan: #0066CC;            /* Apple brand blue for high-contrast hyperlinks & primary buttons */
-    --neon-cyan-glow: rgba(0, 102, 204, 0.12);
+    --neon-cyan: #D97706;            /* High-contrast amber/gold for links & primary buttons */
+    --neon-cyan-glow: rgba(217, 119, 6, 0.12);
     
-    --thai-gold: #BF9F3F;            /* Muted heritage gold accent */
-    --thai-gold-glow: rgba(191, 159, 63, 0.06);
+    --thai-gold: #FABB49;            /* Muted star gold */
+    --thai-gold-glow: rgba(250, 187, 73, 0.06);
     
     /* Text & Content Contrast */
     --text-white: #1D1D1F;           /* High contrast slate black text */
@@ -35,7 +35,7 @@
     
     /* Glassmorphism & Thin Apple Borders */
     --border-glass: rgba(0, 0, 0, 0.08); /* Extremely thin and crisp border */
-    --border-glow: rgba(0, 102, 204, 0.35);
+    --border-glow: rgba(217, 119, 6, 0.35);
     
     /* System Colors */
     --success: #10B981;
@@ -169,8 +169,8 @@ input, select, textarea {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 100% 150px, rgba(43, 179, 192, 0.04) 0%, transparent 500px),
-        radial-gradient(circle at 0% 800px, rgba(185, 60, 60, 0.03) 0%, transparent 600px);
+        radial-gradient(circle at 100% 150px, rgba(250, 187, 73, 0.04) 0%, transparent 500px),
+        radial-gradient(circle at 0% 800px, rgba(139, 139, 139, 0.03) 0%, transparent 600px);
     pointer-events: none;
     z-index: -1;
 }
@@ -190,7 +190,7 @@ input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.28; /* Premium subtle visibility since the asset is already light-colored */
+    opacity: 0.06; /* Very subtle premium backdrop watermark */
 }
 
 .watermark-img {
