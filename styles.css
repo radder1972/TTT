@@ -361,41 +361,35 @@ input, select, textarea {
 }
 
 .logo {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); /* Perfectly centered horizontally and vertically in the header */
+    position: relative;
     display: flex;
-    flex-direction: column !important; /* Center column at top scroll */
+    flex-direction: row !important;
     align-items: center;
     z-index: 1002;
-    gap: 0px !important;
+    gap: 12px !important;
     transition: var(--transition-smooth);
 }
 
 .logo-svg, .logo-img {
-    height: 380px !important; /* Enormously large logo! */
+    height: 48px !important;
     width: auto !important;
     object-fit: contain;
     transition: var(--transition-smooth);
-    position: absolute !important;
-    top: -80px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    opacity: 0.38 !important;
-    z-index: -1 !important;
-    pointer-events: none !important;
+    position: static !important;
+    opacity: 1 !important;
+    z-index: 2 !important;
+    pointer-events: auto !important;
 }
 
 .logo:hover .logo-img {
-    transform: translateX(-50%) scale(1.04) rotate(1deg) !important; /* Elegant subtle scale and pop */
+    transform: scale(1.04) rotate(1deg) !important; /* Elegant subtle scale and pop */
 }
 
 .logo-text {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     transition: var(--transition-smooth);
 }
 
@@ -404,12 +398,18 @@ input, select, textarea {
     height: 80px; /* Compress header height on scroll */
 }
 
-.app-header.scrolled .logo {
+/* Standard navbar logo size and positioning for admin pages */
+.admin-body .logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
     flex-direction: row !important;
     gap: 12px !important;
 }
 
-.app-header.scrolled .logo-img {
+.admin-body .logo-img,
+.admin-body .logo-svg {
     height: 48px !important;
     position: static !important;
     transform: none !important;
@@ -418,9 +418,9 @@ input, select, textarea {
     pointer-events: auto !important;
 }
 
-.app-header.scrolled .logo-text {
-    text-align: left;
-    align-items: flex-start;
+.admin-body .logo-text {
+    text-align: left !important;
+    align-items: flex-start !important;
 }
 
 /* Massive Centered Watermark Logo in the middle of the Hero section */
@@ -2637,62 +2637,34 @@ hr {
     }
     
     .logo {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
         display: flex;
-        flex-direction: column !important; /* Center column at top scroll for laptop */
+        flex-direction: row !important;
         align-items: center;
         z-index: 1002;
-        gap: 0px !important;
+        gap: 12px !important;
         transition: var(--transition-smooth);
     }
     
     .logo-img, .logo-svg {
-        height: 300px !important; /* Slightly smaller massive logo for laptops */
-        position: absolute !important;
-        top: -60px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        opacity: 0.38 !important;
-        z-index: -1 !important;
-        pointer-events: none !important;
+        height: 40px !important; /* Slightly smaller compact logo for laptops */
+        position: static !important;
+        opacity: 1 !important;
+        z-index: 2 !important;
+        pointer-events: auto !important;
         transition: var(--transition-smooth);
     }
     
     .logo:hover .logo-img {
-        transform: translateX(-50%) scale(1.04) rotate(1deg) !important;
+        transform: scale(1.04) rotate(1deg) !important;
     }
     
     .logo-text {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        transition: var(--transition-smooth);
-        margin-left: 0;
-    }
-    
-    /* Scrolled laptop state transitions */
-    .app-header.scrolled .logo {
-        flex-direction: row !important;
-        gap: 12px !important;
-    }
-    
-    .app-header.scrolled .logo-img,
-    .app-header.scrolled .logo-svg {
-        height: 40px !important; /* Slightly smaller compact logo for laptops on scroll */
-        position: static !important;
-        transform: none !important;
-        opacity: 1 !important;
-        z-index: 2 !important;
-        pointer-events: auto !important;
-    }
-    
-    .app-header.scrolled .logo-text {
-        text-align: left;
         align-items: flex-start;
+        text-align: left;
+        transition: var(--transition-smooth);
     }
     
     .brand-name {
@@ -5021,7 +4993,7 @@ hr {
 }
 
 .section-page-illustration {
-    width: 280px;
+    width: 140px;
     height: auto;
     object-fit: contain;
     flex-shrink: 0;
@@ -5065,7 +5037,7 @@ hr {
     }
     
     .section-page-illustration {
-        width: 200px;
+        width: 100px;
     }
     
     .section-header-text-layout {
