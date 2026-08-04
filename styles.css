@@ -1718,7 +1718,9 @@ hr {
 .timeline-step {
     padding: 32px;
     position: relative;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
     border-top: 3px solid var(--thai-gold);
     box-shadow: var(--shadow-soft);
@@ -1729,7 +1731,7 @@ hr {
 }
 
 .timeline-step:nth-child(3) {
-    border-top-color: var(--neon-cyan);
+    border-top-color: var(--thai-blue);
 }
 
 .step-num {
@@ -1761,16 +1763,18 @@ hr {
     padding: 48px;
     border-radius: var(--radius-lg);
     align-items: center;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
     box-shadow: var(--shadow-soft);
-    border-right: 4px solid var(--neon-cyan);
+    border-right: 4px solid var(--thai-gold);
 }
 
 .banner-content h3 {
     font-size: 1.8rem;
     margin-bottom: 12px;
-    color: var(--neon-cyan);
+    color: var(--thai-blue);
 }
 
 .banner-content > p {
