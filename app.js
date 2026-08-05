@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const flower = document.createElement('img');
-        flower.src = 'assets/logo.svg';
+        flower.src = 'assets/petal.png';
         flower.className = 'falling-flower';
         flower.alt = '';
         
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         for (let i = 0; i < count; i++) {
             const flower = document.createElement('img');
-            flower.src = 'assets/logo.svg';
+            flower.src = 'assets/petal.png';
             flower.className = 'falling-flower';
             flower.alt = '';
             
