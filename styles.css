@@ -5214,38 +5214,62 @@ hr {
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), bottom 0.6s ease;
 }
 
-/* Background flowers (slide behind the black footer bar) */
-.bf-1 { left: 4%; width: 65px; transform: rotate(15deg); z-index: 9; }
-.bf-2 { left: 11%; width: 50px; transform: rotate(-10deg) translateY(10px); opacity: 0.7; z-index: 9; }
-.bf-4 { left: 27%; width: 55px; transform: rotate(-25deg) translateY(5px); z-index: 9; }
-.bf-5 { left: 36%; width: 70px; transform: rotate(30deg); z-index: 9; }
-.bf-6 { left: 45%; width: 50px; transform: rotate(-15deg) translateY(8px); opacity: 0.75; z-index: 9; }
-.bf-8 { left: 62%; width: 60px; transform: rotate(-35deg) translateY(3px); z-index: 9; }
-.bf-9 { left: 70%; width: 70px; transform: rotate(20deg); z-index: 9; }
-.bf-10 { left: 79%; width: 50px; transform: rotate(-5deg) translateY(10px); opacity: 0.7; z-index: 9; }
-.bf-12 { left: 93%; width: 55px; transform: rotate(-20deg) translateY(5px); z-index: 9; }
+/* Background & Foreground flower positions (sloping upward to the left and right zijkanten) */
+.bf-1 { left: 1%; width: 75px; bottom: 25px; transform: rotate(15deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12)); }
+.bf-2 { left: 4%; width: 65px; bottom: 12px; transform: rotate(-30deg); z-index: 9; }
+.bf-3 { left: 7%; width: 85px; bottom: -8px; transform: rotate(45deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)) !important; }
+.bf-4 { left: 11%; width: 60px; bottom: 20px; transform: rotate(-10deg); z-index: 9; }
+.bf-5 { left: 15%; width: 75px; bottom: 2px; transform: rotate(25deg); z-index: 9; }
+.bf-6 { left: 19%; width: 55px; bottom: 15px; transform: rotate(-40deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12)); }
+.bf-7 { left: 22%; width: 80px; bottom: -12px; transform: rotate(60deg); z-index: 9; }
+.bf-8 { left: 26%; width: 65px; bottom: 5px; transform: rotate(-20deg); z-index: 9; }
 
-/* Foreground flowers (land and sit overlapping ON TOP of the black footer bar) */
-.bf-3 { left: 18%; width: 75px; transform: rotate(45deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15)) !important; }
-.bf-7 { left: 53%; width: 80px; transform: rotate(60deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15)) !important; }
-.bf-11 { left: 86%; width: 75px; transform: rotate(40deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15)) !important; }
+.bf-9 { left: 30%; width: 70px; bottom: -12px; transform: rotate(10deg); z-index: 9; }
+.bf-10 { left: 35%; width: 50px; bottom: -5px; transform: rotate(-15deg); z-index: 9; }
+.bf-11 { left: 41%; width: 80px; bottom: -18px; transform: rotate(35deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)) !important; }
+.bf-12 { left: 46%; width: 55px; bottom: -8px; transform: rotate(-25deg); z-index: 9; }
+.bf-13 { left: 51%; width: 75px; bottom: -15px; transform: rotate(15deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)) !important; }
+.bf-14 { left: 57%; width: 60px; bottom: -6px; transform: rotate(-30deg); z-index: 9; }
+.bf-15 { left: 62%; width: 70px; bottom: -18px; transform: rotate(45deg); z-index: 9; }
+.bf-16 { left: 67%; width: 50px; bottom: -5px; transform: rotate(-10deg); z-index: 9; }
+
+.bf-17 { left: 72%; width: 65px; bottom: 8px; transform: rotate(20deg); z-index: 9; }
+.bf-18 { left: 76%; width: 80px; bottom: -10px; transform: rotate(-35deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)) !important; }
+.bf-19 { left: 80%; width: 55px; bottom: 15px; transform: rotate(40deg); z-index: 9; }
+.bf-20 { left: 84%; width: 70px; bottom: 2px; transform: rotate(-25deg); z-index: 9; }
+.bf-21 { left: 88%; width: 60px; bottom: 22px; transform: rotate(15deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12)); }
+.bf-22 { left: 91%; width: 85px; bottom: -5px; transform: rotate(-45deg); z-index: 9; }
+.bf-23 { left: 94%; width: 65px; bottom: 14px; transform: rotate(30deg); z-index: 9; }
+.bf-24 { left: 97%; width: 75px; bottom: 28px; transform: rotate(-10deg); z-index: 11; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)) !important; }
 
 /* Wind sway micro-animation trigger on hover */
 .flower-bed-container:hover .bed-flower {
-    bottom: -15px;
+    bottom: inherit; /* Allow CSS transitions */
 }
-.flower-bed-container:hover .bf-1 { transform: rotate(25deg) scale(1.03); }
-.flower-bed-container:hover .bf-2 { transform: rotate(-5deg) translateY(6px); }
-.flower-bed-container:hover .bf-3 { transform: rotate(55deg) scale(1.02); }
-.flower-bed-container:hover .bf-4 { transform: rotate(-15deg) translateY(2px); }
-.flower-bed-container:hover .bf-5 { transform: rotate(40deg) scale(1.03); }
-.flower-bed-container:hover .bf-6 { transform: rotate(-5deg) translateY(4px); }
-.flower-bed-container:hover .bf-7 { transform: rotate(70deg) scale(1.02); }
-.flower-bed-container:hover .bf-8 { transform: rotate(-25deg) translateY(1px); }
-.flower-bed-container:hover .bf-9 { transform: rotate(30deg) scale(1.03); }
-.flower-bed-container:hover .bf-10 { transform: rotate(5deg) translateY(6px); }
-.flower-bed-container:hover .bf-11 { transform: rotate(50deg) scale(1.02); }
-.flower-bed-container:hover .bf-12 { transform: rotate(-10deg) translateY(2px); }
+.flower-bed-container:hover .bf-1 { transform: rotate(25deg) translateY(-5px); }
+.flower-bed-container:hover .bf-2 { transform: rotate(-20deg) translateY(-3px); }
+.flower-bed-container:hover .bf-3 { transform: rotate(55deg) translateY(-4px); }
+.flower-bed-container:hover .bf-4 { transform: rotate(0deg) translateY(-2px); }
+.flower-bed-container:hover .bf-5 { transform: rotate(35deg) translateY(-6px); }
+.flower-bed-container:hover .bf-6 { transform: rotate(-30deg) translateY(-4px); }
+.flower-bed-container:hover .bf-7 { transform: rotate(70deg) translateY(-5px); }
+.flower-bed-container:hover .bf-8 { transform: rotate(-10deg) translateY(-3px); }
+.flower-bed-container:hover .bf-9 { transform: rotate(20deg) translateY(-4px); }
+.flower-bed-container:hover .bf-10 { transform: rotate(-5deg) translateY(-2px); }
+.flower-bed-container:hover .bf-11 { transform: rotate(45deg) translateY(-5px); }
+.flower-bed-container:hover .bf-12 { transform: rotate(-15deg) translateY(-3px); }
+.flower-bed-container:hover .bf-13 { transform: rotate(25deg) translateY(-5px); }
+.flower-bed-container:hover .bf-14 { transform: rotate(-20deg) translateY(-3px); }
+.flower-bed-container:hover .bf-15 { transform: rotate(55deg) translateY(-4px); }
+.flower-bed-container:hover .bf-16 { transform: rotate(0deg) translateY(-2px); }
+.flower-bed-container:hover .bf-17 { transform: rotate(30deg) translateY(-3px); }
+.flower-bed-container:hover .bf-18 { transform: rotate(-25deg) translateY(-5px); }
+.flower-bed-container:hover .bf-19 { transform: rotate(50deg) translateY(-4px); }
+.flower-bed-container:hover .bf-20 { transform: rotate(-15deg) translateY(-2px); }
+.flower-bed-container:hover .bf-21 { transform: rotate(25deg) translateY(-6px); }
+.flower-bed-container:hover .bf-22 { transform: rotate(-35deg) translateY(-3px); }
+.flower-bed-container:hover .bf-23 { transform: rotate(40deg) translateY(-4px); }
+.flower-bed-container:hover .bf-24 { transform: rotate(0deg) translateY(-5px); }
 
 /* ==========================================================================
    19. DECORATIVE FLOWER CORNER UNDER HERO CTA / VISUAL
