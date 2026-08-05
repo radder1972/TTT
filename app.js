@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         flower.style.opacity = opacity;
         
         flower.addEventListener('animationend', () => {
+            flower.classList.add('landed-blossom');
             // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
             setTimeout(() => {
                 flower.style.transition = 'opacity 3s ease';
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
             flower.addEventListener('animationend', () => {
+                flower.classList.add('landed-blossom');
                 setTimeout(() => {
                     flower.style.transition = 'opacity 3s ease';
                     flower.style.opacity = '0';
