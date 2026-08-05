@@ -7,10 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     // FALLING LILAVADI BLOSSOMS EFFECT
     // --------------------------------------------------------------------------
+    const landedFlowersList = [];
+    const MAX_LANDED_FLOWERS = 180; // Dense stack limit to prevent browser slowing down
+
+    function registerLandedFlower(flower) {
+        flower.classList.add('landed-blossom');
+        landedFlowersList.push(flower);
+        
+        // Remove the oldest landed blossom if we exceed the high density ceiling
+        if (landedFlowersList.length > MAX_LANDED_FLOWERS) {
+            const oldest = landedFlowersList.shift();
+            if (oldest) {
+                oldest.style.transition = 'opacity 5s ease';
+                oldest.style.opacity = '0';
+                setTimeout(() => {
+                    oldest.remove();
+                }, 5000);
+            }
+        }
+    }
+
     function spawnSingleFlower() {
         const container = document.body;
-        // Limit total active falling flowers to prevent DOM clutter and performance issues (max 25 active)
-        if (document.querySelectorAll('.falling-flower').length >= 25) {
+        // Limit active falling flowers (max 25 concurrently in the air)
+        if (document.querySelectorAll('.falling-flower:not(.landed-blossom)').length >= 25) {
             return;
         }
 
@@ -20,27 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
         flower.alt = '';
         
         const leftPos = Math.random() * 100;
-        const size = 30 + Math.random() * 40; // 30px to 70px (larger)
-        const duration = 12 + Math.random() * 10; // 12s to 22s (slower, lasts longer)
-        const opacity = 0.45 + Math.random() * 0.5; // depth illusion
+        const size = 30 + Math.random() * 40; // 30px to 70px
+        const duration = 12 + Math.random() * 10; // 12s to 22s
+        const opacity = 0.45 + Math.random() * 0.5;
+        
+        // U-shape coordinate calculation: edges (0 or 100) land higher (e.g. 90vh), center (50) lands lower (e.g. 96vh)
+        const landingY = 96 - Math.pow(Math.abs(leftPos - 50) / 50, 2) * 6;
         
         flower.style.left = `${leftPos}%`;
         flower.style.width = `${size}px`;
         flower.style.height = `${size}px`;
         flower.style.animationDuration = `${duration}s`;
-        flower.style.animationDelay = '0s'; // spawn instantly when loop triggers
+        flower.style.animationDelay = '0s';
         flower.style.opacity = opacity;
+        flower.style.setProperty('--landing-y', `${landingY}vh`);
         
         flower.addEventListener('animationend', () => {
-            flower.classList.add('landed-blossom');
-            // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
-            setTimeout(() => {
-                flower.style.transition = 'opacity 3s ease';
-                flower.style.opacity = '0';
-                setTimeout(() => {
-                    flower.remove();
-                }, 3000);
-            }, 18000);
+            registerLandedFlower(flower);
         });
         
         container.appendChild(flower);
@@ -55,12 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
             flower.className = 'falling-flower';
             flower.alt = '';
             
-            // Randomize position, size, duration, delay and opacity
             const leftPos = Math.random() * 100;
-            const size = 30 + Math.random() * 40; // 30px to 70px (larger)
-            const duration = 12 + Math.random() * 10; // 12s to 22s (slower, lasts longer)
-            const delay = Math.random() * 10; // 0s to 10s (spread out longer)
-            const opacity = 0.45 + Math.random() * 0.5; // depth illusion
+            const size = 30 + Math.random() * 40;
+            const duration = 12 + Math.random() * 10;
+            const delay = Math.random() * 10;
+            const opacity = 0.45 + Math.random() * 0.5;
+            
+            // U-shape coordinate calculation
+            const landingY = 96 - Math.pow(Math.abs(leftPos - 50) / 50, 2) * 6;
             
             flower.style.left = `${leftPos}%`;
             flower.style.width = `${size}px`;
@@ -68,17 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
             flower.style.animationDuration = `${duration}s`;
             flower.style.animationDelay = `${delay}s`;
             flower.style.opacity = opacity;
+            flower.style.setProperty('--landing-y', `${landingY}vh`);
             
-            // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
             flower.addEventListener('animationend', () => {
-                flower.classList.add('landed-blossom');
-                setTimeout(() => {
-                    flower.style.transition = 'opacity 3s ease';
-                    flower.style.opacity = '0';
-                    setTimeout(() => {
-                        flower.remove();
-                    }, 3000);
-                }, 18000);
+                registerLandedFlower(flower);
             });
             
             container.appendChild(flower);
