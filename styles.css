@@ -400,27 +400,36 @@ input, select, textarea {
     content: '';
     position: absolute;
     top: 50%;
-    left: 24px;
+    left: 45%;
     transform: translate(-50%, -50%);
-    width: 76px;
-    height: 76px;
+    width: 480px;
+    height: 140px;
     background-image: 
+        url('assets/logo.svg'),
+        url('assets/logo.svg'),
+        url('assets/logo.svg'),
         url('assets/logo.svg'),
         url('assets/logo.svg'),
         url('assets/logo.svg');
     background-position: 
-        center center,
-        2px 6px,
-        42px 42px;
+        10px 10px,
+        80px 5px,
+        150px 65px,
+        220px 20px,
+        300px 75px,
+        400px 30px;
     background-size: 
-        46px 46px,
-        26px 26px,
-        26px 26px;
+        86px 86px,
+        54px 54px,
+        42px 42px,
+        64px 64px,
+        48px 48px,
+        58px 58px;
     background-repeat: no-repeat;
     opacity: 0.35;
     z-index: 1;
     pointer-events: none;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .logo:hover::before {
@@ -448,6 +457,8 @@ input, select, textarea {
     align-items: flex-start;
     text-align: left;
     transition: var(--transition-smooth);
+    position: relative !important;
+    z-index: 2 !important;
 }
 
 /* Scrolled state transitions for header logo */
