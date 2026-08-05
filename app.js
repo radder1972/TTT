@@ -27,6 +27,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getBiasedLeftPosition() {
+        const rand = Math.random();
+        if (rand < 0.45) {
+            // 45% chance: Left side (0% to 25%)
+            return Math.random() * 25;
+        } else if (rand < 0.90) {
+            // 45% chance: Right side (75% to 100%)
+            return 75 + Math.random() * 25;
+        } else {
+            // 10% chance: Center (25% to 75%)
+            return 25 + Math.random() * 50;
+        }
+    }
+
     function spawnSingleFlower() {
         const container = document.body;
         // Limit active falling flowers (max 25 concurrently in the air)
@@ -39,13 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
         flower.className = 'falling-flower';
         flower.alt = '';
         
-        const leftPos = Math.random() * 100;
+        const leftPos = getBiasedLeftPosition();
         const size = 30 + Math.random() * 40; // 30px to 70px
         const duration = 12 + Math.random() * 10; // 12s to 22s
         const opacity = 0.45 + Math.random() * 0.5;
         
-        // U-shape coordinate calculation: edges (0 or 100) land higher (e.g. 90vh), center (50) lands lower (e.g. 96vh)
-        const landingY = 96 - Math.pow(Math.abs(leftPos - 50) / 50, 2) * 6;
+        // Flat landing coordinate (exactly overlapping the top edge of the black footer bar)
+        const landingY = 95.2;
         
         flower.style.left = `${leftPos}%`;
         flower.style.width = `${size}px`;
@@ -71,14 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
             flower.className = 'falling-flower';
             flower.alt = '';
             
-            const leftPos = Math.random() * 100;
+            const leftPos = getBiasedLeftPosition();
             const size = 30 + Math.random() * 40;
             const duration = 12 + Math.random() * 10;
             const delay = Math.random() * 10;
             const opacity = 0.45 + Math.random() * 0.5;
             
-            // U-shape coordinate calculation
-            const landingY = 96 - Math.pow(Math.abs(leftPos - 50) / 50, 2) * 6;
+            // Flat landing coordinate
+            const landingY = 95.2;
             
             flower.style.left = `${leftPos}%`;
             flower.style.width = `${size}px`;
