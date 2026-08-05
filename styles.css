@@ -79,6 +79,12 @@ body {
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1 0 auto;
 }
 
 /* Fixed Lilavadi Tree Background Photo (Bypasses Safari/WebKit fixed-background rendering bugs) */
