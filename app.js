@@ -32,7 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
         flower.style.opacity = opacity;
         
         flower.addEventListener('animationend', () => {
-            flower.remove();
+            // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
+            setTimeout(() => {
+                flower.style.transition = 'opacity 3s ease';
+                flower.style.opacity = '0';
+                setTimeout(() => {
+                    flower.remove();
+                }, 3000);
+            }, 18000);
         });
         
         container.appendChild(flower);
@@ -61,9 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
             flower.style.animationDelay = `${delay}s`;
             flower.style.opacity = opacity;
             
-            // Auto clean-up
+            // Settle and pile up at the bottom of the screen, then fade out after 18 seconds
             flower.addEventListener('animationend', () => {
-                flower.remove();
+                setTimeout(() => {
+                    flower.style.transition = 'opacity 3s ease';
+                    flower.style.opacity = '0';
+                    setTimeout(() => {
+                        flower.remove();
+                    }, 3000);
+                }, 18000);
             });
             
             container.appendChild(flower);
