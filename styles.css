@@ -5410,59 +5410,66 @@ hr {
    21. DECORATIVE FLOWER CORNER TOP-LEFT PAGE BACKGROUND (UNDER HEADER LOGO)
    ========================================================================== */
 .flower-corner-page-tl {
-    position: fixed; /* Fixed viewport layout under sticky nav Home link */
-    top: 75px;
-    left: 40px;
-    width: 140px;
-    height: 140px;
+    position: fixed; /* Fixed viewport layout directly under nav Home link */
+    top: 48px; /* High enough to overlap the title bar beautifully */
+    left: calc(50% - 595px); /* Perfectly aligned with the Home link's horizontal position */
+    width: 200px;
+    height: 200px;
     pointer-events: none;
-    z-index: 1; /* Sits behind the hero content / text but above background tree */
-    opacity: 0.8;
+    z-index: 1005; /* Sit in front of the sticky app-header (z-index: 1000) so they overlap it */
+    opacity: 0.92;
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .flower-corner-page-tl img {
     position: absolute;
     height: auto;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .flower-corner-page-tl .fptl-1 {
     top: 0;
     left: 0;
-    width: 75px;
+    width: 110px; /* Signicantly larger blossom */
     transform: rotate(-10deg);
 }
 
 .flower-corner-page-tl .fptl-2 {
-    top: 35px;
-    left: 45px;
-    width: 55px;
+    top: 50px;
+    left: 65px;
+    width: 85px; /* Larger blossom */
     transform: rotate(25deg);
-    opacity: 0.75;
+    opacity: 0.85;
 }
 
 .flower-corner-page-tl .fptl-3 {
-    top: 55px;
-    left: 10px;
-    width: 45px;
+    top: 80px;
+    left: 15px;
+    width: 65px; /* Larger blossom */
     transform: rotate(-35deg);
-    opacity: 0.65;
+    opacity: 0.75;
+}
+
+/* Adjust position on narrower desktop screens where container takes full width */
+@media (max-width: 1250px) {
+    .flower-corner-page-tl {
+        left: 40px;
+    }
 }
 
 /* Add responsive adjustments for smaller devices */
 @media (max-width: 768px) {
     .flower-corner-page-tl {
-        top: 65px;
+        top: 45px;
         left: 20px;
-        width: 100px;
-        height: 100px;
-        opacity: 0.6;
+        width: 130px;
+        height: 130px;
+        opacity: 0.8;
     }
-    .flower-corner-page-tl .fptl-1 { width: 55px; }
-    .flower-corner-page-tl .fptl-2 { width: 40px; top: 25px; left: 35px; }
-    .flower-corner-page-tl .fptl-3 { width: 32px; top: 40px; left: 8px; }
+    .flower-corner-page-tl .fptl-1 { width: 70px; }
+    .flower-corner-page-tl .fptl-2 { width: 50px; top: 30px; left: 40px; }
+    .flower-corner-page-tl .fptl-3 { width: 40px; top: 50px; left: 10px; }
 }
 
 
