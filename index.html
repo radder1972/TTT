@@ -88,7 +88,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Satisfy&family=Caveat:wght@700&family=Kaushan+Script&family=Yatra+One&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.148">
+    <link rel="stylesheet" href="styles.css?v=4.2.149">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
@@ -1357,46 +1357,34 @@
                             </div>
                         </div>
 
-                        <!-- Polaroid Photo Carousel of the Office/Reception -->
-                        <div class="polaroid-carousel-wrapper" style="margin-top: 20px;">
-                            <div class="polaroid-carousel" id="contact-polaroid-carousel">
-                                <!-- Slide 1 -->
-                                <div class="polaroid-slide active">
-                                    <div class="polaroid-card">
-                                        <div class="polaroid-img-container">
-                                            <img src="assets/store-front-new.jpg" alt="True Time Thai New Storefront Exterior" onclick="openLightbox(this)">
-                                        </div>
-                                        <p class="polaroid-caption">Our new storefront on Pattaya Sai Song Road</p>
+                        <!-- Storefront visual card with decorative flower corners -->
+                        <div class="contact-storefront-wrapper" style="margin-top: 20px; position: relative;">
+                            <div class="visual-card glass contact-storefront-card">
+                                <div class="experience-img-container">
+                                    <img src="assets/store-front-new.jpg" alt="True Time Thai Pattaya Storefront" class="experience-img" onclick="openLightbox(this)">
+                                    
+                                    <!-- Floating Brand Badge overlay in the corner of the photo -->
+                                    <div class="floating-brand-badge">
+                                        <span class="brand-name-badge">True Time <span class="thai-word">Thai</span></span>
                                     </div>
                                 </div>
-                                <!-- Slide 2 -->
-                                <div class="polaroid-slide">
-                                    <div class="polaroid-card rotate-left">
-                                        <div class="polaroid-img-container">
-                                            <img src="assets/store-entrance.jpg" alt="Cozy outdoor cafe entry seating" onclick="openLightbox(this)">
-                                        </div>
-                                        <p class="polaroid-caption">Cozy outdoor cafe entry seating</p>
-                                    </div>
-                                </div>
-                                <!-- Slide 3 -->
-                                <div class="polaroid-slide">
-                                    <div class="polaroid-card rotate-right">
-                                        <div class="polaroid-img-container">
-                                            <img src="assets/store-interior.jpg" alt="Modern indoor translation advisory lounge" onclick="openLightbox(this)">
-                                        </div>
-                                        <p class="polaroid-caption">Indoor translation advisory lounge</p>
-                                    </div>
+                                <div class="visual-footer">
+                                    <p class="visual-caption">Our storefront on Pattaya Sai Song Road</p>
                                 </div>
                             </div>
-                            <!-- Carousel controls -->
-                            <div class="carousel-nav">
-                                <button type="button" class="carousel-btn prev-btn" id="contact-carousel-prev" aria-label="Previous photo">‹</button>
-                                <div class="carousel-dots" id="contact-carousel-dots">
-                                    <span class="carousel-dot active" data-index="0"></span>
-                                    <span class="carousel-dot" data-index="1"></span>
-                                    <span class="carousel-dot" data-index="2"></span>
-                                </div>
-                                <button type="button" class="carousel-btn next-btn" id="contact-carousel-next" aria-label="Next photo">›</button>
+                            
+                            <!-- Flower corner top-right of the storefront photo -->
+                            <div class="flower-corner-contact-tr">
+                                <img src="assets/logo.svg" class="fc-1" alt="">
+                                <img src="assets/logo.svg" class="fc-2" alt="">
+                                <img src="assets/logo.svg" class="fc-3" alt="">
+                            </div>
+                            
+                            <!-- Flower corner bottom-left of the storefront photo -->
+                            <div class="flower-corner-contact-bl">
+                                <img src="assets/logo.svg" class="fc-1" alt="">
+                                <img src="assets/logo.svg" class="fc-2" alt="">
+                                <img src="assets/logo.svg" class="fc-3" alt="">
                             </div>
                         </div>
                     </div>
@@ -1476,7 +1464,7 @@
         
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.148</span></p>
+                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.149</span></p>
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiene Terms</a>
                     <a href="#pricing">Rental Terms</a>
@@ -1539,6 +1527,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
-    <script src="app.js?v=4.2.148"></script>
+    <script src="app.js?v=4.2.149"></script>
 </body>
 </html>
