@@ -484,12 +484,20 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.75rem;
+    font-size: 1.45rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     color: #5a5a5a;
-    line-height: 1.1;
+    line-height: 0.9;
     display: block;
+    text-align: center;
+}
+
+.brand-name .brand-accent {
+    color: #d4a359 !important; /* Premium plumeria gold */
+    font-size: 1.65rem;
+    display: block;
+    margin-top: 1px;
 }
 
 .thai-word {
@@ -2752,8 +2760,12 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.65rem;
-        gap: 6px;
+        font-size: 1.3rem !important;
+        line-height: 0.9 !important;
+    }
+
+    .brand-name .brand-accent {
+        font-size: 1.5rem !important;
     }
     
     .thai-word {
@@ -2821,7 +2833,12 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.15rem;
+        font-size: 1.05rem !important;
+        line-height: 0.9 !important;
+    }
+
+    .brand-name .brand-accent {
+        font-size: 1.25rem !important;
     }
     
     .thai-word {
