@@ -5193,11 +5193,6 @@ hr {
     animation-fill-mode: forwards;
 }
 
-/* Landed flower overlay state: pop in front of the dark footer bar! */
-.falling-flower.landed-blossom {
-    z-index: 12 !important;
-}
-
 @keyframes fallAndSway {
     0% {
         transform: translateY(-5vh) rotate(0deg) translateX(0);
@@ -5207,101 +5202,22 @@ hr {
         opacity: 0.85;
     }
     25% {
-        transform: translateY(calc(var(--landing-y, 95vh) * 0.25)) rotate(90deg) translateX(25px);
+        transform: translateY(27vh) rotate(90deg) translateX(25px);
     }
     50% {
-        transform: translateY(calc(var(--landing-y, 95vh) * 0.50)) rotate(180deg) translateX(-25px);
+        transform: translateY(55vh) rotate(180deg) translateX(-25px);
     }
     75% {
-        transform: translateY(calc(var(--landing-y, 95vh) * 0.75)) rotate(270deg) translateX(25px);
+        transform: translateY(82vh) rotate(270deg) translateX(25px);
     }
-    98% {
-        transform: translateY(calc(var(--landing-y, 95vh) - 0.5vh)) rotate(350deg) translateX(5px);
+    95% {
+        opacity: 0.85;
     }
     100% {
-        transform: translateY(var(--landing-y, 95vh)) rotate(360deg) translateX(0px);
+        transform: translateY(105vh) rotate(360deg) translateX(0px);
+        opacity: 0;
     }
 }
-
-/* ==========================================================================
-   18. DECORATIVE FLOWER BED AT THE BOTTOM OF THE PAGE
-   ========================================================================== */
-.flower-bed-container {
-    position: relative;
-    width: 100%;
-    height: 60px; /* Compact height */
-    margin-top: 40px;
-    margin-bottom: -35px; /* Pull footer up so flowers overlap it halfway */
-    overflow: visible !important; /* No cut-offs! */
-    pointer-events: auto; /* Allow mouse hover interaction */
-    z-index: 11; /* Sit in front of the footer bottom (which has z-index: 10) */
-}
-
-.bed-flower {
-    position: absolute;
-    bottom: -20px;
-    height: auto;
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
-    opacity: 0.85;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), bottom 0.6s ease;
-}
-
-/* Background & Foreground flower positions (draped willekeurig - stacked double-layered pile with 1/3 bar overlap) */
-.bf-1 { left: 1%; width: 75px; bottom: 0px; transform: rotate(15deg); }
-.bf-2 { left: 3%; width: 65px; bottom: 15px; transform: rotate(-30deg); } /* Stacked top layer */
-.bf-3 { left: 6%; width: 85px; bottom: -4px; transform: rotate(45deg); }
-.bf-4 { left: 9%; width: 60px; bottom: 18px; transform: rotate(-10deg); } /* Stacked top layer */
-.bf-5 { left: 12%; width: 75px; bottom: 2px; transform: rotate(25deg); }
-.bf-6 { left: 16%; width: 55px; bottom: 14px; transform: rotate(-40deg); } /* Stacked top layer */
-.bf-7 { left: 20%; width: 80px; bottom: -5px; transform: rotate(60deg); }
-.bf-8 { left: 23%; width: 65px; bottom: 16px; transform: rotate(-20deg); } /* Stacked top layer */
-
-.bf-9 { left: 27%; width: 70px; bottom: 2px; transform: rotate(10deg); }
-.bf-10 { left: 31%; width: 50px; bottom: 15px; transform: rotate(-15deg); } /* Stacked top layer */
-.bf-11 { left: 35%; width: 80px; bottom: -3px; transform: rotate(35deg); }
-.bf-12 { left: 40%; width: 55px; bottom: 17px; transform: rotate(-25deg); } /* Stacked top layer */
-.bf-13 { left: 45%; width: 75px; bottom: 1px; transform: rotate(15deg); }
-.bf-14 { left: 50%; width: 60px; bottom: 16px; transform: rotate(-30deg); } /* Stacked top layer */
-.bf-15 { left: 55%; width: 70px; bottom: -4px; transform: rotate(45deg); }
-.bf-16 { left: 60%; width: 50px; bottom: 14px; transform: rotate(-10deg); } /* Stacked top layer */
-
-.bf-17 { left: 65%; width: 65px; bottom: 3px; transform: rotate(20deg); }
-.bf-18 { left: 69%; width: 80px; bottom: 18px; transform: rotate(-35deg); } /* Stacked top layer */
-.bf-19 { left: 74%; width: 55px; bottom: -2px; transform: rotate(40deg); }
-.bf-20 { left: 78%; width: 70px; bottom: 15px; transform: rotate(-25deg); } /* Stacked top layer */
-.bf-21 { left: 83%; width: 60px; bottom: 0px; transform: rotate(15deg); }
-.bf-22 { left: 87%; width: 85px; bottom: 19px; transform: rotate(-45deg); } /* Stacked top layer */
-.bf-23 { left: 91%; width: 65px; bottom: -3px; transform: rotate(30deg); }
-.bf-24 { left: 95%; width: 75px; bottom: 16px; transform: rotate(-10deg); } /* Stacked top layer */
-
-/* Wind sway micro-animation trigger on hover */
-.flower-bed-container:hover .bed-flower {
-    bottom: inherit; /* Allow CSS transitions */
-}
-.flower-bed-container:hover .bf-1 { transform: rotate(25deg) translateY(-5px); }
-.flower-bed-container:hover .bf-2 { transform: rotate(-20deg) translateY(-3px); }
-.flower-bed-container:hover .bf-3 { transform: rotate(55deg) translateY(-4px); }
-.flower-bed-container:hover .bf-4 { transform: rotate(0deg) translateY(-2px); }
-.flower-bed-container:hover .bf-5 { transform: rotate(35deg) translateY(-6px); }
-.flower-bed-container:hover .bf-6 { transform: rotate(-30deg) translateY(-4px); }
-.flower-bed-container:hover .bf-7 { transform: rotate(70deg) translateY(-5px); }
-.flower-bed-container:hover .bf-8 { transform: rotate(-10deg) translateY(-3px); }
-.flower-bed-container:hover .bf-9 { transform: rotate(20deg) translateY(-4px); }
-.flower-bed-container:hover .bf-10 { transform: rotate(-5deg) translateY(-2px); }
-.flower-bed-container:hover .bf-11 { transform: rotate(45deg) translateY(-5px); }
-.flower-bed-container:hover .bf-12 { transform: rotate(-15deg) translateY(-3px); }
-.flower-bed-container:hover .bf-13 { transform: rotate(25deg) translateY(-5px); }
-.flower-bed-container:hover .bf-14 { transform: rotate(-20deg) translateY(-3px); }
-.flower-bed-container:hover .bf-15 { transform: rotate(55deg) translateY(-4px); }
-.flower-bed-container:hover .bf-16 { transform: rotate(0deg) translateY(-2px); }
-.flower-bed-container:hover .bf-17 { transform: rotate(30deg) translateY(-3px); }
-.flower-bed-container:hover .bf-18 { transform: rotate(-25deg) translateY(-5px); }
-.flower-bed-container:hover .bf-19 { transform: rotate(50deg) translateY(-4px); }
-.flower-bed-container:hover .bf-20 { transform: rotate(-15deg) translateY(-2px); }
-.flower-bed-container:hover .bf-21 { transform: rotate(25deg) translateY(-6px); }
-.flower-bed-container:hover .bf-22 { transform: rotate(-35deg) translateY(-3px); }
-.flower-bed-container:hover .bf-23 { transform: rotate(40deg) translateY(-4px); }
-.flower-bed-container:hover .bf-24 { transform: rotate(0deg) translateY(-5px); }
 
 /* ==========================================================================
    19. DECORATIVE FLOWER CORNER UNDER HERO CTA / VISUAL
