@@ -5176,19 +5176,19 @@ hr {
         opacity: 0.85;
     }
     25% {
-        transform: translateY(25vh) rotate(90deg) translateX(25px);
+        transform: translateY(calc(var(--landing-y, 95vh) * 0.25)) rotate(90deg) translateX(25px);
     }
     50% {
-        transform: translateY(50vh) rotate(180deg) translateX(-25px);
+        transform: translateY(calc(var(--landing-y, 95vh) * 0.50)) rotate(180deg) translateX(-25px);
     }
     75% {
-        transform: translateY(75vh) rotate(270deg) translateX(25px);
+        transform: translateY(calc(var(--landing-y, 95vh) * 0.75)) rotate(270deg) translateX(25px);
     }
     98% {
-        transform: translateY(94vh) rotate(350deg) translateX(5px);
+        transform: translateY(calc(var(--landing-y, 95vh) - 0.5vh)) rotate(350deg) translateX(5px);
     }
     100% {
-        transform: translateY(95vh) rotate(360deg) translateX(0px);
+        transform: translateY(var(--landing-y, 95vh)) rotate(360deg) translateX(0px);
     }
 }
 
