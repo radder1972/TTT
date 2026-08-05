@@ -7,11 +7,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     // FALLING LILAVADI BLOSSOMS EFFECT
     // --------------------------------------------------------------------------
-    function createFallingFlowers() {
-        const flowerCount = 18;
+    function spawnSingleFlower() {
+        const container = document.body;
+        // Limit total active falling flowers to prevent DOM clutter and performance issues (max 25 active)
+        if (document.querySelectorAll('.falling-flower').length >= 25) {
+            return;
+        }
+
+        const flower = document.createElement('img');
+        flower.src = 'assets/logo.svg';
+        flower.className = 'falling-flower';
+        flower.alt = '';
+        
+        const leftPos = Math.random() * 100;
+        const size = 30 + Math.random() * 40; // 30px to 70px (larger)
+        const duration = 12 + Math.random() * 10; // 12s to 22s (slower, lasts longer)
+        const opacity = 0.45 + Math.random() * 0.5; // depth illusion
+        
+        flower.style.left = `${leftPos}%`;
+        flower.style.width = `${size}px`;
+        flower.style.height = `${size}px`;
+        flower.style.animationDuration = `${duration}s`;
+        flower.style.animationDelay = '0s'; // spawn instantly when loop triggers
+        flower.style.opacity = opacity;
+        
+        flower.addEventListener('animationend', () => {
+            flower.remove();
+        });
+        
+        container.appendChild(flower);
+    }
+
+    function createFallingFlowers(count = 12) {
         const container = document.body;
         
-        for (let i = 0; i < flowerCount; i++) {
+        for (let i = 0; i < count; i++) {
             const flower = document.createElement('img');
             flower.src = 'assets/logo.svg';
             flower.className = 'falling-flower';
@@ -41,7 +71,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Trigger initial rain of flowers
-    createFallingFlowers();
+    createFallingFlowers(12);
+
+    // Continuous loop spawner with random interval and amount
+    function startContinuousSpawner() {
+        const minInterval = 3000; // 3s
+        const maxInterval = 8000; // 8s
+        
+        function loop() {
+            const amount = Math.floor(Math.random() * 3) + 1; // spawn 1 to 3 flowers
+            for (let i = 0; i < amount; i++) {
+                spawnSingleFlower();
+            }
+            const nextInterval = minInterval + Math.random() * (maxInterval - minInterval);
+            setTimeout(loop, nextInterval);
+        }
+        
+        // Start the loop after the initial rain has begun falling (4s delay)
+        setTimeout(loop, 4000);
+    }
+
+    startContinuousSpawner();
 
     // ==========================================================================
     // Supabase Connection & Configuration
