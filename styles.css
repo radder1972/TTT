@@ -443,17 +443,17 @@ input, select, textarea {
 }
 
 .logo-svg, .logo-img {
-    height: 78px !important;
+    height: 110px !important;
     width: auto !important;
     object-fit: contain;
-    transition: var(--transition-smooth);
+    transition: var(--transition-smooth);\
     position: relative !important;
     opacity: 1 !important;
     z-index: 2 !important;
     pointer-events: auto !important;
-    /* Logo overflows below the header bar */
-    margin-top: 4px;
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
+    /* Full logo overflows below the header bar */
+    margin-top: 2px;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.15));
 }
 
 .logo:hover .logo-img {
