@@ -387,15 +387,15 @@ input, select, textarea {
 .logo {
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); /* Center the logo horizontally and vertically in the header */
+    top: 10px !important;
+    transform: translate(-50%, 0) !important; /* Position near top so stack overflows bottom */
     display: flex;
     flex-direction: column !important;
     align-items: center !important;
     z-index: 1002;
     transition: var(--transition-smooth);
     overflow: visible;
-    gap: 2px !important;
+    gap: 3px !important;
 }
 
 .logo::before {
@@ -414,12 +414,12 @@ input, select, textarea {
         url('assets/logo.svg'),
         url('assets/logo.svg');
     background-position: 
-        10px 10px,
         15px 15px,
         20px 20px,
         25px 25px,
         30px 30px,
-        35px 35px;
+        35px 35px,
+        40px 40px;
     background-size: 
         140px 140px,
         120px 120px,
@@ -435,7 +435,7 @@ input, select, textarea {
 }
 
 .logo-svg, .logo-img {
-    height: 70px !important;
+    height: 95px !important;
     width: auto !important;
     object-fit: contain;
     transition: none;
@@ -444,7 +444,7 @@ input, select, textarea {
     z-index: 2 !important;
     pointer-events: auto !important;
     /* Clean vertical overflow borders */
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+    filter: drop-shadow(0 5px 12px rgba(0,0,0,0.15));
 }
 
 .logo-text {
@@ -518,7 +518,7 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Satisfy', 'Kaushan Script', cursive, sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.95rem;
     font-weight: 400;
     letter-spacing: 0.02em;
     color: #5a5a5a;
