@@ -393,18 +393,16 @@ input, select, textarea {
     flex-direction: column !important;
     align-items: center !important;
     z-index: 1002;
-    transition: var(--transition-smooth);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
     overflow: visible;
     gap: 3px !important;
 }
-
-
 
 .logo-svg, .logo-img {
     height: 95px !important;
     width: auto !important;
     object-fit: contain;
-    transition: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
     position: relative !important;
     opacity: 1 !important;
     z-index: 2 !important;
@@ -418,7 +416,7 @@ input, select, textarea {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transition: var(--transition-smooth);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
     position: relative !important;
     z-index: 2 !important;
 }
@@ -426,6 +424,36 @@ input, select, textarea {
 /* Scrolled state transitions for header logo */
 .app-header.scrolled {
     height: 80px; /* Compress header height on scroll */
+}
+
+.app-header.scrolled .logo {
+    flex-direction: row !important;
+    gap: 10px !important;
+    top: 16px !important;
+    align-items: center !important;
+}
+
+.app-header.scrolled .logo-img {
+    height: 48px !important;
+}
+
+.app-header.scrolled .logo-text {
+    align-items: flex-start !important;
+    text-align: left !important;
+}
+
+.app-header.scrolled .brand-name {
+    font-size: 1.12rem !important;
+    line-height: 0.95 !important;
+    text-align: left !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.app-header.scrolled .brand-name .brand-accent {
+    font-size: 1.25rem !important;
+    display: block !important;
+    margin-top: 0px !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* Standard navbar logo size and positioning for admin pages */
@@ -2844,6 +2872,33 @@ hr {
 
     .brand-name .brand-accent {
         font-size: 1.25rem !important;
+    }
+
+    /* Scrolled Mobile Logo Row Collapse */
+    .app-header.scrolled .logo {
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .app-header.scrolled .logo-img {
+        height: 38px !important;
+    }
+
+    .app-header.scrolled .logo-text {
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+
+    .app-header.scrolled .brand-name {
+        font-size: 0.85rem !important;
+        line-height: 0.95 !important;
+    }
+
+    .app-header.scrolled .brand-name .brand-accent {
+        font-size: 0.98rem !important;
     }
     
     .thai-word {
