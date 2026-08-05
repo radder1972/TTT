@@ -5220,6 +5220,87 @@ hr {
 }
 
 /* ==========================================================================
+   18. DECORATIVE FLOWER BED AT THE BOTTOM OF THE PAGE
+   ========================================================================== */
+.flower-bed-container {
+    position: relative;
+    width: 100%;
+    height: 60px; /* Compact height */
+    margin-top: 40px;
+    margin-bottom: -15px; /* Pull footer up so base layer overlaps the black bar by exactly 1/4 of their diameter */
+    overflow: visible !important; /* Allow stacked layers to render upwards without clipping */
+    pointer-events: auto; /* Enable hover sway interaction */
+    z-index: 11; /* Sit on top of the footer bottom (which has z-index: 10) */
+}
+
+.bed-flower {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
+    opacity: 0.88;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), bottom 0.6s ease;
+}
+
+/* Left Side Stacking Stack (Elevated towards the left edge) */
+.bf-1 { left: 0%; width: 85px; bottom: 0px; transform: rotate(15deg); }
+.bf-2 { left: 3%; width: 75px; bottom: -2px; transform: rotate(-25deg); }
+.bf-3 { left: 7%; width: 85px; bottom: 1px; transform: rotate(35deg); }
+.bf-4 { left: 11%; width: 75px; bottom: -1px; transform: rotate(-10deg); }
+/* Left Second Layer (Stacked on top of base) */
+.bf-5 { left: 1.5%; width: 70px; bottom: 25px; transform: rotate(45deg); z-index: 2; }
+.bf-6 { left: 5.5%; width: 65px; bottom: 22px; transform: rotate(-15deg); z-index: 2; }
+.bf-7 { left: 9.5%; width: 70px; bottom: 26px; transform: rotate(30deg); z-index: 2; }
+/* Left Third Layer (Highest peak on the far edge) */
+.bf-8 { left: 3.5%; width: 55px; bottom: 46px; transform: rotate(-45deg); z-index: 3; }
+
+/* Center Flow (Single organic layer undulating across the center with 1/4 black bar overlap) */
+.bf-9 { left: 16%; width: 70px; bottom: 0px; transform: rotate(15deg); }
+.bf-10 { left: 21%; width: 65px; bottom: -2px; transform: rotate(-10deg); }
+.bf-11 { left: 26%; width: 70px; bottom: 1px; transform: rotate(20deg); }
+.bf-12 { left: 32%; width: 60px; bottom: -1px; transform: rotate(-15deg); }
+.bf-13 { left: 38%; width: 70px; bottom: 0px; transform: rotate(30deg); }
+.bf-14 { left: 44%; width: 65px; bottom: -2px; transform: rotate(-5deg); }
+.bf-15 { left: 50%; width: 70px; bottom: 1px; transform: rotate(25deg); }
+.bf-16 { left: 56%; width: 60px; bottom: -1px; transform: rotate(-20deg); }
+.bf-17 { left: 62%; width: 70px; bottom: 0px; transform: rotate(15deg); }
+.bf-18 { left: 68%; width: 65px; bottom: -2px; transform: rotate(-10deg); }
+.bf-19 { left: 74%; width: 70px; bottom: 1px; transform: rotate(20deg); }
+.bf-20 { left: 80%; width: 65px; bottom: 0px; transform: rotate(-15deg); }
+
+/* Right Side Stacking Stack (Elevated towards the right edge) */
+.bf-21 { right: 0%; width: 85px; bottom: 0px; transform: rotate(-15deg); }
+.bf-22 { right: 3%; width: 75px; bottom: -2px; transform: rotate(25deg); }
+.bf-23 { right: 7%; width: 85px; bottom: 1px; transform: rotate(-35deg); }
+.bf-24 { right: 11%; width: 75px; bottom: -1px; transform: rotate(10deg); }
+/* Right Second Layer (Stacked on top of base) */
+.bf-25 { right: 1.5%; width: 70px; bottom: 25px; transform: rotate(-45deg); z-index: 2; }
+.bf-26 { right: 5.5%; width: 65px; bottom: 22px; transform: rotate(15deg); z-index: 2; }
+.bf-27 { right: 9.5%; width: 70px; bottom: 26px; transform: rotate(-30deg); z-index: 2; }
+/* Right Third Layer (Highest peak on the far edge) */
+.bf-28 { right: 3.5%; width: 55px; bottom: 46px; transform: rotate(45deg); z-index: 3; }
+
+/* Subtle organic hover sway effect on flower container */
+.flower-bed-container:hover .bed-flower {
+    transform: translateY(-4px) rotate(5deg);
+}
+.flower-bed-container:hover .bf-1 { transform: rotate(25deg) translateY(-3px); }
+.flower-bed-container:hover .bf-2 { transform: rotate(-20deg) translateY(-2px); }
+.flower-bed-container:hover .bf-3 { transform: rotate(45deg) translateY(-3px); }
+.flower-bed-container:hover .bf-4 { transform: rotate(0deg) translateY(-2px); }
+.flower-bed-container:hover .bf-5 { transform: rotate(55deg) translateY(-4px); }
+.flower-bed-container:hover .bf-6 { transform: rotate(-10deg) translateY(-3px); }
+.flower-bed-container:hover .bf-7 { transform: rotate(40deg) translateY(-3px); }
+.flower-bed-container:hover .bf-8 { transform: rotate(-35deg) translateY(-5px); }
+.flower-bed-container:hover .bf-21 { transform: rotate(-25deg) translateY(-3px); }
+.flower-bed-container:hover .bf-22 { transform: rotate(20deg) translateY(-2px); }
+.flower-bed-container:hover .bf-23 { transform: rotate(-45deg) translateY(-3px); }
+.flower-bed-container:hover .bf-24 { transform: rotate(0deg) translateY(-2px); }
+.flower-bed-container:hover .bf-25 { transform: rotate(-55deg) translateY(-4px); }
+.flower-bed-container:hover .bf-26 { transform: rotate(10deg) translateY(-3px); }
+.flower-bed-container:hover .bf-27 { transform: rotate(-40deg) translateY(-3px); }
+.flower-bed-container:hover .bf-28 { transform: rotate(35deg) translateY(-5px); }
+
+/* ==========================================================================
    19. DECORATIVE FLOWER CORNER UNDER HERO CTA / VISUAL
    ========================================================================== */
 .flower-corner-hero {
