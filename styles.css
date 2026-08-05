@@ -630,6 +630,24 @@ input, select, textarea {
     pointer-events: none; /* Click-through so users can still click the cards underneath */
 }
 
+.photo-watermark-overlay {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 36px !important;
+    height: auto !important;
+    z-index: 9;
+    opacity: 0.85;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15));
+}
+
+.watermark-overlay-img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+
 .floating-brand-badge:hover {
     transform: translateY(-2px) scale(1.02);
 }
