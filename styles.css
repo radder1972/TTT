@@ -684,23 +684,12 @@ input, select, textarea {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
     font-size: 1.1rem; /* Perfectly sized for the horizontal label */
     font-weight: 800; /* Extra bold */
-    color: var(--thai-blue);
+    color: #5a5a5a !important;
     letter-spacing: 0.01em;
     display: inline-flex;
-    flex-direction: row; /* Side-by-side */
     align-items: center;
-    gap: 4px;
     line-height: 1;
     text-shadow: none; /* No shadow needed on solid background */
-}
-
-.brand-name-badge .thai-word {
-    font-family: inherit;
-    font-style: normal; /* Not cursive/italic */
-    font-size: 1.15rem; /* Even larger */
-    font-weight: 800; /* Extra bold */
-    margin: 0;
-    text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
 /* Main Navigation Menu */
@@ -2665,14 +2654,7 @@ hr {
 
     .brand-name-badge {
         font-size: 0.8rem !important;
-        flex-direction: row !important;
         align-items: center !important;
-        gap: 3px !important;
-        text-shadow: none !important;
-    }
-
-    .brand-name-badge .thai-word {
-        font-size: 0.85rem !important;
         text-shadow: none !important;
     }
 
