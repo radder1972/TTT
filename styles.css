@@ -512,20 +512,33 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.45rem;
+    font-size: 1.7rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     color: #5a5a5a;
-    line-height: 0.9;
+    line-height: 1.1;
     display: block;
     text-align: center;
+    white-space: nowrap;
 }
 
-.brand-name .brand-accent {
-    color: #d4a359 !important; /* Premium plumeria gold */
-    font-size: 1.65rem;
+.flower-i {
+    position: relative;
+    display: inline-block;
+}
+
+.flower-i::after {
+    content: '';
+    position: absolute;
+    top: -5px; /* Perfect height above dotless i stem */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    background-image: url('assets/logo-header.png');
+    background-size: contain;
+    background-repeat: no-repeat;
     display: block;
-    margin-top: 1px;
 }
 
 .thai-word {
@@ -2793,12 +2806,14 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.3rem !important;
-        line-height: 0.9 !important;
+        font-size: 1.45rem !important;
+        line-height: 1.1 !important;
     }
 
-    .brand-name .brand-accent {
-        font-size: 1.5rem !important;
+    .brand-name .flower-i::after {
+        width: 7px !important;
+        height: 7px !important;
+        top: -3px !important;
     }
     
     .thai-word {
@@ -2866,12 +2881,14 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.05rem !important;
-        line-height: 0.9 !important;
+        font-size: 1.15rem !important;
+        line-height: 1.1 !important;
     }
 
-    .brand-name .brand-accent {
-        font-size: 1.25rem !important;
+    .brand-name .flower-i::after {
+        width: 6px !important;
+        height: 6px !important;
+        top: -3px !important;
     }
 
     /* Scrolled Mobile Logo Row Collapse */
@@ -2893,12 +2910,14 @@ hr {
     }
 
     .app-header.scrolled .brand-name {
-        font-size: 0.85rem !important;
-        line-height: 0.95 !important;
+        font-size: 0.95rem !important;
+        line-height: 1.1 !important;
     }
 
-    .app-header.scrolled .brand-name .brand-accent {
-        font-size: 0.98rem !important;
+    .app-header.scrolled .brand-name .flower-i::after {
+        width: 5px !important;
+        height: 5px !important;
+        top: -2px !important;
     }
     
     .thai-word {
