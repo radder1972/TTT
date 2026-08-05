@@ -5411,7 +5411,7 @@ hr {
    ========================================================================== */
 .flower-corner-page-tl {
     position: fixed; /* Fixed viewport layout directly under nav Home link */
-    top: 48px; /* High enough to overlap the title bar beautifully */
+    top: 25px; /* Shifted up to overlap the white title bar halfway */
     left: calc(50% - 595px); /* Perfectly aligned with the Home link's horizontal position */
     width: 200px;
     height: 200px;
@@ -5461,7 +5461,7 @@ hr {
 /* Add responsive adjustments for smaller devices */
 @media (max-width: 768px) {
     .flower-corner-page-tl {
-        top: 45px;
+        top: 25px;
         left: 20px;
         width: 130px;
         height: 130px;
