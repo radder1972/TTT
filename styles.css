@@ -395,10 +395,10 @@ input, select, textarea {
     z-index: 1002;
     gap: 4px !important;
     transition: var(--transition-smooth);
-    overflow: visible; /* Allow logo image to peek below */
+    overflow: visible;
     flex-direction: column !important;
     align-items: center !important;
-    top: 8px !important;
+    top: 4px !important;
     transform: translate(-50%, 0) !important;
 }
 
@@ -443,17 +443,17 @@ input, select, textarea {
 }
 
 .logo-svg, .logo-img {
-    height: 110px !important;
+    height: 130px !important;
     width: auto !important;
     object-fit: contain;
-    transition: var(--transition-smooth);\
+    transition: var(--transition-smooth);
     position: relative !important;
     opacity: 1 !important;
     z-index: 2 !important;
     pointer-events: auto !important;
-    /* Full logo overflows below the header bar */
-    margin-top: 2px;
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.15));
+    /* Large flower overflows well below the header bar */
+    margin-top: 0;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
 }
 
 .logo:hover .logo-img {
@@ -531,12 +531,12 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.55rem;
+    font-size: 1.3rem;
     font-weight: 400;
     font-style: italic;
     letter-spacing: 0.01em;
-    color: var(--thai-blue);
-    line-height: 1.05;
+    color: #5a5a5a;
+    line-height: 1;
     display: block;
 }
 
@@ -544,13 +544,13 @@ input, select, textarea {
     font-family: 'Outfit', 'Inter', sans-serif !important;
     font-style: normal;
     font-weight: 900;
-    font-size: 1.25rem;
-    letter-spacing: 0.18em;
+    font-size: 1.05rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--thai-blue) !important;
-    -webkit-text-fill-color: var(--thai-blue) !important;
+    color: #5a5a5a !important;
+    -webkit-text-fill-color: #5a5a5a !important;
     display: block;
-    margin-top: -2px;
+    margin-top: 1px;
 }
 
 .brand-sub {
