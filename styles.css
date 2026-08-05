@@ -374,6 +374,7 @@ input, select, textarea {
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-glass);
     transition: var(--transition-smooth);
+    overflow: visible; /* Allow logo to overflow below header */
 }
 
 .header-container {
@@ -394,6 +395,7 @@ input, select, textarea {
     z-index: 1002;
     gap: 12px !important;
     transition: var(--transition-smooth);
+    overflow: visible; /* Allow logo image to peek below */
 }
 
 .logo::before {
@@ -437,14 +439,17 @@ input, select, textarea {
 }
 
 .logo-svg, .logo-img {
-    height: 48px !important;
+    height: 72px !important;
     width: auto !important;
     object-fit: contain;
     transition: var(--transition-smooth);
-    position: static !important;
+    position: relative !important;
     opacity: 1 !important;
     z-index: 2 !important;
     pointer-events: auto !important;
+    /* Let logo overflow below the navbar */
+    margin-bottom: -18px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
 }
 
 .logo:hover .logo-img {
@@ -515,30 +520,32 @@ input, select, textarea {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    line-height: 1;
+    gap: 0;
 }
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 2.6rem; /* Even larger logo text */
-    font-weight: 800; /* Extra bold brush script */
+    font-size: 1.55rem;
+    font-weight: 400;
+    font-style: italic;
     letter-spacing: 0.01em;
     color: var(--thai-blue);
-    line-height: 1.1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    line-height: 1.05;
+    display: block;
 }
 
 .thai-word {
-    font-family: inherit;
-    font-style: normal; /* Not cursive/italic */
-    font-weight: 800; /* Extra bold */
-    font-size: 2.7rem; /* Even larger */
-    color: var(--thai-red) !important;
-    -webkit-text-fill-color: var(--thai-red) !important;
-    display: inline-block;
-    transform: rotate(-3deg) translateY(1px);
-    margin-left: 2px;
+    font-family: 'Outfit', 'Inter', sans-serif !important;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--thai-blue) !important;
+    -webkit-text-fill-color: var(--thai-blue) !important;
+    display: block;
+    margin-top: -2px;
 }
 
 .brand-sub {
