@@ -5567,49 +5567,43 @@ hr {
    ========================================================================== */
 .flower-corner-contact-tr {
     position: absolute;
-    top: -20px;
-    right: -20px;
+    top: -45px;
+    right: -45px;
     display: flex;
     z-index: 5;
     pointer-events: none;
+    width: 140px;
+    height: 140px;
 }
 .flower-corner-contact-tr img {
     position: absolute;
-    width: 38px;
-    height: 38px;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.16));
 }
-.flower-corner-contact-tr .fc-1 { top: 0; right: 0; width: 44px; height: 44px; }
-.flower-corner-contact-tr .fc-2 { top: -12px; right: 28px; transform: rotate(15deg); }
-.flower-corner-contact-tr .fc-3 { top: 26px; right: -10px; transform: rotate(-25deg); }
+.flower-corner-contact-tr .fc-1 { top: 25px; right: 25px; width: 76px; height: 76px; }
+.flower-corner-contact-tr .fc-2 { top: -2px; right: 80px; width: 56px; height: 56px; transform: rotate(15deg); }
+.flower-corner-contact-tr .fc-3 { top: 80px; right: 5px; width: 44px; height: 44px; transform: rotate(-25deg); }
 
 .flower-corner-contact-bl {
     position: absolute;
-    bottom: -20px;
-    left: -20px;
+    bottom: -45px;
+    left: -45px;
     display: flex;
     z-index: 5;
     pointer-events: none;
+    width: 140px;
+    height: 140px;
 }
 .flower-corner-contact-bl img {
     position: absolute;
-    width: 38px;
-    height: 38px;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.16));
 }
-.flower-corner-contact-bl .fc-1 { bottom: 0; left: 0; width: 44px; height: 44px; }
-.flower-corner-contact-bl .fc-2 { bottom: -12px; left: 28px; transform: rotate(-15deg); }
-.flower-corner-contact-bl .fc-3 { bottom: 26px; left: -10px; transform: rotate(25deg); }
+.flower-corner-contact-bl .fc-1 { bottom: 25px; left: 25px; width: 76px; height: 76px; }
+.flower-corner-contact-bl .fc-2 { bottom: -2px; left: 80px; width: 56px; height: 56px; transform: rotate(-15deg); }
+.flower-corner-contact-bl .fc-3 { bottom: 80px; left: 5px; width: 44px; height: 44px; transform: rotate(25deg); }
 
 .contact-storefront-card {
-    margin: 0 auto;
-    width: 100%;
-    max-width: 460px;
-    transform: rotate(1deg);
-    transition: transform 0.6s ease;
-}
-.contact-storefront-card:hover {
-    transform: rotate(-1deg) scale(1.02);
+    max-width: 290px !important;
+    margin: 10px auto !important;
 }
 
 
