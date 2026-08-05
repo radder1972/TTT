@@ -5183,4 +5183,58 @@ hr {
     }
 }
 
+/* ==========================================================================
+   18. DECORATIVE FLOWER BED AT THE BOTTOM OF THE PAGE
+   ========================================================================== */
+.flower-bed-container {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    margin-top: 60px;
+    margin-bottom: -40px; /* Pull footer up slightly to transition organic boundary */
+    overflow: hidden;
+    pointer-events: auto; /* Allow mouse hover interaction */
+    z-index: 1;
+}
+
+.bed-flower {
+    position: absolute;
+    bottom: -20px;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+    opacity: 0.85;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), bottom 0.6s ease;
+}
+
+/* Overlapping flower positions and rotations across the base layout */
+.bf-1 { left: 4%; width: 65px; transform: rotate(15deg); }
+.bf-2 { left: 11%; width: 50px; transform: rotate(-10deg) translateY(10px); opacity: 0.7; }
+.bf-3 { left: 18%; width: 75px; transform: rotate(45deg); }
+.bf-4 { left: 27%; width: 55px; transform: rotate(-25deg) translateY(5px); }
+.bf-5 { left: 36%; width: 70px; transform: rotate(30deg); }
+.bf-6 { left: 45%; width: 50px; transform: rotate(-15deg) translateY(8px); opacity: 0.75; }
+.bf-7 { left: 53%; width: 80px; transform: rotate(60deg); }
+.bf-8 { left: 62%; width: 60px; transform: rotate(-35deg) translateY(3px); }
+.bf-9 { left: 70%; width: 70px; transform: rotate(20deg); }
+.bf-10 { left: 79%; width: 50px; transform: rotate(-5deg) translateY(10px); opacity: 0.7; }
+.bf-11 { left: 86%; width: 75px; transform: rotate(40deg); }
+.bf-12 { left: 93%; width: 55px; transform: rotate(-20deg) translateY(5px); }
+
+/* Wind sway micro-animation trigger on hover */
+.flower-bed-container:hover .bed-flower {
+    bottom: -15px;
+}
+.flower-bed-container:hover .bf-1 { transform: rotate(25deg) scale(1.03); }
+.flower-bed-container:hover .bf-2 { transform: rotate(-5deg) translateY(6px); }
+.flower-bed-container:hover .bf-3 { transform: rotate(55deg) scale(1.02); }
+.flower-bed-container:hover .bf-4 { transform: rotate(-15deg) translateY(2px); }
+.flower-bed-container:hover .bf-5 { transform: rotate(40deg) scale(1.03); }
+.flower-bed-container:hover .bf-6 { transform: rotate(-5deg) translateY(4px); }
+.flower-bed-container:hover .bf-7 { transform: rotate(70deg) scale(1.02); }
+.flower-bed-container:hover .bf-8 { transform: rotate(-25deg) translateY(1px); }
+.flower-bed-container:hover .bf-9 { transform: rotate(30deg) scale(1.03); }
+.flower-bed-container:hover .bf-10 { transform: rotate(5deg) translateY(6px); }
+.flower-bed-container:hover .bf-11 { transform: rotate(50deg) scale(1.02); }
+.flower-bed-container:hover .bf-12 { transform: rotate(-10deg) translateY(2px); }
+
 
