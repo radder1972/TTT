@@ -517,9 +517,9 @@ input, select, textarea {
 }
 
 .brand-name {
-    font-family: 'Satisfy', 'Kaushan Script', cursive, sans-serif;
-    font-size: 1.95rem;
-    font-weight: 400;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
     letter-spacing: 0.02em;
     color: #5a5a5a;
     line-height: 1.1;
