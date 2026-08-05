@@ -393,9 +393,13 @@ input, select, textarea {
     flex-direction: row !important;
     align-items: center;
     z-index: 1002;
-    gap: 12px !important;
+    gap: 4px !important;
     transition: var(--transition-smooth);
     overflow: visible; /* Allow logo image to peek below */
+    flex-direction: column !important;
+    align-items: center !important;
+    top: 8px !important;
+    transform: translate(-50%, 0) !important;
 }
 
 .logo::before {
@@ -439,7 +443,7 @@ input, select, textarea {
 }
 
 .logo-svg, .logo-img {
-    height: 72px !important;
+    height: 78px !important;
     width: auto !important;
     object-fit: contain;
     transition: var(--transition-smooth);
@@ -447,9 +451,9 @@ input, select, textarea {
     opacity: 1 !important;
     z-index: 2 !important;
     pointer-events: auto !important;
-    /* Let logo overflow below the navbar */
-    margin-bottom: -18px;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+    /* Logo overflows below the header bar */
+    margin-top: 4px;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
 }
 
 .logo:hover .logo-img {
@@ -522,6 +526,7 @@ input, select, textarea {
     text-align: center;
     line-height: 1;
     gap: 0;
+    margin-bottom: 2px;
 }
 
 .brand-name {
