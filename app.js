@@ -21,16 +21,113 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function animateFlower(flower, leftPos, size, duration, delay = 0) {
+        let posY = -50;
+        let rotation = Math.random() * 360;
+        const rotationSpeed = (Math.random() * 2 - 1) * 0.7; // Degrees per frame
+        
+        const fps = 60;
+        const speedY = (window.innerHeight + 100) / (duration * fps);
+        
+        const swayAmount = 15 + Math.random() * 25;
+        const swaySpeed = 0.015 + Math.random() * 0.02;
+        let swayPhase = Math.random() * Math.PI * 2;
+        
+        flower.style.position = 'fixed';
+        flower.style.left = `${leftPos}%`;
+        flower.style.width = `${size}px`;
+        flower.style.height = `${size}px`;
+        flower.style.transform = `translateY(${posY}px) rotate(${rotation}deg)`;
+        flower.style.opacity = '0';
+        
+        let start = null;
+        
+        function step(timestamp) {
+            if (!start) start = timestamp;
+            const elapsed = timestamp - start;
+            
+            if (elapsed < delay * 1000) {
+                requestAnimationFrame(step);
+                return;
+            }
+            
+            // Fade in initially
+            const targetOp = parseFloat(flower.dataset.targetOpacity) || 0.8;
+            if (posY < 50) {
+                flower.style.opacity = Math.min(1, (posY + 50) / 100) * targetOp;
+            } else {
+                flower.style.opacity = targetOp;
+            }
+            
+            posY += speedY;
+            swayPhase += swaySpeed;
+            const currentSway = Math.sin(swayPhase) * swayAmount;
+            rotation += rotationSpeed;
+            
+            const screenWidth = window.innerWidth;
+            const leftPixel = (leftPos / 100) * screenWidth + currentSway;
+            
+            flower.style.transform = `translate(${currentSway}px, ${posY}px) rotate(${rotation}deg)`;
+            
+            // Check collision with the footer flower bed
+            const bed = document.querySelector('.flower-bed-container');
+            const footer = document.querySelector('.app-footer');
+            let collisionY = window.innerHeight + 50;
+            let canLand = false;
+            
+            if (footer && bed) {
+                const footerRect = footer.getBoundingClientRect();
+                
+                // Check if the top of the footer is visible inside the viewport
+                if (footerRect.top < window.innerHeight && footerRect.top > 0) {
+                    const stackOffset = parseFloat(flower.dataset.stackOffset) || 0;
+                    collisionY = footerRect.top - stackOffset;
+                    canLand = true;
+                }
+            }
+            
+            // If the flower hits the collision line
+            if (posY + size >= collisionY) {
+                if (canLand && bed) {
+                    // Convert from fixed viewport styling to absolute positioning inside the flower-bed-container
+                    flower.className = 'bed-flower landed-pile-flower';
+                    flower.style.position = 'absolute';
+                    
+                    const stackOffset = parseFloat(flower.dataset.stackOffset) || 0;
+                    
+                    flower.style.transform = `rotate(${rotation}deg)`;
+                    flower.style.left = `${(leftPixel / screenWidth) * 100}%`; // Responsive percentage-based X position
+                    flower.style.bottom = `${stackOffset}px`; // Vertical piling height offset
+                    flower.style.top = 'auto'; // Reset top
+                    
+                    bed.appendChild(flower);
+                    
+                    // Cap landed flowers to prevent DOM clutter (max 40)
+                    const landed = bed.querySelectorAll('.landed-pile-flower');
+                    if (landed.length > 40) {
+                        landed[0].remove();
+                    }
+                } else {
+                    flower.remove();
+                }
+            } else {
+                requestAnimationFrame(step);
+            }
+        }
+        
+        requestAnimationFrame(step);
+    }
+
     function spawnSingleFlower() {
         const container = document.body;
         // Limit active falling flowers (max 25 concurrently in the air)
-        if (document.querySelectorAll('.falling-flower').length >= 25) {
+        if (document.querySelectorAll('.falling-flower-js').length >= 25) {
             return;
         }
 
         const flower = document.createElement('img');
         flower.src = 'assets/logo.svg';
-        flower.className = 'falling-flower';
+        flower.className = 'falling-flower-js';
         flower.alt = '';
         
         const leftPos = getBiasedLeftPosition();
@@ -38,18 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const duration = 12 + Math.random() * 10; // 12s to 22s
         const opacity = 0.45 + Math.random() * 0.5;
         
-        flower.style.left = `${leftPos}%`;
-        flower.style.width = `${size}px`;
-        flower.style.height = `${size}px`;
-        flower.style.animationDuration = `${duration}s`;
-        flower.style.animationDelay = '0s';
-        flower.style.opacity = opacity;
-        
-        flower.addEventListener('animationend', () => {
-            flower.remove();
-        });
+        flower.dataset.targetOpacity = opacity;
+        // Random stacking height offset (0px to 35px) to make flowers stack vertically
+        flower.dataset.stackOffset = Math.floor(Math.random() * 35);
         
         container.appendChild(flower);
+        animateFlower(flower, leftPos, size, duration, 0);
     }
 
     function createFallingFlowers(count = 12) {
@@ -58,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < count; i++) {
             const flower = document.createElement('img');
             flower.src = 'assets/logo.svg';
-            flower.className = 'falling-flower';
+            flower.className = 'falling-flower-js';
             flower.alt = '';
             
             const leftPos = getBiasedLeftPosition();
@@ -67,18 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const delay = Math.random() * 10;
             const opacity = 0.45 + Math.random() * 0.5;
             
-            flower.style.left = `${leftPos}%`;
-            flower.style.width = `${size}px`;
-            flower.style.height = `${size}px`;
-            flower.style.animationDuration = `${duration}s`;
-            flower.style.animationDelay = `${delay}s`;
-            flower.style.opacity = opacity;
-            
-            flower.addEventListener('animationend', () => {
-                flower.remove();
-            });
+            flower.dataset.targetOpacity = opacity;
+            flower.dataset.stackOffset = Math.floor(Math.random() * 35);
             
             container.appendChild(flower);
+            animateFlower(flower, leftPos, size, duration, delay);
         }
     }
 
@@ -534,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Trigger a fresh shower of blossoms when returning to home page
         if (id === 'home') {
-            const activeBlossoms = document.querySelectorAll('.falling-flower').length;
+            const activeBlossoms = document.querySelectorAll('.falling-flower-js').length;
             if (activeBlossoms < 10) {
                 createFallingFlowers();
             }
