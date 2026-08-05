@@ -7,26 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     // FALLING LILAVADI BLOSSOMS EFFECT
     // --------------------------------------------------------------------------
-    const landedFlowersList = [];
-    const MAX_LANDED_FLOWERS = 180; // Dense stack limit to prevent browser slowing down
-
-    function registerLandedFlower(flower) {
-        flower.classList.add('landed-blossom');
-        landedFlowersList.push(flower);
-        
-        // Remove the oldest landed blossom if we exceed the high density ceiling
-        if (landedFlowersList.length > MAX_LANDED_FLOWERS) {
-            const oldest = landedFlowersList.shift();
-            if (oldest) {
-                oldest.style.transition = 'opacity 5s ease';
-                oldest.style.opacity = '0';
-                setTimeout(() => {
-                    oldest.remove();
-                }, 5000);
-            }
-        }
-    }
-
     function getBiasedLeftPosition() {
         const rand = Math.random();
         if (rand < 0.45) {
@@ -44,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function spawnSingleFlower() {
         const container = document.body;
         // Limit active falling flowers (max 25 concurrently in the air)
-        if (document.querySelectorAll('.falling-flower:not(.landed-blossom)').length >= 25) {
+        if (document.querySelectorAll('.falling-flower').length >= 25) {
             return;
         }
 
@@ -58,19 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const duration = 12 + Math.random() * 10; // 12s to 22s
         const opacity = 0.45 + Math.random() * 0.5;
         
-        // Flat landing coordinate (exactly overlapping the top edge of the black footer bar)
-        const landingY = 95.2;
-        
         flower.style.left = `${leftPos}%`;
         flower.style.width = `${size}px`;
         flower.style.height = `${size}px`;
         flower.style.animationDuration = `${duration}s`;
         flower.style.animationDelay = '0s';
         flower.style.opacity = opacity;
-        flower.style.setProperty('--landing-y', `${landingY}vh`);
         
         flower.addEventListener('animationend', () => {
-            registerLandedFlower(flower);
+            flower.remove();
         });
         
         container.appendChild(flower);
@@ -91,19 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const delay = Math.random() * 10;
             const opacity = 0.45 + Math.random() * 0.5;
             
-            // Flat landing coordinate
-            const landingY = 95.2;
-            
             flower.style.left = `${leftPos}%`;
             flower.style.width = `${size}px`;
             flower.style.height = `${size}px`;
             flower.style.animationDuration = `${duration}s`;
             flower.style.animationDelay = `${delay}s`;
             flower.style.opacity = opacity;
-            flower.style.setProperty('--landing-y', `${landingY}vh`);
             
             flower.addEventListener('animationend', () => {
-                registerLandedFlower(flower);
+                flower.remove();
             });
             
             container.appendChild(flower);
