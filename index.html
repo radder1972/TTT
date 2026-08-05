@@ -88,7 +88,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Satisfy&family=Caveat:wght@700&family=Kaushan+Script&family=Yatra+One&display=swap" rel="stylesheet">
     
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=4.2.142">
+    <link rel="stylesheet" href="styles.css?v=4.2.143">
     
     <!-- Favicon / Meta -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
@@ -358,109 +358,7 @@
             </div>
         </section>
 
-        <!-- SECTION: INTERACTIVE SIMULATOR -->
-        <section id="simulator" class="app-section" style="display: none !important;">
-            <div class="container">
-                <div class="section-header-illustration-layout">
-                    <img src="assets/illustration-simulator.svg" class="section-page-illustration" alt="AI Simulator Illustration">
-                    <div class="section-header-text-layout">
-                        <span class="section-tag">Experience It Yourself</span>
-                        <h2>AI Translation Simulator</h2>
-                        <p class="section-lead-sub">Test how the True Time Thai W4 Pro translates in real-time conversations in Pattaya. Choose a scenario and start the experience.</p>
-                    </div>
-                </div>
 
-                <div class="simulator-layout" id="simulator-layout-container">
-                    <!-- Scenario Chooser -->
-                    <div class="simulator-scenarios">
-                        <h3>Choose a Scenario</h3>
-                        <div class="scenario-list">
-                            <button class="scenario-card glass active" data-scenario="market" id="btn-scenario-market">
-                                <span class="scenario-emoji">
-                                    <svg class="icon-brand icon-brand-lg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                                        <path d="M3 6h18M16 10a4 4 0 0 1-8 0" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
-                                    </svg>
-                                </span>
-                                <div class="scenario-details">
-                                    <h4>Lanpho Naklua Fish Market</h4>
-                                    <p>Ordering seafood and negotiating with a local fishmonger.</p>
-                                </div>
-                            </button>
-                            <button class="scenario-card glass" data-scenario="taxi" id="btn-scenario-taxi">
-                                <span class="scenario-emoji">
-                                    <svg class="icon-brand icon-brand-lg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="2" y="10" width="20" height="9" rx="2" stroke="var(--neon-cyan)" stroke-width="2" stroke-linecap="round" fill="none"/>
-                                        <circle cx="6" cy="19" r="2.5" fill="var(--thai-blue)" stroke="var(--thai-gold)" stroke-width="1.5"/>
-                                        <circle cx="18" cy="19" r="2.5" fill="var(--thai-blue)" stroke="var(--thai-gold)" stroke-width="1.5"/>
-                                        <path d="M4 10V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5" stroke="var(--neon-cyan)" stroke-width="2" fill="none"/>
-                                        <path d="M14 6h4" stroke="var(--thai-red)" stroke-width="2"/>
-                                    </svg>
-                                </span>
-                                <div class="scenario-details">
-                                    <h4>Taxi to Walking Street</h4>
-                                    <p>Explaining directions to a Songthaew driver and agreeing on a price.</p>
-                                </div>
-                            </button>
-                            <button class="scenario-card glass" data-scenario="resort" id="btn-scenario-resort">
-                                <span class="scenario-details">
-                                    <span class="scenario-emoji">
-                                        <svg class="icon-brand icon-brand-lg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3 21h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14" stroke="var(--neon-cyan)" stroke-width="2" fill="none"/>
-                                            <path d="M9 9h2M9 13h2M13 9h2M13 13h2" stroke="var(--thai-gold)" stroke-width="1.5" stroke-linecap="round"/>
-                                            <path d="M12 5V2" stroke="var(--thai-red)" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
-                                    </span>
-                                    <h4>Checking in at Jomtien Resort</h4>
-                                    <p>Talking with the receptionist about hotel amenities and a security deposit.</p>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Simulator Chat Interface -->
-                    <div class="simulator-chatbox glass" id="sim-chatbox-device">
-                        <div class="chatbox-header">
-                            <div class="chatbox-title">
-                                <span class="status-indicator blinking" id="simulator-status-indicator"></span>
-                                <span id="simulator-title-text">Conversation at the Lanpho Naklua Market</span>
-                            </div>
-                            <div class="chatbox-device">
-                                <button type="button" class="btn-sim-sound" id="btn-sim-sound" title="Mute/Unmute Sound" aria-label="Mute/Unmute sound">
-                                    <span id="sim-sound-icon">🔊</span>
-                                </button>
-                                <span class="device-badge" id="sim-device-badge">🎧 Handsfree Mode Active</span>
-                            </div>
-                        </div>
-
-                        <!-- Chat Messages Display -->
-                        <div class="chatbox-messages" id="simulator-messages">
-                            <!-- Dynamically generated by app.js -->
-                        </div>
-
-                        <!-- Chat Translation Overlay / Action -->
-                        <div class="chatbox-controls">
-                            <!-- Voice Waveform Visualizer in AI status bar -->
-                            <div class="ai-status-bar" id="simulator-ai-status" style="display: none;">
-                                <div class="visualizer-container">
-                                    <span class="waveform-bar bar-1"></span>
-                                    <span class="waveform-bar bar-2"></span>
-                                    <span class="waveform-bar bar-3"></span>
-                                    <span class="waveform-bar bar-4"></span>
-                                    <span class="waveform-bar bar-5"></span>
-                                </div>
-                                <span id="simulator-ai-status-text">Timekettle AI is translating speech...</span>
-                            </div>
-                            <!-- Dynamic Choice reply options buttons will be generated here -->
-                            <div class="control-actions" id="simulator-choices">
-                                <button class="btn btn-neon btn-sim-choice" id="simulator-next-btn">Start Conversation</button>
-                                <button class="btn btn-outline" id="simulator-reset-btn">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- SECTION: BOOKING WIZARD -->
         <section id="booking" class="app-section">
@@ -1618,7 +1516,7 @@
         
         <div class="footer-bottom">
             <div class="container bottom-container">
-                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.142</span></p>
+                <p>&copy; 2026 True Time Thai. All rights reserved. <span style="opacity: 0.5; margin-left: 10px; font-size: 0.8rem;">v4.2.143</span></p>
                 <div class="bottom-links">
                     <a href="#hygiene">Hygiene Terms</a>
                     <a href="#pricing">Rental Terms</a>
@@ -1681,6 +1579,6 @@
     <!-- Supabase Client Library CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App JavaScript -->
-    <script src="app.js?v=4.2.142"></script>
+    <script src="app.js?v=4.2.143"></script>
 </body>
 </html>
