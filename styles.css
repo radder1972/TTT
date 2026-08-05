@@ -5162,24 +5162,26 @@ hr {
 
 @keyframes fallAndSway {
     0% {
-        transform: translateY(0) rotate(0deg) translateX(0);
+        transform: translateY(-5vh) rotate(0deg) translateX(0);
         opacity: 0;
     }
-    10% {
+    8% {
         opacity: 0.85;
     }
     25% {
-        transform: translateY(27vh) rotate(90deg) translateX(25px);
+        transform: translateY(25vh) rotate(90deg) translateX(25px);
     }
     50% {
-        transform: translateY(55vh) rotate(180deg) translateX(-25px);
+        transform: translateY(50vh) rotate(180deg) translateX(-25px);
     }
     75% {
-        transform: translateY(82vh) rotate(270deg) translateX(25px);
+        transform: translateY(75vh) rotate(270deg) translateX(25px);
+    }
+    98% {
+        transform: translateY(94vh) rotate(350deg) translateX(5px);
     }
     100% {
-        transform: translateY(112vh) rotate(360deg) translateX(0px);
-        opacity: 0;
+        transform: translateY(95vh) rotate(360deg) translateX(0px);
     }
 }
 
