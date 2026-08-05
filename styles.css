@@ -398,41 +398,7 @@ input, select, textarea {
     gap: 3px !important;
 }
 
-.logo::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 45%;
-    transform: translate(-50%, -50%);
-    width: 480px;
-    height: 140px;
-    background-image: 
-        url('assets/logo.svg'),
-        url('assets/logo.svg'),
-        url('assets/logo.svg'),
-        url('assets/logo.svg'),
-        url('assets/logo.svg'),
-        url('assets/logo.svg');
-    background-position: 
-        15px 15px,
-        20px 20px,
-        25px 25px,
-        30px 30px,
-        35px 35px,
-        40px 40px;
-    background-size: 
-        140px 140px,
-        120px 120px,
-        100px 100px,
-        80px 80px,
-        60px 60px,
-        40px 40px;
-    background-repeat: no-repeat;
-    opacity: 0.35;
-    z-index: 1;
-    pointer-events: none;
-    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
+
 
 .logo-svg, .logo-img {
     height: 95px !important;
