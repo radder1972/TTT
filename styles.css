@@ -5447,8 +5447,8 @@ hr {
    ========================================================================== */
 .flower-corner-page-tl {
     position: fixed; /* Fixed viewport layout directly under nav Home link */
-    top: 25px; /* Shifted up to overlap the white title bar halfway */
-    left: calc(50% - 635px); /* Shifted left to keep Home text fully readable */
+    top: 45px; /* Shifted down to clear the navigation line */
+    left: calc(50% - 675px); /* Shifted left to keep Home text fully readable */
     width: 200px;
     height: 200px;
     pointer-events: none;
