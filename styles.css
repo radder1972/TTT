@@ -5253,31 +5253,39 @@ hr {
 /* Left Third Layer (Highest peak on the far edge) */
 .bf-8 { left: 3.5%; width: 55px; bottom: 46px; transform: rotate(-45deg); z-index: 3; }
 
-/* Center Flow (Single organic layer undulating across the center with 1/4 black bar overlap) */
-.bf-9 { left: 16%; width: 70px; bottom: 0px; transform: rotate(15deg); }
-.bf-10 { left: 21%; width: 65px; bottom: -2px; transform: rotate(-10deg); }
-.bf-11 { left: 26%; width: 70px; bottom: 1px; transform: rotate(20deg); }
-.bf-12 { left: 32%; width: 60px; bottom: -1px; transform: rotate(-15deg); }
-.bf-13 { left: 38%; width: 70px; bottom: 0px; transform: rotate(30deg); }
-.bf-14 { left: 44%; width: 65px; bottom: -2px; transform: rotate(-5deg); }
-.bf-15 { left: 50%; width: 70px; bottom: 1px; transform: rotate(25deg); }
-.bf-16 { left: 56%; width: 60px; bottom: -1px; transform: rotate(-20deg); }
-.bf-17 { left: 62%; width: 70px; bottom: 0px; transform: rotate(15deg); }
-.bf-18 { left: 68%; width: 65px; bottom: -2px; transform: rotate(-10deg); }
-.bf-19 { left: 74%; width: 70px; bottom: 1px; transform: rotate(20deg); }
-.bf-20 { left: 80%; width: 65px; bottom: 0px; transform: rotate(-15deg); }
+/* Center Flow (Dense, random mixture of sizes and heights for a natural look) */
+.bf-9 { left: 15%; width: 75px; bottom: 0px; transform: rotate(12deg); }
+.bf-10 { left: 18%; width: 50px; bottom: 12px; transform: rotate(-25deg); z-index: 2; }
+.bf-11 { left: 21%; width: 80px; bottom: -3px; transform: rotate(35deg); }
+.bf-12 { left: 25%; width: 60px; bottom: 8px; transform: rotate(-5deg); }
+.bf-13 { left: 28%; width: 70px; bottom: -2px; transform: rotate(18deg); }
+.bf-14 { left: 31%; width: 45px; bottom: 15px; transform: rotate(-40deg); z-index: 2; }
+.bf-15 { left: 34%; width: 85px; bottom: 1px; transform: rotate(20deg); }
+.bf-16 { left: 38%; width: 55px; bottom: -1px; transform: rotate(-15deg); }
+.bf-17 { left: 42%; width: 75px; bottom: 4px; transform: rotate(28deg); }
+.bf-18 { left: 45%; width: 48px; bottom: 16px; transform: rotate(-30deg); z-index: 2; }
+.bf-19 { left: 48%; width: 80px; bottom: -4px; transform: rotate(10deg); }
+.bf-20 { left: 52%; width: 60px; bottom: 6px; transform: rotate(-20deg); }
+.bf-21 { left: 56%; width: 75px; bottom: -2px; transform: rotate(35deg); }
+.bf-22 { left: 60%; width: 52px; bottom: 14px; transform: rotate(-10deg); z-index: 2; }
+.bf-23 { left: 63%; width: 85px; bottom: 2px; transform: rotate(25deg); }
+.bf-24 { left: 67%; width: 50px; bottom: -1px; transform: rotate(-35deg); }
+.bf-25 { left: 71%; width: 70px; bottom: 5px; transform: rotate(15deg); }
+.bf-26 { left: 74%; width: 45px; bottom: 16px; transform: rotate(-20deg); z-index: 2; }
+.bf-27 { left: 77%; width: 80px; bottom: -3px; transform: rotate(30deg); }
+.bf-28 { left: 81%; width: 58px; bottom: 8px; transform: rotate(-15deg); }
 
 /* Right Side Stacking Stack (Elevated towards the right edge) */
-.bf-21 { right: 0%; width: 85px; bottom: 0px; transform: rotate(-15deg); }
-.bf-22 { right: 3%; width: 75px; bottom: -2px; transform: rotate(25deg); }
-.bf-23 { right: 7%; width: 85px; bottom: 1px; transform: rotate(-35deg); }
-.bf-24 { right: 11%; width: 75px; bottom: -1px; transform: rotate(10deg); }
+.bf-29 { right: 0%; width: 85px; bottom: 0px; transform: rotate(-15deg); }
+.bf-30 { right: 3%; width: 75px; bottom: -2px; transform: rotate(25deg); }
+.bf-31 { right: 7%; width: 85px; bottom: 1px; transform: rotate(-35deg); }
+.bf-32 { right: 11%; width: 75px; bottom: -1px; transform: rotate(10deg); }
 /* Right Second Layer (Stacked on top of base) */
-.bf-25 { right: 1.5%; width: 70px; bottom: 25px; transform: rotate(-45deg); z-index: 2; }
-.bf-26 { right: 5.5%; width: 65px; bottom: 22px; transform: rotate(15deg); z-index: 2; }
-.bf-27 { right: 9.5%; width: 70px; bottom: 26px; transform: rotate(-30deg); z-index: 2; }
+.bf-33 { right: 1.5%; width: 70px; bottom: 25px; transform: rotate(-45deg); z-index: 2; }
+.bf-34 { right: 5.5%; width: 65px; bottom: 22px; transform: rotate(15deg); z-index: 2; }
+.bf-35 { right: 9.5%; width: 70px; bottom: 26px; transform: rotate(-30deg); z-index: 2; }
 /* Right Third Layer (Highest peak on the far edge) */
-.bf-28 { right: 3.5%; width: 55px; bottom: 46px; transform: rotate(45deg); z-index: 3; }
+.bf-36 { right: 3.5%; width: 55px; bottom: 46px; transform: rotate(45deg); z-index: 3; }
 
 /* Subtle organic hover sway effect on flower container */
 .flower-bed-container:hover .bed-flower {
@@ -5291,14 +5299,14 @@ hr {
 .flower-bed-container:hover .bf-6 { transform: rotate(-10deg) translateY(-3px); }
 .flower-bed-container:hover .bf-7 { transform: rotate(40deg) translateY(-3px); }
 .flower-bed-container:hover .bf-8 { transform: rotate(-35deg) translateY(-5px); }
-.flower-bed-container:hover .bf-21 { transform: rotate(-25deg) translateY(-3px); }
-.flower-bed-container:hover .bf-22 { transform: rotate(20deg) translateY(-2px); }
-.flower-bed-container:hover .bf-23 { transform: rotate(-45deg) translateY(-3px); }
-.flower-bed-container:hover .bf-24 { transform: rotate(0deg) translateY(-2px); }
-.flower-bed-container:hover .bf-25 { transform: rotate(-55deg) translateY(-4px); }
-.flower-bed-container:hover .bf-26 { transform: rotate(10deg) translateY(-3px); }
-.flower-bed-container:hover .bf-27 { transform: rotate(-40deg) translateY(-3px); }
-.flower-bed-container:hover .bf-28 { transform: rotate(35deg) translateY(-5px); }
+.flower-bed-container:hover .bf-29 { transform: rotate(-25deg) translateY(-3px); }
+.flower-bed-container:hover .bf-30 { transform: rotate(20deg) translateY(-2px); }
+.flower-bed-container:hover .bf-31 { transform: rotate(-45deg) translateY(-3px); }
+.flower-bed-container:hover .bf-32 { transform: rotate(0deg) translateY(-2px); }
+.flower-bed-container:hover .bf-33 { transform: rotate(-55deg) translateY(-4px); }
+.flower-bed-container:hover .bf-34 { transform: rotate(10deg) translateY(-3px); }
+.flower-bed-container:hover .bf-35 { transform: rotate(-40deg) translateY(-3px); }
+.flower-bed-container:hover .bf-36 { transform: rotate(35deg) translateY(-5px); }
 
 /* ==========================================================================
    19. DECORATIVE FLOWER CORNER UNDER HERO CTA / VISUAL
