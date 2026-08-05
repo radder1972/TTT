@@ -545,8 +545,8 @@ input, select, textarea {
 
 /* Custom premium handwriting typography for the Polaroid captions */
 .experience-visual-card .visual-caption {
-    font-family: 'Architects Daughter', 'Segoe Print', 'Segoe Script', 'Brush Script MT', cursive, sans-serif !important;
-    font-size: 0.90rem !important; /* Slightly smaller to fit text beautifully */
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif !important;
+    font-size: 1.05rem !important; /* Adjusted for calligraphic font */
     color: #333333 !important;
     text-align: center;
     font-style: normal !important;
@@ -581,23 +581,23 @@ input, select, textarea {
     bottom: 16px; /* Positioned beautifully in the bottom-left corner */
     left: 16px;
     right: auto; /* Clear right alignment */
-    background: transparent !important; /* Completely transparent background */
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    display: flex;
+    background: rgba(255, 255, 255, 0.9) !important; /* Clean semi-solid white glass backdrop label */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    padding: 6px 14px !important;
+    border-radius: 50px !important; /* Pill style card */
+    display: inline-flex;
     flex-direction: row; /* Horizontal row layout as requested! */
     align-items: center;
     justify-content: flex-start;
-    gap: 12px; /* Gap between logo and text */
-    box-shadow: none !important; /* No container shadow */
+    gap: 8px; /* Gap between logo and text */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
     z-index: 10;
     transition: var(--transition-smooth);
     width: auto; /* Auto width for clean wrapping */
     max-width: 90%;
-    text-align: left;
+    white-space: nowrap; /* Do not wrap text */
     pointer-events: none; /* Click-through so users can still click the cards underneath */
 }
 
@@ -606,11 +606,11 @@ input, select, textarea {
 }
 
 .badge-logo-img {
-    height: 100px; /* Highly prominent and perfectly sized logo for the bottom-left corner */
-    width: 100px;
+    height: 24px; /* Scaled down for horizontal label */
+    width: 24px;
     object-fit: contain;
     transition: var(--transition-smooth);
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22)); /* Gorgeous dropshadow on the transparent logo */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .floating-brand-badge:hover .badge-logo-img {
@@ -619,22 +619,22 @@ input, select, textarea {
 
 .brand-name-badge {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.45rem; /* Even larger badge text */
+    font-size: 1.1rem; /* Perfectly sized for the horizontal label */
     font-weight: 800; /* Extra bold */
     color: var(--thai-blue);
     letter-spacing: 0.01em;
-    display: flex;
-    flex-direction: column; /* Stack True Time and Thai vertically */
-    align-items: flex-start; /* Left-aligned typography */
-    gap: 2px;
-    line-height: 1.1;
-    text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6); /* White glow shadow around text for extreme legibility over photos */
+    display: inline-flex;
+    flex-direction: row; /* Side-by-side */
+    align-items: center;
+    gap: 4px;
+    line-height: 1;
+    text-shadow: none; /* No shadow needed on solid background */
 }
 
 .brand-name-badge .thai-word {
     font-family: inherit;
     font-style: normal; /* Not cursive/italic */
-    font-size: 1.5rem; /* Even larger */
+    font-size: 1.15rem; /* Even larger */
     font-weight: 800; /* Extra bold */
     margin: 0;
     text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95), 0 0 15px rgba(255, 255, 255, 0.6);
@@ -2324,8 +2324,8 @@ hr {
 }
 
 .polaroid-card .polaroid-caption {
-    font-family: 'Architects Daughter', 'Segoe Print', 'Segoe Script', 'Brush Script MT', cursive, sans-serif !important;
-    font-size: 0.95rem !important;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif !important;
+    font-size: 1.05rem !important;
     color: #333333 !important;
     text-align: center;
     font-weight: 700;
@@ -2572,37 +2572,39 @@ hr {
     }
 
     .floating-brand-badge {
-        padding: 0 !important;
+        padding: 4px 10px !important;
         bottom: 12px !important;
         left: 12px !important;
         right: auto !important;
-        gap: 8px !important;
-        border-radius: 0 !important;
+        gap: 6px !important;
+        border-radius: 50px !important;
         width: auto !important;
         max-width: 90% !important;
-        flex-direction: row !important; /* Horizontal layout on mobile too */
-        background: transparent !important;
-        backdrop-filter: none !important;
-        border: none !important;
-        box-shadow: none !important;
+        flex-direction: row !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08) !important;
     }
 
     .badge-logo-img {
-        height: 64px !important; /* Elegant 64px watermark logo on mobile */
-        width: 64px !important;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22)) !important;
+        height: 18px !important;
+        width: 18px !important;
+        filter: none !important;
     }
 
     .brand-name-badge {
-        font-size: 0.82rem !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.95) !important;
+        font-size: 0.8rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 3px !important;
+        text-shadow: none !important;
     }
 
     .brand-name-badge .thai-word {
-        font-size: 0.92rem !important;
-        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.95) !important;
+        font-size: 0.85rem !important;
+        text-shadow: none !important;
     }
 
     .hero-container {
@@ -3045,7 +3047,8 @@ hr {
 }
 
 .photo-compare-card .photo-caption {
-    font-size: 0.72rem;
+    font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
+    font-size: 0.82rem;
     color: var(--text-muted);
     text-align: center;
     line-height: 1.2;
