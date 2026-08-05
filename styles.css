@@ -546,11 +546,28 @@ input, select, textarea {
     font-weight: 900;
     font-size: 1.05rem;
     letter-spacing: 0.22em;
-    text-transform: uppercase;
     color: #5a5a5a !important;
     -webkit-text-fill-color: #5a5a5a !important;
     display: block;
     margin-top: 1px;
+}
+
+.thai-i-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.thai-i-wrap::after {
+    content: '';
+    position: absolute;
+    top: -2px; /* Position it above the dotless i */
+    right: -10px; /* Shift slightly right to match the logo style */
+    width: 14px;
+    height: 14px;
+    background-image: url('assets/logo-header.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 5;
 }
 
 .brand-sub {
