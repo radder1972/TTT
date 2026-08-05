@@ -220,7 +220,7 @@ input, select, textarea {
    4. GLASSMORPHISM COMPONENT (Polished Frosted Glass for Light Theme)
    -------------------------------------------------------------------------- */
 .glass {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 246, 204, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
@@ -1374,7 +1374,7 @@ input, select, textarea {
 .booking-form {
     padding: 40px;
     border-radius: var(--radius-lg);
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
@@ -1721,7 +1721,7 @@ hr {
 .timeline-step {
     padding: 32px;
     position: relative;
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
@@ -1766,7 +1766,7 @@ hr {
     padding: 48px;
     border-radius: var(--radius-lg);
     align-items: center;
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
@@ -1898,7 +1898,9 @@ hr {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    background: #FFFFFF;
+    background: rgba(255, 246, 204, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
     box-shadow: var(--shadow-soft);
 }
@@ -2048,14 +2050,16 @@ hr {
 .faq-item {
     border-radius: var(--radius-md);
     overflow: hidden;
-    background: #FFFFFF;
+    background: rgba(255, 246, 204, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-glass);
     box-shadow: var(--shadow-soft);
 }
 
 .faq-question {
     width: 100%;
-    background: #FFFFFF;
+    background: transparent;
     padding: 20px 24px;
     border: none;
     color: var(--thai-blue);
@@ -2184,7 +2188,7 @@ hr {
 
 /* Make Contact page form card transparent matching news articles */
 #contact .footer-grid > .glass {
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
 }
 
 .contact-form input:focus,
@@ -2972,7 +2976,7 @@ hr {
     border-radius: var(--radius-md);
     border: 1px solid var(--border-glass);
     transition: var(--transition-smooth);
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
 }
 
 .news-card:hover {
@@ -3023,7 +3027,7 @@ hr {
 
 .photo-compare-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-sm);
     padding: 8px;
@@ -3036,7 +3040,7 @@ hr {
 .photo-compare-card:hover {
     transform: translateY(-2px);
     border-color: var(--neon-cyan);
-    background: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 246, 204, 0.65);
     box-shadow: var(--shadow-soft);
 }
 
@@ -3098,7 +3102,7 @@ hr {
     padding: 40px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-glass);
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 246, 204, 0.45);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -3131,7 +3135,7 @@ hr {
     padding: 40px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-glass);
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 246, 204, 0.6);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -3180,7 +3184,7 @@ hr {
     margin: 20px 0;
     padding: 24px;
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 246, 204, 0.25);
     border: 1px solid var(--border-glass);
 }
 
