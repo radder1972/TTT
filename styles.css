@@ -5239,4 +5239,73 @@ hr {
 .flower-bed-container:hover .bf-11 { transform: rotate(50deg) scale(1.02); }
 .flower-bed-container:hover .bf-12 { transform: rotate(-10deg) translateY(2px); }
 
+/* ==========================================================================
+   19. DECORATIVE FLOWER CORNER UNDER HERO CTA / VISUAL
+   ========================================================================== */
+.flower-corner-hero {
+    position: absolute;
+    bottom: -45px;
+    right: -45px;
+    width: 160px;
+    height: 160px;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.95;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.flower-corner-hero img {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.flower-corner-hero .fc-1 {
+    bottom: 25px;
+    right: 25px;
+    width: 95px;
+    transform: rotate(15deg);
+    z-index: 3;
+}
+
+.flower-corner-hero .fc-2 {
+    bottom: 65px;
+    right: 85px;
+    width: 70px;
+    transform: rotate(-30deg);
+    opacity: 0.85;
+    z-index: 2;
+}
+
+.flower-corner-hero .fc-3 {
+    bottom: 95px;
+    right: 20px;
+    width: 60px;
+    transform: rotate(45deg);
+    opacity: 0.8;
+    z-index: 1;
+}
+
+/* Subtle micro-sway on visual container hover */
+.hero-visual:hover .flower-corner-hero {
+    transform: translate(-3px, -3px);
+}
+.hero-visual:hover .fc-1 { transform: rotate(25deg) scale(1.05); }
+.hero-visual:hover .fc-2 { transform: rotate(-20deg) scale(1.03); }
+.hero-visual:hover .fc-3 { transform: rotate(55deg) scale(1.05); }
+
+/* Responsive adjustments for mobile stacked view */
+@media (max-width: 768px) {
+    .flower-corner-hero {
+        bottom: -25px;
+        right: -25px;
+        width: 120px;
+        height: 120px;
+    }
+    .flower-corner-hero .fc-1 { width: 70px; bottom: 15px; right: 15px; }
+    .flower-corner-hero .fc-2 { width: 50px; bottom: 45px; right: 60px; }
+    .flower-corner-hero .fc-3 { width: 45px; bottom: 65px; right: 12px; }
+}
+
 
