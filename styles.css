@@ -3274,6 +3274,18 @@ hr {
     letter-spacing: 2px;
 }
 
+.review-rating-logos {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.review-star-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
 .review-text {
     font-size: 0.95rem;
     line-height: 1.6;
@@ -3393,7 +3405,7 @@ hr {
     display: inline-block;
     width: 18px;
     height: 18px;
-    background-image: url('assets/logo.svg');
+    background-image: url('assets/logo-header.png');
     background-size: contain;
     background-repeat: no-repeat;
     margin-right: 10px;
