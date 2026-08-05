@@ -443,16 +443,16 @@ input, select, textarea {
 }
 
 .app-header.scrolled .brand-name {
-    font-size: 1.12rem !important;
-    line-height: 0.95 !important;
+    font-size: 1.45rem !important;
+    line-height: 1.1 !important;
     text-align: left !important;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.app-header.scrolled .brand-name .brand-accent {
-    font-size: 1.25rem !important;
-    display: block !important;
-    margin-top: 0px !important;
+.app-header.scrolled .brand-name .flower-i::after {
+    width: 7px !important;
+    height: 7px !important;
+    top: -3px !important;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -512,7 +512,7 @@ input, select, textarea {
 
 .brand-name {
     font-family: 'Kaushan Script', 'Satisfy', cursive, sans-serif;
-    font-size: 1.7rem;
+    font-size: 2.15rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     color: #5a5a5a;
@@ -530,11 +530,11 @@ input, select, textarea {
 .flower-i::after {
     content: '';
     position: absolute;
-    top: -5px; /* Perfect height above dotless i stem */
+    top: -6px; /* Perfect height above dotless i stem */
     left: 50%;
     transform: translateX(-50%);
-    width: 9px;
-    height: 9px;
+    width: 11px;
+    height: 11px;
     background-image: url('assets/logo-header.png');
     background-size: contain;
     background-repeat: no-repeat;
@@ -2806,14 +2806,14 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.45rem !important;
+        font-size: 1.75rem !important;
         line-height: 1.1 !important;
     }
 
     .brand-name .flower-i::after {
-        width: 7px !important;
-        height: 7px !important;
-        top: -3px !important;
+        width: 9px !important;
+        height: 9px !important;
+        top: -5px !important;
     }
     
     .thai-word {
@@ -2881,14 +2881,14 @@ hr {
     }
     
     .brand-name {
-        font-size: 1.15rem !important;
+        font-size: 1.35rem !important;
         line-height: 1.1 !important;
     }
 
     .brand-name .flower-i::after {
-        width: 6px !important;
-        height: 6px !important;
-        top: -3px !important;
+        width: 7px !important;
+        height: 7px !important;
+        top: -4px !important;
     }
 
     /* Scrolled Mobile Logo Row Collapse */
@@ -2910,14 +2910,14 @@ hr {
     }
 
     .app-header.scrolled .brand-name {
-        font-size: 0.95rem !important;
+        font-size: 1.15rem !important;
         line-height: 1.1 !important;
     }
 
     .app-header.scrolled .brand-name .flower-i::after {
-        width: 5px !important;
-        height: 5px !important;
-        top: -2px !important;
+        width: 6px !important;
+        height: 6px !important;
+        top: -3px !important;
     }
     
     .thai-word {
