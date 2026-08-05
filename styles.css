@@ -3348,11 +3348,16 @@ hr {
     flex-direction: column;
     padding: 16px;
     border-radius: var(--radius-md);
-    background: #FFFFFF;
+    background: rgba(255, 246, 204, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
     box-shadow: var(--shadow-soft);
 }
 
 .terms-nav-btn {
+    display: flex;
+    align-items: center;
     text-align: left;
     padding: 16px 20px;
     background: transparent;
@@ -3368,19 +3373,35 @@ hr {
 
 .terms-nav-btn:hover {
     color: var(--thai-blue);
-    background: rgba(0, 102, 204, 0.02);
+    background: rgba(255, 246, 204, 0.15);
 }
 
 .terms-nav-btn.active {
     color: var(--thai-red);
-    background: rgba(208, 42, 42, 0.03);
-    border-left-color: var(--thai-red);
+    background: rgba(255, 246, 204, 0.3);
+    border-left-color: var(--thai-gold);
+}
+
+.terms-nav-btn.active::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-image: url('assets/logo.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+    flex-shrink: 0;
+    animation: spinSlow 8s linear infinite;
 }
 
 .terms-content {
     padding: 40px;
     border-radius: var(--radius-md);
-    background: #FFFFFF;
+    background: rgba(255, 246, 204, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
     min-height: 380px;
     box-shadow: var(--shadow-soft);
 }
