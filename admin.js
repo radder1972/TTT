@@ -174,18 +174,7 @@ function initDummyDevices() {
 // 3. Document Ready Listener
 document.addEventListener('DOMContentLoaded', () => {
     initDatabase();
-    checkAuthSession();
-    
-    // Auth Forms Events
-    const loginForm = document.getElementById('admin-login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
-    }
-    
-    const logoutBtn = document.getElementById('btn-logout');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
-    }
+    loadDashboardData();
     
     // Inventory Save Event
     const saveStockBtn = document.getElementById('btn-save-stock');
@@ -347,91 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4. Session & Authentication logic
 let currentSessionUser = null;
 
-async function checkAuthSession() {
-    const loginSection = document.getElementById('admin-login-section');
-    const dashboardSection = document.getElementById('admin-dashboard-section');
-    const logoutWrapper = document.getElementById('header-logout-wrapper');
 
-    if (isSimulated) {
-        const isLoggedIn = localStorage.getItem('ttt_admin_auth') === 'true';
-        if (isLoggedIn) {
-            currentSessionUser = { email: "info@truetimethai.com" };
-            if (loginSection) loginSection.style.display = 'none';
-            if (dashboardSection) dashboardSection.style.display = 'block';
-            if (logoutWrapper) logoutWrapper.style.display = 'block';
-            
-            // Load dashboard data
-            loadDashboardData();
-        } else {
-            if (loginSection) loginSection.style.display = 'block';
-            if (dashboardSection) dashboardSection.style.display = 'none';
-            if (logoutWrapper) logoutWrapper.style.display = 'none';
-        }
-    } else {
-        // Supabase Live Auth Session check
-        const { data, error } = await supabaseClient.auth.getSession();
-        if (data && data.session) {
-            currentSessionUser = data.session.user;
-            if (loginSection) loginSection.style.display = 'none';
-            if (dashboardSection) dashboardSection.style.display = 'block';
-            if (logoutWrapper) logoutWrapper.style.display = 'block';
-            
-            loadDashboardData();
-        } else {
-            if (loginSection) loginSection.style.display = 'block';
-            if (dashboardSection) dashboardSection.style.display = 'none';
-            if (logoutWrapper) logoutWrapper.style.display = 'none';
-        }
-    }
-}
-
-async function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    const loginBtn = document.getElementById('btn-login');
-
-    if (loginBtn) loginBtn.disabled = true;
-
-    if (isSimulated) {
-        // Simulated Authentication
-        if (email === "info@truetimethai.com" && password === "R@dd3r1972?12345") {
-            localStorage.setItem('ttt_admin_auth', 'true');
-            alert("Login successful!");
-            checkAuthSession();
-        } else {
-            alert("Incorrect email address or password! Try info@truetimethai.com / R@dd3r1972?12345");
-        }
-        if (loginBtn) loginBtn.disabled = false;
-    } else {
-        // Supabase Live Auth
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-        if (error) {
-            alert("Login failed: " + error.message);
-        } else {
-            alert("Login successful!");
-            checkAuthSession();
-        }
-        if (loginBtn) loginBtn.disabled = false;
-    }
-}
-
-async function handleLogout() {
-    if (isSimulated) {
-        localStorage.setItem('ttt_admin_auth', 'false');
-        checkAuthSession();
-    } else {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) {
-            alert("Error logging out: " + error.message);
-        }
-        checkAuthSession();
-    }
-}
 
 // 5. Data Loading & Operations
 let activeBookings = [];
